@@ -1,0 +1,23 @@
+# Keep the GitHub Pages repository code-only. Media is hosted externally.
+/assets/
+/downloads/
+/images/
+/media/
+
+*.[Aa][Vv][Ii][Ff]
+*.[Gg][Ii][Ff]
+*.[Jj][Pp][Ee][Gg]
+*.[Jj][Pp][Gg]
+*.[Pp][Nn][Gg]
+*.[Ss][Vv][Gg]
+*.[Ww][Ee][Bb][Pp]
+*.[Pp][Dd][Ff]
+*.[Dd][Oo][Cc][Xx]
+*.[Pp][Pp][Tt][Xx]
+*.[Xx][Ll][Ss][Xx]
+*.[Mm][Pp]3
+*.[Mm][Pp]4
+*.[Mm][Oo][Vv]
+*.[Ww][Aa][Vv]
+*.[Ww][Ee][Bb][Mm]
+*.[Zz][Ii][Pp]

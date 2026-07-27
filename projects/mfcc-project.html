@@ -3,9 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Evidence documentation for an FPGA MFCC speech-recognition pipeline with VHDL, UART debug, and MATLAB checks." />
+    <meta
+      name="description"
+      content="Report-backed evidence for a routed FPGA MFCC spoken-digit recognizer, its fixed-point verification, retained-dataset evaluation, and analog front-end PCB."
+    />
     <meta name="theme-color" content="#163f73" />
-    <title>MFCC Project Evidence | Borek's Engineering Notebook</title>
+    <title>MFCC Spoken-Digit Recognizer | Borek's Engineering Notebook</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body class="project-mfcc">
@@ -22,8 +25,11 @@
         </div>
         <nav class="main-nav" aria-label="Project navigation">
           <a href="../index.html#projects">All projects</a>
-          <a href="#implementation">Implementation</a>
-          <a href="#evidence">Evidence</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#verification">Verification</a>
+          <a href="#recognition">Recognition</a>
+          <a href="#hardware">Hardware</a>
+          <a href="#report">Report</a>
           <a href="#limitations">Limitations</a>
         </nav>
       </header>
@@ -32,70 +38,354 @@
         <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / MFCC</p>
 
         <section class="project-intro" aria-labelledby="project-title">
-          <p class="page-label">FPGA DSP / EVIDENCE DOCUMENT</p>
-          <h1 id="project-title">MFCC: speech-recognition processing pipeline</h1>
+          <p class="page-label">FPGA DSP / REPORT-BACKED EVIDENCE</p>
+          <h1 id="project-title">FPGA MFCC spoken-digit recognizer</h1>
           <p class="lead">
-            A VHDL pipeline organized around audio capture, spectral/feature stages, comparison,
-            board outputs, and optional UART debug. The documentation maps module handshakes and a
-            text-file plus MATLAB verification flow instead of describing the design as one black box.
+            A complete fixed-point speech pipeline for Basys 3: microphone capture, overlapped
+            windowing, a Xilinx FFT, MEL and LOGMEL features, DCT coefficients, and a hardware
+            SAD/L1 template comparator. The evidence below comes from the 107-page project report
+            and is presented with the limits of the retained dataset kept explicit.
           </p>
           <div class="entry-actions" aria-label="MFCC project actions">
-            <a class="button primary" href="#evidence">Read evidence record</a>
-            <a class="button repository-button" href="https://github.com/Borek-32/EEE491-Spoken-Digit-Recognizer-BASYS3" data-repository="mfcc-project"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+            <a class="button primary" href="#recognition">See recognition evidence</a>
+            <a
+              class="button"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186253/engineering-portfolio/mfcc/spoken-digit-project-report.pdf"
+            >Open project report</a>
+            <a
+              class="button repository-button"
+              href="https://github.com/Borek-32/EEE491-Spoken-Digit-Recognizer-BASYS3"
+              data-repository="mfcc-project"
+            ><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
           </div>
 
           <dl class="project-facts wide">
-            <div><dt>Implementation</dt><dd>Vivado / VHDL</dd></div>
-            <div><dt>Verification</dt><dd>VHDL benches / MATLAB checkers</dd></div>
-            <div><dt>Pipeline</dt><dd>ADC → WINDOW → FFT → MEL → LOGMEL → DCT → COMP</dd></div>
-            <div><dt>Recorded status</dt><dd>Architecture and verification flow mapped</dd></div>
+            <div><dt>Implementation</dt><dd>Vivado / VHDL / MATLAB</dd></div>
+            <div><dt>Feature path</dt><dd>63 frames × 8 coefficients</dd></div>
+            <div><dt>Routed timing</dt><dd>100 MHz; WNS +0.609 ns</dd></div>
+            <div><dt>Recorded status</dt><dd>Post-correction labeled live trial pending</dd></div>
           </dl>
+
+          <figure class="project-hero-media">
+            <a
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186251/engineering-portfolio/mfcc/digit-9-active-window.png"
+              aria-label="Open the full-resolution retained digit-nine evidence figure"
+            >
+              <img
+                src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1785186251/engineering-portfolio/mfcc/digit-9-active-window.png"
+                width="2722"
+                height="1927"
+                alt="Composite chart of one FPGA-UART digit-nine record with speech waveform, MEL-energy curve, and DCT heat map highlighting the selected 16-frame feature window"
+                decoding="async"
+                fetchpriority="high"
+              />
+            </a>
+            <figcaption>
+              One retained digit-9 FPGA-UART record connects the sampled speech envelope to the
+              energy onset and selected DCT feature window. PDF Figure 40, page 48.
+            </figcaption>
+          </figure>
         </section>
 
         <section class="content-section" aria-labelledby="summary-title">
           <div class="section-titlebar"><h2 id="summary-title">Executive summary</h2><span>what was built</span></div>
           <div class="summary-grid">
-            <article><h3>Problem</h3><p>Implement and inspect a staged MFCC-based recognition path in FPGA logic while keeping controller sequencing, fixed-point data, and debug output testable.</p></article>
-            <article><h3>Implementation</h3><p>A controller advances through ready/start handshakes for ADC, WINDOW, FFT, MEL, LOGMEL, DCT, COMP, and optional DEBUG states.</p></article>
-            <article><h3>Result</h3><p>The polished copy and verification directory are mapped. This page records how evidence is produced without claiming a final measured recognition result that has not yet been published.</p></article>
+            <article>
+              <h3>Problem</h3>
+              <p>Run an explainable spoken-digit feature and comparison chain in FPGA logic while keeping fixed-point arithmetic, memory addressing, and controller sequencing observable.</p>
+            </article>
+            <article>
+              <h3>Implementation</h3>
+              <p>A 16,384-sample acquisition becomes 63 overlapped frames, 32 MEL bands, eight non-DC DCT coefficients, and a 16-frame template compared against 30 stored references.</p>
+            </article>
+            <article>
+              <h3>Result boundary</h3>
+              <p>The integrated design is routed and the retained 30-record collection separates 30/30 in leave-one-out analysis. That is development-set evidence, not population-wide speaker accuracy.</p>
+            </article>
           </div>
         </section>
 
-        <section id="implementation" class="content-section" aria-labelledby="implementation-title">
-          <div class="section-titlebar"><h2 id="implementation-title">Implementation flow</h2><span>processing path</span></div>
+        <section id="architecture" class="content-section" aria-labelledby="architecture-title">
+          <div class="section-titlebar"><h2 id="architecture-title">Implemented architecture</h2><span>data reduction path</span></div>
+          <div class="two-column">
+            <article class="plain-panel">
+              <h3>Feature dimensions</h3>
+              <p>
+                The ADC stores 16,384 samples. Hann-windowed 512-sample frames advance with a
+                256-sample hop, producing 63 frames. The pipeline retains 256 FFT magnitude bins,
+                32 MEL and LOGMEL values, and eight non-DC DCT coefficients per frame.
+              </p>
+            </article>
+            <article class="plain-panel">
+              <h3>Comparison convention</h3>
+              <p>
+                The comparator selects a 16-frame activity window and evaluates SAD/L1 distance
+                over 16 × 8 coefficients against 30 references: ten digits with three retained
+                trials per digit.
+              </p>
+            </article>
+          </div>
+
+          <div class="evidence-gallery architecture-gallery">
+            <figure class="wide-media portrait-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186240/engineering-portfolio/mfcc/pipeline-overview.png"
+                aria-label="Open the full-resolution MFCC pipeline diagram"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1000/v1785186240/engineering-portfolio/mfcc/pipeline-overview.png"
+                  width="413"
+                  height="1300"
+                  alt="Vertical FPGA feature pipeline: a 16,384-sample ADC record flows through 512-sample windowing, a 256-bin FFT, 32-band MEL and LOGMEL stages, eight DCT coefficients, then record or SAD comparison"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Pipeline overview.</strong> Implemented stages and stored data dimensions from ADC capture to fixed-point SAD comparison. PDF Figure 1, page 7.</figcaption>
+            </figure>
+          </div>
+
           <ol class="flow-list">
-            <li><strong>Capture a frame.</strong><span>The controller starts ADC, watches busy/done status, and hands captured samples toward the feature path.</span></li>
-            <li><strong>Window and transform.</strong><span>WINDOW prepares the frame and FFT converts it to the frequency domain.</span></li>
-            <li><strong>Build mel features.</strong><span>MEL and LOGMEL reduce the spectrum into log-scaled perceptual bands.</span></li>
-            <li><strong>Decorrelate and compare.</strong><span>DCT produces cepstral coefficients; COMP uses the result to update digit/record state.</span></li>
-            <li><strong>Expose debug state.</strong><span>SW1 controls optional UART packet generation after COMP, and LD1 mirrors whether debug is enabled.</span></li>
+            <li><strong>Acquire once.</strong><span>The ADC path fills the 16,384-sample record, including preroll handling and zero padding.</span></li>
+            <li><strong>Frame and taper.</strong><span>WINDOW reads 63 overlapping 512-sample regions and applies fixed-point Hann coefficients.</span></li>
+            <li><strong>Transform.</strong><span>A 512-point FFT wrapper stores 256 magnitude values using the corrected sample and output-address contracts.</span></li>
+            <li><strong>Build perceptual bands.</strong><span>MEL reduces the spectrum to 32 filters; LOGMEL applies the fixed-point logarithmic approximation.</span></li>
+            <li><strong>Compact spectral shape.</strong><span>DCT writes eight signed non-DC coefficients while MEL energy remains available for onset selection.</span></li>
+            <li><strong>Record or compare.</strong><span>COMP can write a reference or evaluate all 30 stored references under the 16-frame × 8-coefficient SAD/L1 rule.</span></li>
+            <li><strong>Expose internal state.</strong><span>The optional UART DEBUG packet serializes 1,362 words per frame without burdening normal operation.</span></li>
           </ol>
         </section>
 
-        <section id="evidence" class="content-section" aria-labelledby="evidence-title">
-          <div class="section-titlebar"><h2 id="evidence-title">Evidence record</h2><span>documented artifacts</span></div>
-          <div class="table-wrap" tabindex="0" role="region" aria-label="MFCC evidence table">
+        <section id="verification" class="content-section" aria-labelledby="verification-title">
+          <div class="section-titlebar"><h2 id="verification-title">Fixed-point and routed verification</h2><span>module-level evidence</span></div>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="MFCC verification results">
             <table class="evidence-table">
-              <thead><tr><th scope="col">Evidence</th><th scope="col">What it establishes</th><th scope="col">Publication state</th></tr></thead>
+              <thead><tr><th scope="col">Stage</th><th scope="col">Retained result</th><th scope="col">What it establishes</th></tr></thead>
               <tbody>
-                <tr><th scope="row">Navigation map</th><td>Project-copy roles, top-level wiring, source files, IP use, and testbench relationships.</td><td>Summarized on this page</td></tr>
-                <tr><th scope="row">Controller workflow</th><td>Reset, idle, stage starts, handshakes, frame looping, digit/trial selection, and DEBUG branching.</td><td>Summarized on this page</td></tr>
-                <tr><th scope="row"><code>mfcc-recog 1.4</code></th><td>The designated polished copy, kept separate from earlier reference copies.</td><td>Role recorded</td></tr>
-                <tr><th scope="row"><code>ref_data</code></th><td>Integer fixed-point vectors consumed by VHDL verification benches.</td><td>Mapped in local verification folder</td></tr>
-                <tr><th scope="row"><code>tb_output</code></th><td>Bench-generated results used by the checker flow.</td><td>Mapped in local verification folder</td></tr>
-                <tr><th scope="row">MATLAB checkers</th><td>Expected integer results are compared with bench output at module boundaries.</td><td>Flow recorded; plots not published</td></tr>
-                <tr><th scope="row">SW1 / LD1 debug path</th><td>The polished copy can skip or run UART debug after COMP while exposing the enable state.</td><td>Integration documented</td></tr>
+                <tr><th scope="row">CTRL</th><td>48/48 expected event rows; zero frame-address error</td><td>Stage order, overlap, and debug branches</td></tr>
+                <tr><th scope="row">WINDOW</th><td>512/512 output words agree</td><td>Coefficient and BRAM pipeline alignment</td></tr>
+                <tr><th scope="row">FFT</th><td>Peak bin/address 32; AMD parity 256/256; integer-ideal maximum difference 45 counts</td><td>Corrected sample order and stored-bin identity for the 1 kHz unit test</td></tr>
+                <tr><th scope="row">MEL</th><td>32/32 words agree</td><td>Filter, coefficient, and address paths</td></tr>
+                <tr><th scope="row">LOGMEL</th><td>32/32 boundary-focused words agree</td><td>Exponent, ROM, interpolation, and zero clamp</td></tr>
+                <tr><th scope="row">DCT</th><td>8/8 signed coefficients agree</td><td>C1–C8 addressing, accumulation, and rounding</td></tr>
+                <tr><th scope="row">DEBUG</th><td>1,362/1,362 UART words agree</td><td>Packet markers, section order, extension, and full length</td></tr>
+                <tr><th scope="row">Routed design</th><td>WNS +0.609 ns; WHS +0.020 ns; 12,665/12,665 routable nets routed</td><td>The integrated internal 100 MHz timing target and routing completion</td></tr>
               </tbody>
             </table>
           </div>
-          <p class="source-note"><strong>Documentation basis:</strong> <code>mfcc project/navigation/README.md</code>, <code>CTRL_WORKFLOW.md</code>, <code>MODULE_WORKFLOWS.md</code>, and <code>mfcc-recog 1.4/verification/README.md</code>.</p>
+
+          <div class="evidence-gallery">
+            <figure class="wide-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186251/engineering-portfolio/mfcc/fft-bin-address-verification.png"
+                aria-label="Open the full-resolution corrected FFT verification figure"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1785186251/engineering-portfolio/mfcc/fft-bin-address-verification.png"
+                  width="3989"
+                  height="2403"
+                  alt="Three stacked plots show a 1 kHz sampled waveform, FFT peaks aligned at reference bin and DUT RAM address 32, and per-bin error with RTL matching the AMD model"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Corrected FFT unit test.</strong> The post-fix 1 kHz regression aligns the reference peak with DUT RAM address 32. It verifies this unit test, not classifier accuracy. PDF Figure 11, page 19.</figcaption>
+            </figure>
+          </div>
+
+          <p class="source-note">
+            <strong>Implementation scale:</strong> the placed design uses 5,559 LUTs, 8,412 registers,
+            23.5 block-RAM tiles, and 15 DSPs. The timing result covers the internal 100 MHz
+            constraint; external board-interface timing is not characterized here.
+          </p>
+        </section>
+
+        <section id="recognition" class="content-section" aria-labelledby="recognition-title">
+          <div class="section-titlebar"><h2 id="recognition-title">Retained-dataset evaluation</h2><span>30 archived utterances</span></div>
+          <p>
+            The retained collection contains digits 0–9 with three FPGA-UART recordings per digit.
+            Each record includes the complete ADC array and all downstream stage memories. In
+            leave-one-out comparison, every query selected the correct digit under the implemented
+            16-frame × 8-coefficient SAD/L1 convention.
+          </p>
+
+          <div class="evidence-gallery">
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186251/engineering-portfolio/mfcc/spoken-digit-confusion-matrix.png"
+                aria-label="Open the full-resolution retained-set confusion matrix"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1200/v1785186251/engineering-portfolio/mfcc/spoken-digit-confusion-matrix.png"
+                  width="1457"
+                  height="1403"
+                  alt="Ten-by-ten confusion matrix for 30 retained FPGA-UART utterances, with three decisions in every diagonal cell and zero off-diagonal decisions"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Leave-one-out confusion matrix.</strong> All 30 retained decisions fall on the diagonal, three per digit. PDF Figure 42, page 50.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186251/engineering-portfolio/mfcc/leave-one-out-distance-margins.png"
+                aria-label="Open the full-resolution retained-set distance margin chart"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1600/v1785186251/engineering-portfolio/mfcc/leave-one-out-distance-margins.png"
+                  width="2096"
+                  height="1278"
+                  alt="Grouped bars for 30 archived recordings compare the nearest retained-recording SAD/L1 distance with the nearest wrong-digit distance; the wrong-digit bar is higher for every query"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Distance margins.</strong> Per-query SAD/L1 distances expose separation across the same 30-record set. PDF Figure 43, page 51.</figcaption>
+            </figure>
+          </div>
+
+          <aside class="result-boundary" aria-label="Recognition result boundary">
+            <strong>How to read 30/30:</strong> this is leave-one-out separability inside one small
+            retained development collection with three trials per digit and no broad speaker or
+            noise stratification. It is not a claim of 100% live-speaker or population-wide accuracy.
+          </aside>
+        </section>
+
+        <section id="hardware" class="content-section" aria-labelledby="hardware-title">
+          <div class="section-titlebar"><h2 id="hardware-title">Microphone front end and PCB</h2><span>design to physical build</span></div>
+          <p>
+            The project includes an LM324 microphone amplifier, buffered reference, adjustable
+            gain, and two unequal Sallen-Key low-pass sections. The circuit was converted into a
+            44 mm × 40 mm single-sided through-hole board for home fabrication.
+          </p>
+
+          <div class="evidence-gallery hardware-gallery">
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186251/engineering-portfolio/mfcc/analog-front-end-schematic.png"
+                aria-label="Open the full-resolution analog front-end schematic"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1785186251/engineering-portfolio/mfcc/analog-front-end-schematic.png"
+                  width="978"
+                  height="810"
+                  alt="Analog front-end schematic showing an LM324 microphone amplifier, bias network, adjustable gain, and two cascaded Sallen-Key low-pass filter sections"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Implemented circuit.</strong> LM324-based microphone amplifier and fourth-order Sallen-Key analog front end. PDF Figure 50, page 60.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186252/engineering-portfolio/mfcc/single-sided-pcb-layout.png"
+                aria-label="Open the full-resolution single-sided PCB layout"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1785186252/engineering-portfolio/mfcc/single-sided-pcb-layout.png"
+                  width="917"
+                  height="810"
+                  alt="Single-sided PCB layout with red copper traces, through-hole pads, component labels, microphone input, output connector, and adjustment potentiometer"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Fabrication layout.</strong> Final 44 mm × 40 mm single-sided through-hole PCB designed for home etching. PDF Figure 53, page 63.</figcaption>
+            </figure>
+            <figure class="wide-media assembled-board-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186252/engineering-portfolio/mfcc/assembled-analog-front-end-pcb.png"
+                aria-label="Open the full-resolution assembled analog PCB photograph"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1200/v1785186252/engineering-portfolio/mfcc/assembled-analog-front-end-pcb.png"
+                  width="840"
+                  height="960"
+                  alt="Photograph of the completed brown single-sided analog PCB populated with a DIP op-amp, resistors, capacitors, connectors, and an adjustment component"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Assembled board.</strong> Completed component-side analog front-end PCB after home fabrication and assembly. PDF Figure 61, page 70.</figcaption>
+            </figure>
+          </div>
+
+          <dl class="project-facts wide hardware-facts">
+            <div><dt>Board</dt><dd>44 mm × 40 mm / 17.6 cm²</dd></div>
+            <div><dt>Fabrication</dt><dd>21 through-hole footprints / no vias</dd></div>
+            <div><dt>Simulated corner</dt><dd>−3.0008 dB at 4.053 kHz</dd></div>
+            <div><dt>Simulated slope</dt><dd>80.006 dB from 10 to 100 kHz</dd></div>
+          </dl>
+          <p class="source-note">
+            <strong>Measurement boundary:</strong> the frequency-response figures in the report are
+            simulations. No calibrated measured transfer-function sweep, transient oscilloscope
+            trace, or power measurement is retained.
+          </p>
+        </section>
+
+        <section id="report" class="content-section" aria-labelledby="report-title">
+          <div class="section-titlebar"><h2 id="report-title">Full project report</h2><span>107 pages / 4.9 MB</span></div>
+          <p>
+            The report is hosted outside GitHub, so the Pages repository contains only HTML and CSS
+            delivery URLs. Use the normal link if the inline PDF viewer is unavailable in your browser.
+          </p>
+
+          <figure class="report-cover">
+            <a
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186253/engineering-portfolio/mfcc/spoken-digit-project-report.pdf"
+              aria-label="Open the full 107-page MFCC project report PDF"
+            >
+              <img
+                src="https://res.cloudinary.com/vb29plgf/image/upload/pg_1,f_auto,q_auto:good,c_limit,w_1400/v1785186253/engineering-portfolio/mfcc/spoken-digit-project-report.jpg"
+                width="1400"
+                height="1812"
+                alt="Cover page of the FPGA MFCC Spoken Digit Recognition project report"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+            <figcaption>Preview of the report cover; select it to open the full PDF.</figcaption>
+          </figure>
+
+          <iframe
+            class="pdf-frame"
+            src="https://res.cloudinary.com/vb29plgf/image/upload/v1785186253/engineering-portfolio/mfcc/spoken-digit-project-report.pdf#page=1&view=FitH"
+            title="Preview of the 107-page FPGA MFCC spoken-digit project report"
+            loading="lazy"
+          ></iframe>
+          <div class="entry-actions report-actions" aria-label="Project report links">
+            <a
+              class="button primary"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186253/engineering-portfolio/mfcc/spoken-digit-project-report.pdf"
+            >Open full project report (PDF, 4.9 MB, 107 pages)</a>
+            <a
+              class="button"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/fl_attachment:MFCC-Spoken-Digit-Project-Report/v1785186253/engineering-portfolio/mfcc/spoken-digit-project-report.pdf"
+            >Download report</a>
+          </div>
         </section>
 
         <section id="limitations" class="content-section" aria-labelledby="limitations-title">
           <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>honest status</span></div>
           <div class="two-column">
-            <article class="plain-panel"><h3>Known limitation</h3><p>The architecture and module-level checker flow are documented, but this website does not yet publish a passing end-to-end simulation capture, MATLAB comparison plot, or measured recognition result.</p></article>
-            <article class="plain-panel"><h3>Best next evidence</h3><p>Publish one passing bench per major stage, one fixed-point MATLAB comparison, the end-to-end controller trace, and a short UART or seven-segment output demonstration.</p></article>
+            <article class="plain-panel">
+              <h3>Known limitations</h3>
+              <ul>
+                <li>The 30-record collection is historical development evidence, not a broad accuracy study.</li>
+                <li>Runtime reference recording and flush are implemented but lack retained direct readback proof.</li>
+                <li>External SPI and board-interface timing is not characterized by the internal timing result.</li>
+                <li>The analog response lacks a calibrated physical transfer-function sweep.</li>
+              </ul>
+            </article>
+            <article class="plain-panel">
+              <h3>Best next evidence</h3>
+              <ul>
+                <li>Record one known digit, read the selected reference slot back, then recall it.</li>
+                <li>Capture reference memory before and after flush.</li>
+                <li>Run a labeled live spoken-digit comparison and retain the full frame sequence plus final display/UART result.</li>
+                <li>Measure the physical front-end response with calibrated equipment.</li>
+              </ul>
+            </article>
           </div>
         </section>
 

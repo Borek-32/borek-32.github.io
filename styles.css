@@ -852,6 +852,103 @@ main {
   object-fit: contain;
 }
 
+.project-entry.project-mfcc .project-preview-image {
+  background: #fff;
+  object-fit: contain;
+}
+
+.project-mfcc .project-hero-media a,
+.project-mfcc .evidence-gallery a,
+.project-mfcc .report-cover a {
+  display: block;
+}
+
+.project-mfcc .project-hero-media img {
+  height: auto;
+  max-height: 680px;
+  background: #fff;
+  object-fit: contain;
+}
+
+.project-mfcc .evidence-gallery img {
+  height: auto;
+  max-height: 560px;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
+.evidence-gallery .wide-media {
+  grid-column: 1 / -1;
+}
+
+.project-mfcc .evidence-gallery figcaption strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #283846;
+}
+
+.project-mfcc .portrait-media a {
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.project-mfcc .portrait-media img {
+  width: auto;
+  max-width: min(100%, 440px);
+  max-height: 760px;
+}
+
+.project-mfcc .assembled-board-media a {
+  max-width: 660px;
+  margin: 0 auto;
+}
+
+.project-mfcc .hardware-facts {
+  margin-top: 14px;
+}
+
+.result-boundary {
+  margin-top: 14px;
+  padding: 13px 15px;
+  border-left: 5px solid var(--accent);
+  background: #edf3f8;
+  color: #283846;
+}
+
+.report-cover {
+  max-width: 540px;
+  margin: 18px auto;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.report-cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #e7ebef;
+}
+
+.report-cover figcaption {
+  padding: 8px 10px;
+  border-top: 1px solid var(--line-light);
+  color: #5b6772;
+  font-size: 0.72rem;
+}
+
+.pdf-frame {
+  display: block;
+  width: 100%;
+  min-height: 680px;
+  border: 1px solid var(--line);
+  background: #e7ebef;
+}
+
+.report-actions {
+  margin-top: 12px;
+}
+
 .project-pager {
   display: flex;
   justify-content: space-between;
@@ -900,6 +997,14 @@ main {
 
   .project-facts.wide div:nth-child(-n + 2) {
     border-bottom: 1px solid var(--line-light);
+  }
+
+  .evidence-gallery .wide-media {
+    grid-column: auto;
+  }
+
+  .pdf-frame {
+    min-height: 500px;
   }
 }
 
