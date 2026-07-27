@@ -151,25 +151,27 @@
               </header>
               <div class="project-summary">
                 <figure class="project-preview">
-                  <div
-                    class="project-preview-placeholder"
-                    role="img"
-                    aria-label="Placeholder for an MFCC project preview photo"
-                  >
-                    <span>Project preview</span>
-                    <strong>Photo placeholder</strong>
-                  </div>
-                  <figcaption>MFCC photo</figcaption>
+                  <img
+                    class="project-preview-image"
+                    src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_900/v1785186251/engineering-portfolio/mfcc/spoken-digit-confusion-matrix.png"
+                    width="1457"
+                    height="1403"
+                    alt="Ten-by-ten leave-one-out confusion matrix with three retained development recordings correctly placed on each digit's diagonal"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption>30/30 leave-one-out on 30 retained development utterances; not a live-speaker accuracy result</figcaption>
                 </figure>
                 <dl class="project-facts">
                   <div><dt>Area</dt><dd>FPGA / DSP / PCB design</dd></div>
                   <div><dt>Platform</dt><dd>Vivado / VHDL / MATLAB / LTSpice / KiCad</dd></div>
-                  <div><dt>Status</dt><dd>Bitstream; Fully Integrated with PCB; </dd></div>
+                  <div><dt>Status</dt><dd>Routed RTL and assembled PCB; post-correction labeled live trial pending</dd></div>
                 </dl>
               </div>
               <p>
-                A staged (ADC, Hanning Window, FFT, MEL, LogMEL, DCT, COMP/REC) DSP pipeline with controller workflows, fixed-point
-                checks, debug UART integration, and board-level result display along with the mic-amp + anti aliasing filter design on PCB.
+                A staged ADC, Hann-window, FFT, MEL, LOGMEL, DCT, and SAD/L1 pipeline with
+                fixed-point checks, UART observability, a 30-record retained dataset, and a
+                fabricated microphone-amplifier and anti-aliasing PCB.
               </p>
               <div class="entry-actions" aria-label="MFCC project links">
                 <a class="button primary" href="projects/mfcc-project.html">Evidence documentation</a>
