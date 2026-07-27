@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Evidence documentation for an FPGA MFCC speech-recognition pipeline with VHDL, UART debug, and MATLAB checks." />
+    <meta name="theme-color" content="#163f73" />
+    <title>MFCC Project Evidence | Borek's Engineering Notebook</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="project-mfcc">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="masthead">
+          <a class="brand" href="../index.html" aria-label="Borek's Engineering Notebook home">
+            <span class="brand-mark" aria-hidden="true">B</span>
+            <span><strong>Borek's Engineering Notebook</strong><small>Project evidence file</small></span>
+          </a>
+          <p class="masthead-note">PROJECT 04 / MFCC</p>
+        </div>
+        <nav class="main-nav" aria-label="Project navigation">
+          <a href="../index.html#projects">All projects</a>
+          <a href="#implementation">Implementation</a>
+          <a href="#evidence">Evidence</a>
+          <a href="#limitations">Limitations</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / MFCC</p>
+
+        <section class="project-intro" aria-labelledby="project-title">
+          <p class="page-label">FPGA DSP / EVIDENCE DOCUMENT</p>
+          <h1 id="project-title">MFCC: speech-recognition processing pipeline</h1>
+          <p class="lead">
+            A VHDL pipeline organized around audio capture, spectral/feature stages, comparison,
+            board outputs, and optional UART debug. The documentation maps module handshakes and a
+            text-file plus MATLAB verification flow instead of describing the design as one black box.
+          </p>
+          <div class="entry-actions" aria-label="MFCC project actions">
+            <a class="button primary" href="#evidence">Read evidence record</a>
+            <a class="button repository-button" href="https://github.com/Borek-32/EEE491-Spoken-Digit-Recognizer-BASYS3" data-repository="mfcc-project"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+          </div>
+
+          <dl class="project-facts wide">
+            <div><dt>Implementation</dt><dd>Vivado / VHDL</dd></div>
+            <div><dt>Verification</dt><dd>VHDL benches / MATLAB checkers</dd></div>
+            <div><dt>Pipeline</dt><dd>ADC → WINDOW → FFT → MEL → LOGMEL → DCT → COMP</dd></div>
+            <div><dt>Recorded status</dt><dd>Architecture and verification flow mapped</dd></div>
+          </dl>
+        </section>
+
+        <section class="content-section" aria-labelledby="summary-title">
+          <div class="section-titlebar"><h2 id="summary-title">Executive summary</h2><span>what was built</span></div>
+          <div class="summary-grid">
+            <article><h3>Problem</h3><p>Implement and inspect a staged MFCC-based recognition path in FPGA logic while keeping controller sequencing, fixed-point data, and debug output testable.</p></article>
+            <article><h3>Implementation</h3><p>A controller advances through ready/start handshakes for ADC, WINDOW, FFT, MEL, LOGMEL, DCT, COMP, and optional DEBUG states.</p></article>
+            <article><h3>Result</h3><p>The polished copy and verification directory are mapped. This page records how evidence is produced without claiming a final measured recognition result that has not yet been published.</p></article>
+          </div>
+        </section>
+
+        <section id="implementation" class="content-section" aria-labelledby="implementation-title">
+          <div class="section-titlebar"><h2 id="implementation-title">Implementation flow</h2><span>processing path</span></div>
+          <ol class="flow-list">
+            <li><strong>Capture a frame.</strong><span>The controller starts ADC, watches busy/done status, and hands captured samples toward the feature path.</span></li>
+            <li><strong>Window and transform.</strong><span>WINDOW prepares the frame and FFT converts it to the frequency domain.</span></li>
+            <li><strong>Build mel features.</strong><span>MEL and LOGMEL reduce the spectrum into log-scaled perceptual bands.</span></li>
+            <li><strong>Decorrelate and compare.</strong><span>DCT produces cepstral coefficients; COMP uses the result to update digit/record state.</span></li>
+            <li><strong>Expose debug state.</strong><span>SW1 controls optional UART packet generation after COMP, and LD1 mirrors whether debug is enabled.</span></li>
+          </ol>
+        </section>
+
+        <section id="evidence" class="content-section" aria-labelledby="evidence-title">
+          <div class="section-titlebar"><h2 id="evidence-title">Evidence record</h2><span>documented artifacts</span></div>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="MFCC evidence table">
+            <table class="evidence-table">
+              <thead><tr><th scope="col">Evidence</th><th scope="col">What it establishes</th><th scope="col">Publication state</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Navigation map</th><td>Project-copy roles, top-level wiring, source files, IP use, and testbench relationships.</td><td>Summarized on this page</td></tr>
+                <tr><th scope="row">Controller workflow</th><td>Reset, idle, stage starts, handshakes, frame looping, digit/trial selection, and DEBUG branching.</td><td>Summarized on this page</td></tr>
+                <tr><th scope="row"><code>mfcc-recog 1.4</code></th><td>The designated polished copy, kept separate from earlier reference copies.</td><td>Role recorded</td></tr>
+                <tr><th scope="row"><code>ref_data</code></th><td>Integer fixed-point vectors consumed by VHDL verification benches.</td><td>Mapped in local verification folder</td></tr>
+                <tr><th scope="row"><code>tb_output</code></th><td>Bench-generated results used by the checker flow.</td><td>Mapped in local verification folder</td></tr>
+                <tr><th scope="row">MATLAB checkers</th><td>Expected integer results are compared with bench output at module boundaries.</td><td>Flow recorded; plots not published</td></tr>
+                <tr><th scope="row">SW1 / LD1 debug path</th><td>The polished copy can skip or run UART debug after COMP while exposing the enable state.</td><td>Integration documented</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="source-note"><strong>Documentation basis:</strong> <code>mfcc project/navigation/README.md</code>, <code>CTRL_WORKFLOW.md</code>, <code>MODULE_WORKFLOWS.md</code>, and <code>mfcc-recog 1.4/verification/README.md</code>.</p>
+        </section>
+
+        <section id="limitations" class="content-section" aria-labelledby="limitations-title">
+          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>honest status</span></div>
+          <div class="two-column">
+            <article class="plain-panel"><h3>Known limitation</h3><p>The architecture and module-level checker flow are documented, but this website does not yet publish a passing end-to-end simulation capture, MATLAB comparison plot, or measured recognition result.</p></article>
+            <article class="plain-panel"><h3>Best next evidence</h3><p>Publish one passing bench per major stage, one fixed-point MATLAB comparison, the end-to-end controller trace, and a short UART or seven-segment output demonstration.</p></article>
+          </div>
+        </section>
+
+        <nav class="project-pager" aria-label="Project pages">
+          <a href="nrf-project.html">← Previous: nRF24L01</a>
+          <a href="rc-car.html">Next: FPGA RC car →</a>
+        </nav>
+      </main>
+
+      <footer class="site-footer"><p>Borek's Engineering Notebook</p><p><a href="#main-content">Return to top</a></p></footer>
+    </div>
+  </body>
+</html>

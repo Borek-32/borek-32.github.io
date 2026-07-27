@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Evidence documentation for a two-Basys3 FPGA RC car using XADC joystick input, NRF24L01 radios over SPI, and five PWM outputs." />
+    <meta name="theme-color" content="#163f73" />
+    <title>FPGA RC Car Project Evidence | Borek's Engineering Notebook</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="project-rc">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="masthead">
+          <a class="brand" href="../index.html" aria-label="Borek's Engineering Notebook home">
+            <span class="brand-mark" aria-hidden="true">B</span>
+            <span><strong>Borek's Engineering Notebook</strong><small>Project evidence file</small></span>
+          </a>
+          <p class="masthead-note">PROJECT 05 / RC CAR</p>
+        </div>
+        <nav class="main-nav" aria-label="Project navigation">
+          <a href="../index.html#projects">All projects</a>
+          <a href="#implementation">Implementation</a>
+          <a href="#evidence">Evidence</a>
+          <a href="#limitations">Limitations</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / FPGA RC car</p>
+
+        <section class="project-intro" aria-labelledby="project-title">
+          <p class="page-label">FPGA MECHATRONICS / EVIDENCE DOCUMENT</p>
+          <h1 id="project-title">FPGA RC car: SPI, XADC &amp; PWM interface</h1>
+          <p class="lead">
+            A two-Basys3 control system recovered from the original EE102 project report. The
+            handheld unit samples two analog joysticks, sends an 8-bit command through an
+            NRF24L01 link, and the vehicle converts the received command into five PWM outputs.
+          </p>
+          <div class="entry-actions" aria-label="FPGA RC car project actions">
+            <a class="button primary" href="#evidence">Read evidence record</a>
+            <a class="button" href="https://youtu.be/JlileyPvNLM?si=4B1xvQ-6fF4RnPQ1">Watch project demo</a>
+            <a class="button repository-button" href="https://github.com/Borek-32/EEE102-FPGA-RC-Car-BASYS3" data-repository="rc-car"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+          </div>
+
+          <dl class="project-facts wide">
+            <div><dt>Controllers</dt><dd>2× Basys3 / Artix-7</dd></div>
+            <div><dt>Radio link</dt><dd>2× NRF24L01 over SPI</dd></div>
+            <div><dt>Inputs</dt><dd>2× HW-504 joysticks through XADC</dd></div>
+            <div><dt>Source status</dt><dd>Not fully functional; syntax analysis only</dd></div>
+          </dl>
+
+          <figure class="project-hero-media">
+            <div class="media-placeholder hero-media-placeholder" role="img" aria-label="Completed handmade four-wheel-drive RC car chassis with a Basys3 FPGA board, radio, ESCs, and motors">
+              <span>Project media</span>
+              <strong>External hosting pending</strong>
+            </div>
+            <figcaption>Completed handmade chassis, documented on physical page 6 of the project report.</figcaption>
+          </figure>
+        </section>
+
+        <section class="content-section" aria-labelledby="summary-title">
+          <div class="section-titlebar"><h2 id="summary-title">Executive summary</h2><span>what was built</span></div>
+          <div class="summary-grid">
+            <article><h3>Problem</h3><p>Turn two-axis analog joystick movement into wireless steering and throttle commands for a four-wheel-drive vehicle using FPGA logic at both ends.</p></article>
+            <article><h3>Implementation</h3><p>XADC capture, 8-bit command encoding, SPI radio controllers, payload checking, and PWM generation are separated into remote, shared, and vehicle VHDL compile sets.</p></article>
+            <article><h3>Recorded result</h3><p>The project is not fully functional in its recovered form. The existing source passes VHDL-2008 syntax analysis only; the report supplies the physical-build evidence and demonstration.</p></article>
+          </div>
+        </section>
+
+        <section id="implementation" class="content-section" aria-labelledby="implementation-title">
+          <div class="section-titlebar"><h2 id="implementation-title">Implementation flow</h2><span>end-to-end control path</span></div>
+          <ol class="flow-list">
+            <li><strong>Sample the joysticks.</strong><span>The handheld Basys3 alternates VAUX6 and VAUX14 through XADC and reduces each converter value to six control bits.</span></li>
+            <li><strong>Encode the command.</strong><span><code>REMOTE_UNIT</code> converts steering or throttle movement into the 8-bit payload used by the project.</span></li>
+            <li><strong>Transmit over SPI radio.</strong><span>The transmitter-specific <code>nrftop</code> configures an NRF24L01, writes the payload, and controls the CE/CSN transaction sequence.</span></li>
+            <li><strong>Receive and normalize.</strong><span>The vehicle-specific <code>nrftop</code> reads the radio payload and passes it through <code>nrf_errorhandler</code>.</span></li>
+            <li><strong>Drive the chassis.</strong><span><code>CONTROL_UNIT</code> routes the command into one steering channel and four motor/ESC PWM outputs.</span></li>
+          </ol>
+        </section>
+
+        <section id="evidence" class="content-section" aria-labelledby="evidence-title">
+          <div class="section-titlebar"><h2 id="evidence-title">Evidence gallery</h2><span>report-derived artifacts</span></div>
+          <div class="evidence-gallery">
+            <figure><div class="media-placeholder" role="img" aria-label="Front of the handmade dual-joystick FPGA remote control"><span>Remote-unit photo</span><strong>External media pending</strong></div><figcaption>Handheld dual-joystick remote.</figcaption></figure>
+            <figure><div class="media-placeholder" role="img" aria-label="SolidWorks model of the RC car chassis frame"><span>Mechanical CAD</span><strong>External media pending</strong></div><figcaption>SolidWorks chassis-frame study.</figcaption></figure>
+            <figure><div class="media-placeholder" role="img" aria-label="Vivado XADC Wizard configuration for the joystick inputs"><span>XADC configuration</span><strong>External media pending</strong></div><figcaption>XADC configuration evidence.</figcaption></figure>
+            <figure><div class="media-placeholder" role="img" aria-label="Oscilloscope measurement of an analog joystick signal"><span>Oscilloscope capture</span><strong>External media pending</strong></div><figcaption>Analog joystick oscilloscope measurement.</figcaption></figure>
+            <figure><div class="media-placeholder" role="img" aria-label="Vivado simulation waveform for the RC car PWM interface"><span>PWM simulation</span><strong>External media pending</strong></div><figcaption>PWM interface simulation waveform.</figcaption></figure>
+            <figure><div class="media-placeholder" role="img" aria-label="Vivado RTL view of the remote-unit transmitter top level"><span>Remote-unit RTL</span><strong>External media pending</strong></div><figcaption>Remote transmitter RTL overview.</figcaption></figure>
+            <figure><div class="media-placeholder" role="img" aria-label="Vivado RTL view of the vehicle control-unit receiver top level"><span>Vehicle-unit RTL</span><strong>External media pending</strong></div><figcaption>Vehicle receiver and control RTL overview.</figcaption></figure>
+          </div>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="FPGA RC car evidence table">
+            <table class="evidence-table">
+              <thead><tr><th scope="col">Evidence</th><th scope="col">What it establishes</th><th scope="col">Publication state</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Original project report</th><td>Mechanical build, radio/SPI design, XADC setup, PWM interface, simulations, RTL views, and project context.</td><td>Source for this evidence page</td></tr>
+                <tr><th scope="row">Recovered design listings</th><td>20 report design listings are maintained in separated remote, vehicle, and shared source sets.</td><td>Recovered and audited locally</td></tr>
+                <tr><th scope="row">Recovered testbenches</th><td>Eleven report testbenches preserve the published component-level verification inputs.</td><td>Syntax analyzed; assertions absent</td></tr>
+                <tr><th scope="row">VHDL-2008 validation</th><td>Vivado 2025.2 accepts four isolated source sets, including the transmitter/receiver name collision boundary.</td><td>Syntax pass only; not functional proof</td></tr>
+                <tr><th scope="row">Physical build media</th><td>The completed car, handmade remote, joystick measurement, and chassis design are visible in the report.</td><td>Curated gallery above</td></tr>
+                <tr><th scope="row">Demonstration video</th><td>The report links to a recorded project demonstration.</td><td><a href="https://youtu.be/JlileyPvNLM?si=4B1xvQ-6fF4RnPQ1">Public video</a></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="source-note"><strong>Documentation basis:</strong> the original report dated 22 May 2024, the recovered VHDL workspace, validation notes, and the lossless image-extraction manifest in <code>rc-car project</code>.</p>
+        </section>
+
+        <section id="limitations" class="content-section" aria-labelledby="limitations-title">
+          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>honest status</span></div>
+          <div class="two-column">
+            <article class="plain-panel"><h3>Recovery boundary</h3><p>The report does not include the remote or vehicle XDC files, generated XADC/Clocking Wizard products, or the referenced <code>byte_latch</code> source. The recovered project therefore does not claim synthesis, bitstream generation, or a new hardware test.</p></article>
+            <article class="plain-panel"><h3>Best next evidence</h3><p>Recover or recreate the missing IP and constraints, review pin/electrical assumptions, elaborate and simulate the complete systems, then publish a repeatable hardware test for radio commands, steering, and motor outputs.</p></article>
+          </div>
+        </section>
+
+        <nav class="project-pager" aria-label="Project pages">
+          <a href="mfcc-project.html">← Previous: MFCC</a>
+          <a href="../index.html#projects">Project directory →</a>
+        </nav>
+      </main>
+
+      <footer class="site-footer"><p>Borek's Engineering Notebook</p><p><a href="#main-content">Return to top</a></p></footer>
+    </div>
+  </body>
+</html>

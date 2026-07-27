@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Evidence documentation for Basys3 nRF24L01 transmitter, receiver, and SPI troubleshooting workspaces." />
+    <meta name="theme-color" content="#163f73" />
+    <title>nRF24L01 Project Evidence | Borek's Engineering Notebook</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="project-nrf">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="masthead">
+          <a class="brand" href="../index.html" aria-label="Borek's Engineering Notebook home">
+            <span class="brand-mark" aria-hidden="true">B</span>
+            <span><strong>Borek's Engineering Notebook</strong><small>Project evidence file</small></span>
+          </a>
+          <p class="masthead-note">PROJECT 03 / nRF</p>
+        </div>
+        <nav class="main-nav" aria-label="Project navigation">
+          <a href="../index.html#projects">All projects</a>
+          <a href="#implementation">Implementation</a>
+          <a href="#evidence">Evidence</a>
+          <a href="#limitations">Limitations</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / nRF24L01</p>
+
+        <section class="project-intro" aria-labelledby="project-title">
+          <p class="page-label">FPGA RADIO BRING-UP / EVIDENCE DOCUMENT</p>
+          <h1 id="project-title">nRF24L01: transmitter, receiver, and debug builds</h1>
+          <p class="lead">
+            A Basys3 workspace for nRF24L01 communication over SPI. Separate transmitter,
+            receiver, and troubleshooting builds expose radio configuration and register state
+            instead of treating the module as an opaque peripheral.
+          </p>
+          <div class="entry-actions" aria-label="nRF project actions">
+            <a class="button primary" href="#evidence">Read evidence record</a>
+            <a class="button repository-button" href="https://github.com/Borek-32/EEE102-NRF24L01-Radio-Debugger-for-RC-car-Project-BASYS3" data-repository="nrf-project"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+          </div>
+
+          <dl class="project-facts wide">
+            <div><dt>Platform</dt><dd>Basys3 / Xilinx Artix-7</dd></div>
+            <div><dt>Peripheral</dt><dd>nRF24L01 2.4 GHz radio</dd></div>
+            <div><dt>Interface</dt><dd>SPI plus CE / CSN / IRQ</dd></div>
+            <div><dt>Recorded status</dt><dd>TX/RX and diagnostic workspaces mapped</dd></div>
+          </dl>
+        </section>
+
+        <section class="content-section" aria-labelledby="summary-title">
+          <div class="section-titlebar"><h2 id="summary-title">Executive summary</h2><span>what was built</span></div>
+          <div class="summary-grid">
+            <article><h3>Problem</h3><p>Bring up an nRF24L01 from FPGA logic while making SPI transactions, configuration registers, payload state, and failure signals inspectable on the board.</p></article>
+            <article><h3>Implementation</h3><p>Reusable helpers separate register writes, payload reads/writes, one-byte commands, clock division, debounce, and seven-segment display logic.</p></article>
+            <article><h3>Result</h3><p>The workspace records four focused builds and their common mapping. A complete published over-the-air TX/RX proof path is still the next verification target.</p></article>
+          </div>
+        </section>
+
+        <section id="implementation" class="content-section" aria-labelledby="implementation-title">
+          <div class="section-titlebar"><h2 id="implementation-title">Implementation flow</h2><span>four build roles</span></div>
+          <ol class="flow-list">
+            <li><strong>Original transmitter.</strong><span><code>nrfTX</code> initializes registers, writes a 32-byte payload, issues commands, pulses CE, and exposes switch input on LEDs.</span></li>
+            <li><strong>Original receiver.</strong><span><code>nrfRX</code> configures receive mode, waits for IRQ, reads payload data, clears status, and returns to listening.</span></li>
+            <li><strong>TX troubleshooting.</strong><span>The debug build adds register readback, display stepping, and maximum-retry visibility.</span></li>
+            <li><strong>RX troubleshooting.</strong><span>The receive debug path centers on IRQ, payload read, FIFO/IRQ clearing, and visible register state.</span></li>
+            <li><strong>Shared board mapping.</strong><span>SPI and radio-control signals are mapped to Basys3 PMOD JC across the documented builds.</span></li>
+          </ol>
+        </section>
+
+        <section id="evidence" class="content-section" aria-labelledby="evidence-title">
+          <div class="section-titlebar"><h2 id="evidence-title">Evidence record</h2><span>documented artifacts</span></div>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="nRF evidence table">
+            <table class="evidence-table">
+              <thead><tr><th scope="col">Evidence</th><th scope="col">What it establishes</th><th scope="col">Publication state</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Original TX project</th><td>Register initialization, payload write path, CE pulse, and user-input mapping.</td><td>Summarized on this page</td></tr>
+                <tr><th scope="row">Original RX project</th><td>Receive initialization, IRQ wait, payload read, and status/FIFO clearing.</td><td>Summarized on this page</td></tr>
+                <tr><th scope="row">TX debug project</th><td>Register readback and maximum-retry state can be inspected through board outputs.</td><td>Summarized on this page</td></tr>
+                <tr><th scope="row">RX debug project</th><td>Receive state and configured registers can be stepped through on the display.</td><td>Summarized on this page</td></tr>
+                <tr><th scope="row">Register map notes</th><td>CONFIG, RF_CH, RF_SETUP, DYNPD, FEATURE, and related setup values are tracked per role.</td><td>Recorded in source notes</td></tr>
+                <tr><th scope="row">PMOD JC mapping</th><td>SCK, MOSI, MISO, CE, CSN, and IRQ assumptions are documented for Basys3.</td><td>Recorded in source notes</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="source-note"><strong>Documentation basis:</strong> <code>nrf project/PROJECT_CONTENTS.md</code>. The page distinguishes workspace coverage from a fully published radio-link demonstration.</p>
+        </section>
+
+        <section id="limitations" class="content-section" aria-labelledby="limitations-title">
+          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>honest status</span></div>
+          <div class="two-column">
+            <article class="plain-panel"><h3>Known limitation</h3><p>The documentation maps TX, RX, and register-debug paths, but does not yet publish one continuous, independently inspectable over-the-air transfer from transmitter input to receiver output.</p></article>
+            <article class="plain-panel"><h3>Best next evidence</h3><p>Publish a wiring photo, register readback capture, configuration table, and short test showing the selected transmitter payload arriving at the receiver output.</p></article>
+          </div>
+        </section>
+
+        <nav class="project-pager" aria-label="Project pages">
+          <a href="emtproject.html">← Previous: EMT</a>
+          <a href="mfcc-project.html">Next: MFCC →</a>
+        </nav>
+      </main>
+
+      <footer class="site-footer"><p>Borek's Engineering Notebook</p><p><a href="#main-content">Return to top</a></p></footer>
+    </div>
+  </body>
+</html>

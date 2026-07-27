@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Evidence documentation for a Basys3 ultrasonic directional-speaker prototype with MATLAB UART audio streaming." />
+    <meta name="theme-color" content="#163f73" />
+    <title>EMT Project Evidence | Borek's Engineering Notebook</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="project-emt">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="masthead">
+          <a class="brand" href="../index.html" aria-label="Borek's Engineering Notebook home">
+            <span class="brand-mark" aria-hidden="true">B</span>
+            <span><strong>Borek's Engineering Notebook</strong><small>Project evidence file</small></span>
+          </a>
+          <p class="masthead-note">PROJECT 02 / EMT</p>
+        </div>
+        <nav class="main-nav" aria-label="Project navigation">
+          <a href="../index.html#projects">All projects</a>
+          <a href="#implementation">Implementation</a>
+          <a href="#evidence">Evidence</a>
+          <a href="#limitations">Limitations</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / EMT</p>
+
+        <section class="project-intro" aria-labelledby="project-title">
+          <p class="page-label">ULTRASONIC AUDIO / EVIDENCE DOCUMENT</p>
+          <h1 id="project-title">EMT: ultrasonic directional-speaker prototype</h1>
+          <p class="lead">
+            A hardware/audio experiment in which MATLAB prepares and streams audio frames over
+            UART to a Basys3 design. The FPGA decodes sample and steering data, then controls
+            PWM/H-bridge output paths for an ultrasonic transducer array.
+          </p>
+          <div class="entry-actions" aria-label="EMT project actions">
+            <a class="button primary" href="#evidence">Read evidence record</a>
+            <a class="button repository-button" href="https://github.com/Borek-32/EEE351-Parametric-Speaker-Beam-steering-Attempt-BASYS3" data-repository="emtproject"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+          </div>
+
+          <dl class="project-facts wide">
+            <div><dt>Platform</dt><dd>Basys3 / 100 MHz FPGA clock</dd></div>
+            <div><dt>Tools</dt><dd>Vivado, VHDL, MATLAB</dd></div>
+            <div><dt>Input path</dt><dd>WAV file → framed UART</dd></div>
+            <div><dt>Recorded status</dt><dd>Prototype bitstream; timing issue remains</dd></div>
+          </dl>
+        </section>
+
+        <section class="content-section" aria-labelledby="summary-title">
+          <div class="section-titlebar"><h2 id="summary-title">Executive summary</h2><span>what was built</span></div>
+          <div class="summary-grid">
+            <article><h3>Problem</h3><p>Explore narrow-region audio delivery through an ultrasonic transducer array while keeping the sample transport and steering control observable.</p></article>
+            <article><h3>Implementation</h3><p>MATLAB normalizes and quantizes audio, sends 64-sample frames plus a signed steering delta, and FPGA logic converts the decoded data into driver control.</p></article>
+            <article><h3>Result</h3><p>The documented build produced a prototype bitstream and a precise serial protocol; physical demo coverage and timing closure still need publication.</p></article>
+          </div>
+        </section>
+
+        <section id="implementation" class="content-section" aria-labelledby="implementation-title">
+          <div class="section-titlebar"><h2 id="implementation-title">Implementation flow</h2><span>audio path</span></div>
+          <ol class="flow-list">
+            <li><strong>Prepare the audio.</strong><span>MATLAB reads a WAV file, converts it to mono, resamples, normalizes, and maps samples to unsigned 8-bit values.</span></li>
+            <li><strong>Calculate steering.</strong><span>The streamer derives signed <code>deltaTicks</code> from angle, element spacing, sound speed, and the FPGA clock.</span></li>
+            <li><strong>Transmit framed data.</strong><span>Each v2 frame carries a start marker, two steering bytes, 64 audio samples, and an end marker.</span></li>
+            <li><strong>Decode on FPGA.</strong><span>UART receive logic identifies frame fields and hands sample/steering values to the modulation and phase-control path.</span></li>
+            <li><strong>Drive transducers.</strong><span>Three H-bridge channel groups provide external control signals for the ultrasonic hardware.</span></li>
+          </ol>
+        </section>
+
+        <section id="evidence" class="content-section" aria-labelledby="evidence-title">
+          <div class="section-titlebar"><h2 id="evidence-title">Evidence record</h2><span>documented artifacts</span></div>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="EMT evidence table">
+            <table class="evidence-table">
+              <thead><tr><th scope="col">Evidence</th><th scope="col">What it establishes</th><th scope="col">Publication state</th></tr></thead>
+              <tbody>
+                <tr><th scope="row"><code>stream_wav_uart_v2.m</code></th><td>Audio preprocessing, 8-bit sample mapping, steering calculation, and serial framing.</td><td>Described on this page</td></tr>
+                <tr><th scope="row">v2 frame format</th><td>Start byte, signed 16-bit delta, 64-sample payload, and end byte.</td><td>Documented on this page</td></tr>
+                <tr><th scope="row"><code>top_module_v2.bit</code></th><td>A bitstream artifact exists for the wired prototype path.</td><td>Recorded; file not published</td></tr>
+                <tr><th scope="row">Basys3 constraints</th><td>UART and three H-bridge output groups are mapped to board pins.</td><td>Mapped in source notes</td></tr>
+                <tr><th scope="row">Routed run notes</th><td>Implementation completed but the notes record failing setup timing.</td><td>Known issue disclosed</td></tr>
+                <tr><th scope="row">Wireless README</th><td>Separates UART-to-nRF TX and nRF-to-speaker RX experiments from the wired path.</td><td>Summarized on this page</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="source-note"><strong>Documentation basis:</strong> <code>emtproject/PROJECT_NAVIGATION.md</code> and <code>emtproject/wireless_audio/README.md</code>. The wired and wireless paths are not presented as one verified system.</p>
+        </section>
+
+        <section id="limitations" class="content-section" aria-labelledby="limitations-title">
+          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>honest status</span></div>
+          <div class="two-column">
+            <article class="plain-panel"><h3>Known limitation</h3><p>The routed prototype has a documented setup-timing failure, likely around phase-offset paths. The available notes also do not yet establish a complete measured beam-steering result.</p></article>
+            <article class="plain-panel"><h3>Best next evidence</h3><p>Publish the design report, protocol capture, transducer/H-bridge wiring photo, timing summary, and a controlled before/after steering measurement or recording.</p></article>
+          </div>
+        </section>
+
+        <nav class="project-pager" aria-label="Project pages">
+          <a href="ecd-proje.html">← Previous: ECD_PROJE</a>
+          <a href="nrf-project.html">Next: nRF24L01 →</a>
+        </nav>
+      </main>
+
+      <footer class="site-footer"><p>Borek's Engineering Notebook</p><p><a href="#main-content">Return to top</a></p></footer>
+    </div>
+  </body>
+</html>

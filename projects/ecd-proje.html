@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Evidence documentation for a Basys3 3-bit ADC controller and VGA oscilloscope implemented in VHDL." />
+    <meta name="theme-color" content="#163f73" />
+    <title>ECD_PROJE Evidence | Borek's Engineering Notebook</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="project-ecd">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="masthead">
+          <a class="brand" href="../index.html" aria-label="Borek's Engineering Notebook home">
+            <span class="brand-mark" aria-hidden="true">B</span>
+            <span><strong>Borek's Engineering Notebook</strong><small>Project evidence file</small></span>
+          </a>
+          <p class="masthead-note">PROJECT 01 / ECD</p>
+        </div>
+        <nav class="main-nav" aria-label="Project navigation">
+          <a href="../index.html#projects">All projects</a>
+          <a href="#implementation">Implementation</a>
+          <a href="#evidence">Evidence</a>
+          <a href="#limitations">Limitations</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / ECD_PROJE</p>
+
+        <section class="project-intro" aria-labelledby="project-title">
+          <p class="page-label">MIXED-SIGNAL FPGA / EVIDENCE DOCUMENT</p>
+          <h1 id="project-title">ECD_PROJE: 3-bit ADC controller and VGA scope</h1>
+          <p class="lead">
+            A Basys3 design that participates in conversion rather than reading a finished ADC:
+            it controls an external sample-and-hold/comparator path, assembles a 3-bit result with
+            a SAR-style sequence, detects a trigger boundary, and draws samples on VGA.
+          </p>
+          <div class="entry-actions" aria-label="ECD project actions">
+            <a class="button primary" href="#evidence">Read evidence record</a>
+            <a class="button repository-button" href="https://github.com/Borek-32/EEE313-VGA-Scope-3-Bit-ADC-BASYS3" data-repository="ecd-proje"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+          </div>
+
+          <dl class="project-facts wide">
+            <div><dt>Platform</dt><dd>Digilent Basys3 / Xilinx Artix-7</dd></div>
+            <div><dt>Tools</dt><dd>Vivado, VHDL, LTspice</dd></div>
+            <div><dt>Output</dt><dd>640×480 VGA waveform</dd></div>
+            <div><dt>Recorded status</dt><dd>Bitstream generated; timing cleanup remains</dd></div>
+          </dl>
+        </section>
+
+        <section class="content-section" aria-labelledby="summary-title">
+          <div class="section-titlebar"><h2 id="summary-title">Executive summary</h2><span>what was built</span></div>
+          <div class="summary-grid">
+            <article><h3>Problem</h3><p>Demonstrate a small end-to-end ADC system in which FPGA control, external analog decisions, and a live display operate as one path.</p></article>
+            <article><h3>Implementation</h3><p>An FSM drives <code>sel[2:0]</code> and <code>hold</code>, consumes comparator input <code>din</code>, then passes completed codes to trigger and VGA logic.</p></article>
+            <article><h3>Result</h3><p>The documented Vivado build produced a bitstream and the page records both the active digital path and the remaining generated-clock/endpoint constraints work.</p></article>
+          </div>
+        </section>
+
+        <section id="implementation" class="content-section" aria-labelledby="implementation-title">
+          <div class="section-titlebar"><h2 id="implementation-title">Implementation flow</h2><span>signal path</span></div>
+          <ol class="flow-list">
+            <li><strong>Hold the analog sample.</strong><span>The external circuit captures the input; the FPGA asserts <code>hold</code> during conversion decisions.</span></li>
+            <li><strong>Select reference levels.</strong><span>The controller steps through <code>bit0</code>, <code>bit1</code>, and <code>bit2</code> states while driving the reference MUX.</span></li>
+            <li><strong>Consume comparator decisions.</strong><span><code>din</code> is sampled at each decision and assembled into the completed 3-bit output code.</span></li>
+            <li><strong>Detect a stable boundary.</strong><span>The trigger FSM watches completed codes for a low-to-high crossing before capture.</span></li>
+            <li><strong>Render the waveform.</strong><span>A double-buffered scope stores samples and draws a staircase trace on a 640×480 VGA frame.</span></li>
+          </ol>
+        </section>
+
+        <section id="evidence" class="content-section" aria-labelledby="evidence-title">
+          <div class="section-titlebar"><h2 id="evidence-title">Evidence record</h2><span>documented artifacts</span></div>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="ECD evidence table">
+            <table class="evidence-table">
+              <thead><tr><th scope="col">Evidence</th><th scope="col">What it establishes</th><th scope="col">Publication state</th></tr></thead>
+              <tbody>
+                <tr><th scope="row"><code>top_main.vhd</code></th><td>Top-level coordination of conversion, trigger, and display paths.</td><td>Described on this page</td></tr>
+                <tr><th scope="row"><code>top_adc.vhd</code></th><td>SAR-style state sequence, reference selection, hold control, and output code.</td><td>Described on this page</td></tr>
+                <tr><th scope="row"><code>vga_adc_scope_3bits.vhd</code></th><td>Sample capture and VGA staircase renderer.</td><td>Described on this page</td></tr>
+                <tr><th scope="row">Basys3 constraints</th><td>Clock, VGA, LED, comparator, hold, and reference-select pin mapping.</td><td>Mapped in source notes</td></tr>
+                <tr><th scope="row">LTspice model</th><td>Sample-and-hold, comparator, level shifting, and reference-selection concept.</td><td>Recorded; image not published</td></tr>
+                <tr><th scope="row">Vivado run</th><td>A routed bitstream was generated.</td><td>Recorded; report not published</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="source-note"><strong>Documentation basis:</strong> the local engineering notes in <code>ECD_PROJE/AGENTS.md</code>. Source files and reports are being reviewed and curated for upload to the linked public repository.</p>
+        </section>
+
+        <section id="limitations" class="content-section" aria-labelledby="limitations-title">
+          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>honest status</span></div>
+          <div class="two-column">
+            <article class="plain-panel"><h3>Known limitation</h3><p>The routed design wrote a bitstream, but the notes flag generated-clock and unconstrained-endpoint cleanup. Bitstream generation alone is not presented as proof of timing closure.</p></article>
+            <article class="plain-panel"><h3>Best next evidence</h3><p>Publish the final report, one LTspice schematic capture, the timing summary, and a photo or short recording of the VGA output responding to a measured input.</p></article>
+          </div>
+        </section>
+
+        <nav class="project-pager" aria-label="Project pages">
+          <a href="../index.html#projects">← Project directory</a>
+          <a href="emtproject.html">Next: EMT ultrasonic speaker →</a>
+        </nav>
+      </main>
+
+      <footer class="site-footer"><p>Borek's Engineering Notebook</p><p><a href="#main-content">Return to top</a></p></footer>
+    </div>
+  </body>
+</html>

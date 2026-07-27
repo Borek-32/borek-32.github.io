@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Borek's compact engineering portfolio: FPGA, DSP, radio, mixed-signal, and mechatronic projects with evidence-first documentation."
+    />
+    <meta name="theme-color" content="#163f73" />
+    <title>Kerem Gürbüz - Project Archive</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="masthead">
+          <a class="brand" href="index.html" aria-label="Borek's Engineering Notebook home">
+            <span class="brand-mark" aria-hidden="true">B</span>
+            <span>
+              <strong>Kerem Gürbüz - Project Archive</strong>
+              <small>FPGA · RTL · DSP · Hardware Integration · verification</small>
+            </span>
+          </a>
+        </div>
+      </header>
+
+      <main id="main-content">
+        <section class="welcome-panel" aria-labelledby="welcome-title">
+          <p class="page-label">PROJECT INDEX</p>
+          <h1 id="welcome-title"></h1>
+          <p class="lead">
+            This is a compact project library of FPGA, signal-processing, radio, mixed-signal, and mechatronic work.
+            Each project page has evidences of architecture design, implementation flow,
+            verification notes, and known limitations listed.
+          </p>
+        </section>
+
+        <section id="projects" class="content-section" aria-labelledby="projects-title">
+          <div class="section-titlebar">
+            <h2 id="projects-title">Project directory</h2>
+            <span>5 entries</span>
+          </div>
+
+          <div class="project-list">
+            <article class="project-entry project-ecd">
+              <header>
+                <p class="project-number">PROJECT 01</p>
+                <h3>3-bit ADC and VGA scope</h3>
+              </header>
+              <div class="project-summary">
+                <figure class="project-preview">
+                  <div
+                    class="project-preview-placeholder"
+                    role="img"
+                    aria-label="Placeholder for an ECD_PROJE project preview photo"
+                  >
+                    <span>Project preview</span>
+                    <strong>Photo placeholder</strong>
+                  </div>
+                  <figcaption>ECD_PROJE photo</figcaption>
+                </figure>
+                <dl class="project-facts">
+                  <div><dt>Area</dt><dd>Mixed-signal acquisition on FPGA</dd></div>
+                  <div><dt>Platform</dt><dd>Basys3 / Artix-7 / LTSpice / KiCad</dd></div>
+                  <div><dt>Status</dt><dd>Bitstream; verified; documented</dd></div>
+                </dl>
+              </div>
+              <p>
+                FPGA control for an external sample-and-hold/comparator hardware on breadboard, followed
+                by period-based trigger detection and a 640×480 VGA waveform renderer.
+              </p>
+              <div class="entry-actions" aria-label="ECD_PROJE links">
+                <a class="button primary" href="projects/ecd-proje.html">Evidence documentation</a>
+                <a class="button repository-button" href="https://github.com/Borek-32/EEE313-VGA-Scope-3-Bit-ADC-BASYS3" data-repository="ecd-proje"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+              </div>
+            </article>
+
+            <article class="project-entry project-emt">
+              <header>
+                <p class="project-number">PROJECT 02</p>
+                <h3>Parametric directional speaker - Beamsteering attempt</h3>
+              </header>
+              <div class="project-summary">
+                <figure class="project-preview">
+                  <div
+                    class="project-preview-placeholder"
+                    role="img"
+                    aria-label="Placeholder for an EMT project preview photo"
+                  >
+                    <span>Project preview</span>
+                    <strong>Photo placeholder</strong>
+                  </div>
+                  <figcaption>EMT photo</figcaption>
+                </figure>
+                <dl class="project-facts">
+                  <div><dt>Area</dt><dd>Ultrasonic beamforming on acoustic media</dd></div>
+                  <div><dt>Platform</dt><dd>Basys3 / UART / MATLAB</dd></div>
+                  <div><dt>Status</dt><dd>Bitstream; verified; documented</dd></div>
+                </dl>
+              </div>
+              <p>
+                MATLAB audio streaming with framed UART samples and a beamsteering phase delta, decoded by
+                FPGA logic that drives PWM/H-bridge PCB channels for an array of ultrasonic transducers.
+              </p>
+              <div class="entry-actions" aria-label="EMT project links">
+                <a class="button primary" href="projects/emtproject.html">Evidence documentation</a>
+                <a class="button repository-button" href="https://github.com/Borek-32/EEE351-Parametric-Speaker-Beam-steering-Attempt-BASYS3" data-repository="emtproject"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+              </div>
+            </article>
+
+            <article class="project-entry project-nrf">
+              <header>
+                <p class="project-number">PROJECT 03</p>
+                <h3>nRF24L01 — FPGA radio register level debugger</h3>
+              </header>
+              <div class="project-summary">
+                <figure class="project-preview">
+                  <div
+                    class="project-preview-placeholder"
+                    role="img"
+                    aria-label="Placeholder for an nRF24L01 project preview photo"
+                  >
+                    <span>Project preview</span>
+                    <strong>Photo placeholder</strong>
+                  </div>
+                  <figcaption>nRF24L01 photo</figcaption>
+                </figure>
+                <dl class="project-facts">
+                  <div><dt>Area</dt><dd>SPI / 2.4 GHz radio</dd></div>
+                  <div><dt>Platform</dt><dd>Basys3 / nRF24L01 / Python</dd></div>
+                  <div><dt>Status</dt><dd>Bitstream; verified; TX/RX and troubleshooting GUI workspaces documented</dd></div>
+                </dl>
+              </div>
+              <p>
+                A four-build workspace for transmitter, receiver, and diagnostic variants with
+                SPI helpers, register maps, payload logic, and on-board state visibility.
+              </p>
+              <div class="entry-actions" aria-label="nRF24L01 project links">
+                <a class="button primary" href="projects/nrf-project.html">Evidence documentation</a>
+                <a class="button repository-button" href="https://github.com/Borek-32/EEE102-NRF24L01-Radio-Debugger-for-RC-car-Project-BASYS3" data-repository="nrf-project"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+              </div>
+            </article>
+
+            <article class="project-entry project-mfcc">
+              <header>
+                <p class="project-number">PROJECT 04</p>
+                <h3>MFCC based FPGA speech-recognition DSP pipeline</h3>
+              </header>
+              <div class="project-summary">
+                <figure class="project-preview">
+                  <div
+                    class="project-preview-placeholder"
+                    role="img"
+                    aria-label="Placeholder for an MFCC project preview photo"
+                  >
+                    <span>Project preview</span>
+                    <strong>Photo placeholder</strong>
+                  </div>
+                  <figcaption>MFCC photo</figcaption>
+                </figure>
+                <dl class="project-facts">
+                  <div><dt>Area</dt><dd>FPGA / DSP / PCB design</dd></div>
+                  <div><dt>Platform</dt><dd>Vivado / VHDL / MATLAB / LTSpice / KiCad</dd></div>
+                  <div><dt>Status</dt><dd>Bitstream; Fully Integrated with PCB; </dd></div>
+                </dl>
+              </div>
+              <p>
+                A staged (ADC, Hanning Window, FFT, MEL, LogMEL, DCT, COMP/REC) DSP pipeline with controller workflows, fixed-point
+                checks, debug UART integration, and board-level result display along with the mic-amp + anti aliasing filter design on PCB.
+              </p>
+              <div class="entry-actions" aria-label="MFCC project links">
+                <a class="button primary" href="projects/mfcc-project.html">Evidence documentation</a>
+                <a class="button repository-button" href="https://github.com/Borek-32/EEE491-Spoken-Digit-Recognizer-BASYS3" data-repository="mfcc-project"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+              </div>
+            </article>
+
+            <article class="project-entry project-rc">
+              <header>
+                <p class="project-number">PROJECT 05</p>
+                <h3>FPGA RC car — SPI, XADC &amp; PWM</h3>
+              </header>
+              <div class="project-summary">
+                <figure class="project-preview">
+                  <div
+                    class="project-preview-placeholder"
+                    role="img"
+                    aria-label="Media placeholder for the completed RC car chassis"
+                  >
+                    <span>Project preview</span>
+                    <strong>External media pending</strong>
+                  </div>
+                  <figcaption>Completed RC car chassis media will be hosted separately</figcaption>
+                </figure>
+                <dl class="project-facts">
+                  <div><dt>Area</dt><dd>FPGA radio control and motor drive</dd></div>
+                  <div><dt>Platform</dt><dd>2× Basys3 / NRF24L01 / XADC / PWM</dd></div>
+                  <div><dt>Status</dt><dd>Not fully functional; syntax analysis only</dd></div>
+                </dl>
+              </div>
+              <p>
+                An all-VHDL control system in which dual analog joysticks feed an XADC and
+                NRF24L01 radio link, while the vehicle produces one steering and four motor/ESC
+                PWM outputs.
+              </p>
+              <div class="entry-actions" aria-label="FPGA RC car project links">
+                <a class="button primary" href="projects/rc-car.html">Evidence documentation</a>
+                <a class="button" href="https://youtu.be/JlileyPvNLM?si=4B1xvQ-6fF4RnPQ1">Watch project demo</a>
+                <a class="button repository-button" href="https://github.com/Borek-32/EEE102-FPGA-RC-Car-BASYS3" data-repository="rc-car"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+              </div>
+            </article>
+          </div>
+        </section>
+
+      </main>
+
+      <footer class="site-footer">
+        <p>Kerem Gürbüz - Project Archive</p>
+        <p><a href="#main-content">Return to top</a></p>
+      </footer>
+    </div>
+  </body>
+</html>
