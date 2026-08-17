@@ -3,9 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Evidence documentation for a Basys3 3-bit ADC controller and VGA oscilloscope implemented in VHDL." />
+    <meta
+      name="description"
+      content="Report-backed evidence for a Basys3-controlled 3-bit ADC, discrete analog front end, trigger-aligned capture path, and VGA oscilloscope."
+    />
     <meta name="theme-color" content="#163f73" />
-    <title>ECD_PROJE Evidence | Borek's Engineering Notebook</title>
+    <title>FPGA 3-bit ADC and VGA Oscilloscope | Borek's Engineering Notebook</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body class="project-ecd">
@@ -22,79 +25,399 @@
         </div>
         <nav class="main-nav" aria-label="Project navigation">
           <a href="../index.html#projects">All projects</a>
-          <a href="#implementation">Implementation</a>
-          <a href="#evidence">Evidence</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#verification">Verification</a>
+          <a href="#results">Results</a>
+          <a href="#hardware">Hardware</a>
+          <a href="#report">Report</a>
           <a href="#limitations">Limitations</a>
         </nav>
       </header>
 
       <main id="main-content">
-        <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / ECD_PROJE</p>
+        <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / FPGA 3-bit ADC</p>
 
         <section class="project-intro" aria-labelledby="project-title">
-          <p class="page-label">MIXED-SIGNAL FPGA / EVIDENCE DOCUMENT</p>
-          <h1 id="project-title">ECD_PROJE: 3-bit ADC controller and VGA scope</h1>
+          <p class="page-label">MIXED-SIGNAL FPGA / REPORT-BACKED EVIDENCE</p>
+          <h1 id="project-title">FPGA 3-bit ADC and VGA oscilloscope</h1>
           <p class="lead">
-            A Basys3 design that participates in conversion rather than reading a finished ADC:
-            it controls an external sample-and-hold/comparator path, assembles a 3-bit result with
-            a SAR-style sequence, detects a trigger boundary, and draws samples on VGA.
+            A Basys3 design that closes the loop around a discrete analog front end: FPGA logic
+            freezes a sample, selects three comparison references, reconstructs a 3-bit code,
+            finds a repeatable waveform boundary, and draws the captured result on VGA. The record
+            below separates the current routed build from historical bench photographs.
           </p>
           <div class="entry-actions" aria-label="ECD project actions">
-            <a class="button primary" href="#evidence">Read evidence record</a>
-            <a class="button repository-button" href="https://github.com/Borek-32/EEE313-VGA-Scope-3-Bit-ADC-BASYS3" data-repository="ecd-proje"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+            <a class="button primary" href="#results">See display evidence</a>
+            <a
+              class="button"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982375/vga-adc-project-report_gdfmu8.pdf"
+            >Open project report</a>
+            <a
+              class="button repository-button"
+              href="https://github.com/Borek-32/EEE313-VGA-Scope-3-Bit-ADC-BASYS3"
+              data-repository="ecd-proje"
+            ><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
           </div>
 
           <dl class="project-facts wide">
-            <div><dt>Platform</dt><dd>Digilent Basys3 / Xilinx Artix-7</dd></div>
-            <div><dt>Tools</dt><dd>Vivado, VHDL, LTspice</dd></div>
-            <div><dt>Output</dt><dd>640×480 VGA waveform</dd></div>
-            <div><dt>Recorded status</dt><dd>Bitstream generated; timing cleanup remains</dd></div>
+            <div><dt>Platform</dt><dd>Basys 3 / XC7A35T</dd></div>
+            <div><dt>Conversion</dt><dd>3 comparisons / 48 µs</dd></div>
+            <div><dt>Display</dt><dd>640 × 480 VGA / ≈59.52 Hz</dd></div>
+            <div><dt>Evidence state</dt><dd>Current routed build; historical bench demo</dd></div>
           </dl>
+
+          <figure class="project-hero-media">
+            <a
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/one-khz-sine-vga-output_a9tt9t.jpg"
+              aria-label="Open the full-resolution historical one-kilohertz sine-wave VGA demonstration"
+            >
+              <img
+                src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1786982372/one-khz-sine-vga-output_a9tt9t.jpg"
+                width="1408"
+                height="734"
+                alt="Bench photograph showing an oscilloscope sine wave beside a monitor rendering a black staircase waveform on a white VGA plot"
+                decoding="async"
+                fetchpriority="high"
+              />
+            </a>
+            <figcaption>
+              <strong>Historical end-to-end demonstration.</strong> A 1 kHz sine input appears on
+              the bench oscilloscope and VGA display. It demonstrates the earlier prototype, not
+              programming of the current bitstream hash. PDF Figure 17, page 26.
+            </figcaption>
+          </figure>
         </section>
 
         <section class="content-section" aria-labelledby="summary-title">
           <div class="section-titlebar"><h2 id="summary-title">Executive summary</h2><span>what was built</span></div>
           <div class="summary-grid">
-            <article><h3>Problem</h3><p>Demonstrate a small end-to-end ADC system in which FPGA control, external analog decisions, and a live display operate as one path.</p></article>
-            <article><h3>Implementation</h3><p>An FSM drives <code>sel[2:0]</code> and <code>hold</code>, consumes comparator input <code>din</code>, then passes completed codes to trigger and VGA logic.</p></article>
-            <article><h3>Result</h3><p>The documented Vivado build produced a bitstream and the page records both the active digital path and the remaining generated-clock/endpoint constraints work.</p></article>
+            <article>
+              <h3>Problem</h3>
+              <p>Demonstrate an end-to-end ADC in which discrete analog acquisition, FPGA decision sequencing, trigger alignment, and a live display operate as one explainable signal path.</p>
+            </article>
+            <article>
+              <h3>Implementation</h3>
+              <p>A sample-and-hold and comparator feed a three-step controller. Completed codes drive a low-to-high trigger detector, alternating 256-sample buffers, and a staircase VGA renderer.</p>
+            </article>
+            <article>
+              <h3>Result boundary</h3>
+              <p>Historical photographs show four waveform families on VGA, while the current package-inverting source set produces a routed bitstream. The current build is not timing-closed or tied to those photographs.</p>
+            </article>
           </div>
         </section>
 
-        <section id="implementation" class="content-section" aria-labelledby="implementation-title">
-          <div class="section-titlebar"><h2 id="implementation-title">Implementation flow</h2><span>signal path</span></div>
+        <section id="architecture" class="content-section" aria-labelledby="architecture-title">
+          <div class="section-titlebar"><h2 id="architecture-title">Implemented architecture</h2><span>analog input to VGA</span></div>
+          <div class="two-column">
+            <article class="plain-panel">
+              <h3>Mixed-signal boundary</h3>
+              <p>
+                The FPGA supplies HOLD and three natural-binary reference selections, then samples
+                one comparator decision on <code>din</code>. In the current top level, HOLD and all
+                selectors are inverted at the package boundary for one-stage external 5 V translators.
+              </p>
+            </article>
+            <article class="plain-panel">
+              <h3>Capture convention</h3>
+              <p>
+                One code is completed every 48 µs. A trigger FSM advances only on completed codes;
+                the display engine captures two detected periods or 256 samples into the inactive
+                buffer before swapping it onto the VGA plot.
+              </p>
+            </article>
+          </div>
+
+          <div class="evidence-gallery architecture-gallery">
+            <figure class="wide-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982373/system-architecture_gitnvt.png"
+                aria-label="Open the full-resolution ECD mixed-signal system architecture diagram"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_2000/v1786982373/system-architecture_gitnvt.png"
+                  width="3397"
+                  height="733"
+                  alt="Signal-flow diagram from analog input through sample-and-hold, comparator and selectable reference network into the Basys3 SAR controller, trigger detector, capture buffers, and VGA output"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>System architecture.</strong> The implemented mixed-signal path and control contracts from input acquisition to VGA output. PDF Figure 2, page 8.</figcaption>
+            </figure>
+          </div>
+
           <ol class="flow-list">
-            <li><strong>Hold the analog sample.</strong><span>The external circuit captures the input; the FPGA asserts <code>hold</code> during conversion decisions.</span></li>
-            <li><strong>Select reference levels.</strong><span>The controller steps through <code>bit0</code>, <code>bit1</code>, and <code>bit2</code> states while driving the reference MUX.</span></li>
-            <li><strong>Consume comparator decisions.</strong><span><code>din</code> is sampled at each decision and assembled into the completed 3-bit output code.</span></li>
-            <li><strong>Detect a stable boundary.</strong><span>The trigger FSM watches completed codes for a low-to-high crossing before capture.</span></li>
-            <li><strong>Render the waveform.</strong><span>A double-buffered scope stores samples and draws a staircase trace on a 640×480 VGA frame.</span></li>
+            <li><strong>Acquire the input.</strong><span>A BS250 sample switch and 33 nF storage capacitor follow the moving analog waveform.</span></li>
+            <li><strong>Freeze one sample.</strong><span>The controller asserts logical HOLD for the duration of the three comparison decisions.</span></li>
+            <li><strong>Select references.</strong><span>The SAR-style states choose midpoint and conditional reference levels through the external MUX and ladder.</span></li>
+            <li><strong>Assemble one code.</strong><span>The controller samples <code>din</code> three times, writes the MSB-to-LSB decisions, and pulses <code>code_valid</code>.</span></li>
+            <li><strong>Find a stable boundary.</strong><span>Completed codes feed a low/high threshold sequence that emits <code>period_valid</code> after a full cycle.</span></li>
+            <li><strong>Capture without tearing.</strong><span>The inactive 256-sample buffer records the next span and becomes visible only after capture completes.</span></li>
+            <li><strong>Render the trace.</strong><span>A 25 MHz pixel clock drives a 640 × 480 frame with axes and a three-pixel-thick staircase waveform.</span></li>
           </ol>
         </section>
 
-        <section id="evidence" class="content-section" aria-labelledby="evidence-title">
-          <div class="section-titlebar"><h2 id="evidence-title">Evidence record</h2><span>documented artifacts</span></div>
-          <div class="table-wrap" tabindex="0" role="region" aria-label="ECD evidence table">
+        <section id="verification" class="content-section" aria-labelledby="verification-title">
+          <div class="section-titlebar"><h2 id="verification-title">Verification record</h2><span>what each artifact establishes</span></div>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="ECD verification results">
             <table class="evidence-table">
-              <thead><tr><th scope="col">Evidence</th><th scope="col">What it establishes</th><th scope="col">Publication state</th></tr></thead>
+              <thead><tr><th scope="col">Evidence</th><th scope="col">Retained result</th><th scope="col">What it establishes</th></tr></thead>
               <tbody>
-                <tr><th scope="row"><code>top_main.vhd</code></th><td>Top-level coordination of conversion, trigger, and display paths.</td><td>Described on this page</td></tr>
-                <tr><th scope="row"><code>top_adc.vhd</code></th><td>SAR-style state sequence, reference selection, hold control, and output code.</td><td>Described on this page</td></tr>
-                <tr><th scope="row"><code>vga_adc_scope_3bits.vhd</code></th><td>Sample capture and VGA staircase renderer.</td><td>Described on this page</td></tr>
-                <tr><th scope="row">Basys3 constraints</th><td>Clock, VGA, LED, comparator, hold, and reference-select pin mapping.</td><td>Mapped in source notes</td></tr>
-                <tr><th scope="row">LTspice model</th><td>Sample-and-hold, comparator, level shifting, and reference-selection concept.</td><td>Recorded; image not published</td></tr>
-                <tr><th scope="row">Vivado run</th><td>A routed bitstream was generated.</td><td>Recorded; report not published</td></tr>
+                <tr><th scope="row">Stored LTspice RAW</th><td>Median acquisition error 5.29 mV; maximum 12.75 mV; median hold drift 0.295 mV; maximum 0.461 mV</td><td>Nominal behavior of the archived analog model only</td></tr>
+                <tr><th scope="row">Comparator polarity</th><td>100% correct outside a ±50 mV ambiguity band in the retained nominal transient</td><td>Decision polarity for that model and stimulus, not ADC accuracy across PVT</td></tr>
+                <tr><th scope="row">Active VHDL and XDC</th><td><code>top_adc</code>, <code>vga_adc_scope_3bits</code>, and <code>top_main</code> form the current synthesis source set</td><td>Current controller, capture, renderer, package polarity, and pin contracts</td></tr>
+                <tr><th scope="row">Routed Vivado build</th><td>Bitstream written; 100 MHz intra-clock WNS +1.179 ns; overall WNS −3.992 ns and TNS −47.310 ns</td><td>Routing and artifact generation, but not timing closure</td></tr>
+                <tr><th scope="row">Historical bench record</th><td>Breadboard, oscilloscope, and VGA photographs retained for sine, square, triangle, and sawtooth inputs</td><td>Qualitative end-to-end behavior of the earlier prototype</td></tr>
               </tbody>
             </table>
           </div>
-          <p class="source-note"><strong>Documentation basis:</strong> the local engineering notes in <code>ECD_PROJE/AGENTS.md</code>. Source files and reports are being reviewed and curated for upload to the linked public repository.</p>
+
+          <div class="evidence-gallery">
+            <figure class="wide-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/ltspice-transient-reanalysis_xjmi1s.png"
+                aria-label="Open the full-resolution LTspice transient reanalysis"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1786982372/ltspice-transient-reanalysis_xjmi1s.png"
+                  width="2500"
+                  height="1700"
+                  alt="Four-panel LTspice analysis showing input and held voltage, acquisition error, hold drift, and comparator decision margin over a nominal transient"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Nominal analog reanalysis.</strong> Metrics were recomputed from the archived binary RAW file. The model uses an ideal reference surrogate and historical two-stage control translation. PDF Figure 4, page 10.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982373/sar-sequence_yfkkrw.png"
+                aria-label="Open the full-resolution SAR controller sequence"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786982373/sar-sequence_yfkkrw.png"
+                  width="2310"
+                  height="327"
+                  alt="State diagram showing idle, bit-zero, bit-one, and bit-two conversion states with hold, selector, and output-code actions"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Three-comparison sequence.</strong> Generated from the current controller states and decision updates. PDF Figure 11, page 17.</figcaption>
+            </figure>
+            <figure class="portrait-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982373/trigger-capture_saan3n.png"
+                aria-label="Open the full-resolution trigger and double-buffer capture sequence"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1000/v1786982373/trigger-capture_saan3n.png"
+                  width="860"
+                  height="1583"
+                  alt="Vertical flow diagram showing low and high threshold waits, period measurement, capture arming, sample collection, and display-buffer swap"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Trigger-to-display control.</strong> The period detector gates capture, and the completed inactive buffer is swapped onto the display. PDF Figure 12, page 19.</figcaption>
+            </figure>
+          </div>
+
+          <p class="source-note">
+            <strong>Current artifact:</strong> <code>top_main.bit</code> is 2,192,132 bytes with
+            SHA-256 <code>3b5d721ca68fffdb19968866694d870c60431c66ee463945d182b23c40285643</code>.
+            The routed report also flags 51 sequential pins without a recognized clock and 90
+            unconstrained internal endpoints.
+          </p>
+        </section>
+
+        <section id="results" class="content-section" aria-labelledby="results-title">
+          <div class="section-titlebar"><h2 id="results-title">Acquisition and display evidence</h2><span>historical bench record</span></div>
+          <p>
+            The retained photographs pair an oscilloscope view of each applied waveform with the
+            VGA staircase display. They demonstrate shape tracking across four waveform families;
+            they do not provide a calibrated code-versus-voltage table or prove the current build hash.
+          </p>
+
+          <div class="evidence-gallery">
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/one-khz-sine-vga-output_a9tt9t.jpg"
+                aria-label="Open the full-resolution one-kilohertz sine-wave VGA demonstration"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786982372/one-khz-sine-vga-output_a9tt9t.jpg"
+                  width="1408"
+                  height="734"
+                  alt="Oscilloscope sine trace beside a monitor showing the corresponding stepped VGA waveform"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Sine input.</strong> Historical 1 kHz bench and VGA demonstration. PDF Figure 17, page 26.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/one-khz-square-vga-output_iyqjeu.jpg"
+                aria-label="Open the full-resolution one-kilohertz square-wave VGA demonstration"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786982372/one-khz-square-vga-output_iyqjeu.jpg"
+                  width="1310"
+                  height="726"
+                  alt="Oscilloscope square trace beside a monitor showing the corresponding two-level VGA waveform"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Square input.</strong> Historical 1 kHz bench and VGA demonstration. PDF Figure 18, page 26.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/one-khz-triangle-vga-output_zggbwk.jpg"
+                aria-label="Open the full-resolution one-kilohertz triangle-wave VGA demonstration"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786982372/one-khz-triangle-vga-output_zggbwk.jpg"
+                  width="1287"
+                  height="735"
+                  alt="Oscilloscope triangle trace beside a monitor showing the corresponding rising and falling staircase VGA waveform"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Triangle input.</strong> Historical 1 kHz bench and VGA demonstration. PDF Figure 19, page 27.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/one-khz-sawtooth-vga-output_p6qpsz.jpg"
+                aria-label="Open the full-resolution one-kilohertz sawtooth-wave VGA demonstration"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786982372/one-khz-sawtooth-vga-output_p6qpsz.jpg"
+                  width="1284"
+                  height="722"
+                  alt="Oscilloscope sawtooth trace beside a monitor showing the corresponding rising staircase and reset on VGA"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Sawtooth input.</strong> Historical 1 kHz bench and VGA demonstration. PDF Figure 20, page 27.</figcaption>
+            </figure>
+          </div>
+
+          <aside class="result-boundary" aria-label="Display evidence boundary">
+            <strong>How to read these photographs:</strong> they are qualitative historical
+            end-to-end evidence. No retained capture ties them to the current package-inverting
+            bitstream, and no calibrated ADC transition or amplitude-error table is available.
+          </aside>
+        </section>
+
+        <section id="hardware" class="content-section" aria-labelledby="hardware-title">
+          <div class="section-titlebar"><h2 id="hardware-title">Discrete analog front end</h2><span>prototype and interface</span></div>
+          <p>
+            The analog side uses a MOSFET sample switch, storage capacitor, five-transistor
+            OTA-like comparison stage, CMOS regeneration, a resistor-ladder reference concept,
+            and MOSFET control translation. The Basys3 closes the decision loop and supplies VGA.
+          </p>
+
+          <div class="evidence-gallery hardware-gallery">
+            <figure class="wide-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/integrated-hardware-setup_gwfgvw.jpg"
+                aria-label="Open the full-resolution integrated ECD breadboard and Basys3 setup"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1600/v1786982372/integrated-hardware-setup_gwfgvw.jpg"
+                  width="1315"
+                  height="756"
+                  alt="Photograph of the Basys3 board connected by PMOD wiring to a large breadboard analog prototype with a VGA cable attached"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Integrated historical prototype.</strong> Basys3, PMOD wiring, breadboard analog circuit, and VGA connection in the earlier bench setup. PDF Figure 15, page 23.</figcaption>
+            </figure>
+          </div>
+
+          <dl class="project-facts wide hardware-facts">
+            <div><dt>Sample-and-hold</dt><dd>BS250 switch / 33 nF storage</dd></div>
+            <div><dt>Comparator</dt><dd>5T OTA-like stage / CMOS regeneration</dd></div>
+            <div><dt>Reference path</dt><dd>Eight-level ladder / MUX concept</dd></div>
+            <div><dt>Current PMOD polarity</dt><dd>Active-low HOLD and selectors</dd></div>
+          </dl>
+          <p class="source-note">
+            <strong>Interface boundary:</strong> the current source expects one external inverter
+            for HOLD and one per selector. The archived LTspice transient used an ideal reference
+            surrogate and a historical two-stage HOLD translator, so it is not validation of the
+            current loaded interface.
+          </p>
+        </section>
+
+        <section id="report" class="content-section" aria-labelledby="report-title">
+          <div class="section-titlebar"><h2 id="report-title">Full project report</h2><span>45 pages / 3.3 MB</span></div>
+          <p>
+            The latest saved engineering report consolidates the source map, analog reanalysis,
+            current Vivado reports, historical bench record, limitations, and reproduction guide.
+            The public copy removes the student ID and workstation-specific absolute paths.
+          </p>
+
+          <figure class="report-cover">
+            <a
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982375/vga-adc-project-report_gdfmu8.pdf"
+              aria-label="Open the full 45-page VGA ADC project report PDF"
+            >
+              <img
+                src="https://res.cloudinary.com/vb29plgf/image/upload/pg_1,f_auto,q_auto:good,c_limit,w_1400/v1786982375/vga-adc-project-report_gdfmu8.jpg"
+                width="1400"
+                height="1980"
+                alt="Cover page of the VGA-Interfaced 3-Bit ADC on Basys3 engineering project report"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+            <figcaption>Preview of the privacy-scrubbed report cover; select it to open the full PDF.</figcaption>
+          </figure>
+
+          <iframe
+            class="pdf-frame"
+            src="https://res.cloudinary.com/vb29plgf/image/upload/v1786982375/vga-adc-project-report_gdfmu8.pdf#page=1&view=FitH"
+            title="Preview of the 45-page VGA ADC engineering project report"
+            loading="lazy"
+          ></iframe>
+          <div class="entry-actions report-actions" aria-label="Project report links">
+            <a
+              class="button primary"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982375/vga-adc-project-report_gdfmu8.pdf"
+            >Open full project report (PDF, 3.3 MB, 45 pages)</a>
+            <a
+              class="button"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/fl_attachment:VGA-ADC-Project-Report/v1786982375/vga-adc-project-report_gdfmu8.pdf"
+            >Download report</a>
+          </div>
         </section>
 
         <section id="limitations" class="content-section" aria-labelledby="limitations-title">
           <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>honest status</span></div>
           <div class="two-column">
-            <article class="plain-panel"><h3>Known limitation</h3><p>The routed design wrote a bitstream, but the notes flag generated-clock and unconstrained-endpoint cleanup. Bitstream generation alone is not presented as proof of timing closure.</p></article>
-            <article class="plain-panel"><h3>Best next evidence</h3><p>Publish the final report, one LTspice schematic capture, the timing summary, and a photo or short recording of the VGA output responding to a measured input.</p></article>
+            <article class="plain-panel">
+              <h3>Known limitations</h3>
+              <ul>
+                <li>The routed design does not meet overall setup timing and contains unrecognized generated-clock and unconstrained paths.</li>
+                <li>The historical VGA photographs are not tied to the current bitstream hash.</li>
+                <li>The loaded comparator-return level at K17 is not retained for the current interface.</li>
+                <li>The historical copper drawing remains a do-not-fabricate artifact because its inferred connectivity and DRC are unresolved.</li>
+              </ul>
+            </article>
+            <article class="plain-panel">
+              <h3>Best next evidence</h3>
+              <ul>
+                <li>Replace the fabric-generated <code>dclk</code> with a 100 MHz clock-enable path and close all relevant timing constraints.</li>
+                <li>Program the current bitstream, record its hash, and retain a synchronized input/comparator/code/VGA capture.</li>
+                <li>Measure all eight loaded reference voltages plus K17 high/low levels, edge rate, and comparator-return current.</li>
+                <li>Route and DRC a verified schematic before generating any fabrication artwork.</li>
+              </ul>
+            </article>
           </div>
         </section>
 
