@@ -48,29 +48,30 @@
             <article class="project-entry project-ecd">
               <header>
                 <p class="project-number">PROJECT 01</p>
-                <h3>3-bit ADC and VGA scope</h3>
+                <h3>FPGA 3-bit ADC and VGA oscilloscope</h3>
               </header>
               <div class="project-summary">
                 <figure class="project-preview">
-                  <div
-                    class="project-preview-placeholder"
-                    role="img"
-                    aria-label="Placeholder for an ECD_PROJE project preview photo"
-                  >
-                    <span>Project preview</span>
-                    <strong>Photo placeholder</strong>
-                  </div>
-                  <figcaption>ECD_PROJE photo</figcaption>
+                  <img
+                    class="project-preview-image"
+                    src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_900/v1786982372/one-khz-sine-vga-output_a9tt9t.jpg"
+                    width="1408"
+                    height="734"
+                    alt="Historical bench demonstration with a sine wave on the oscilloscope and its staircase rendering on the VGA display"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption>Historical 1 kHz sine-wave bench and VGA demonstration; current bitstream linkage remains to be captured</figcaption>
                 </figure>
                 <dl class="project-facts">
                   <div><dt>Area</dt><dd>Mixed-signal acquisition on FPGA</dd></div>
                   <div><dt>Platform</dt><dd>Basys3 / Artix-7 / LTSpice / KiCad</dd></div>
-                  <div><dt>Status</dt><dd>Bitstream; verified; documented</dd></div>
+                  <div><dt>Status</dt><dd>Current routed bitstream; historical bench demo; timing open</dd></div>
                 </dl>
               </div>
               <p>
-                FPGA control for an external sample-and-hold/comparator hardware on breadboard, followed
-                by period-based trigger detection and a 640×480 VGA waveform renderer.
+                FPGA control for an external sample-and-hold and comparator path, followed by
+                period-based trigger detection, double-buffered capture, and a 640 × 480 VGA renderer.
               </p>
               <div class="entry-actions" aria-label="ECD_PROJE links">
                 <a class="button primary" href="projects/ecd-proje.html">Evidence documentation</a>

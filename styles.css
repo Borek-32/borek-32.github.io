@@ -851,12 +851,16 @@ main {
 .project-mfcc .report-cover a,
 .project-emt .project-hero-media a,
 .project-emt .evidence-gallery a,
-.project-emt .report-cover a {
+.project-emt .report-cover a,
+.project-ecd .project-hero-media a,
+.project-ecd .evidence-gallery a,
+.project-ecd .report-cover a {
   display: block;
 }
 
 .project-mfcc .project-hero-media img,
-.project-emt .project-hero-media img {
+.project-emt .project-hero-media img,
+.project-ecd .project-hero-media img {
   height: auto;
   max-height: 680px;
   background: #fff;
@@ -864,7 +868,8 @@ main {
 }
 
 .project-mfcc .evidence-gallery img,
-.project-emt .evidence-gallery img {
+.project-emt .evidence-gallery img,
+.project-ecd .evidence-gallery img {
   height: auto;
   max-height: 560px;
   aspect-ratio: auto;
@@ -877,19 +882,23 @@ main {
 
 .project-mfcc .evidence-gallery figcaption strong,
 .project-emt .project-hero-media figcaption strong,
-.project-emt .evidence-gallery figcaption strong {
+.project-emt .evidence-gallery figcaption strong,
+.project-ecd .project-hero-media figcaption strong,
+.project-ecd .evidence-gallery figcaption strong {
   display: block;
   margin-bottom: 3px;
   color: #283846;
 }
 
-.project-mfcc .portrait-media a {
+.project-mfcc .portrait-media a,
+.project-ecd .portrait-media a {
   display: grid;
   place-items: center;
   padding: 18px;
 }
 
-.project-mfcc .portrait-media img {
+.project-mfcc .portrait-media img,
+.project-ecd .portrait-media img {
   width: auto;
   max-width: min(100%, 440px);
   max-height: 760px;
@@ -901,7 +910,8 @@ main {
 }
 
 .project-mfcc .hardware-facts,
-.project-emt .hardware-facts {
+.project-emt .hardware-facts,
+.project-ecd .hardware-facts {
   margin-top: 14px;
 }
 
