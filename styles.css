@@ -848,18 +848,23 @@ main {
 
 .project-mfcc .project-hero-media a,
 .project-mfcc .evidence-gallery a,
-.project-mfcc .report-cover a {
+.project-mfcc .report-cover a,
+.project-emt .project-hero-media a,
+.project-emt .evidence-gallery a,
+.project-emt .report-cover a {
   display: block;
 }
 
-.project-mfcc .project-hero-media img {
+.project-mfcc .project-hero-media img,
+.project-emt .project-hero-media img {
   height: auto;
   max-height: 680px;
   background: #fff;
   object-fit: contain;
 }
 
-.project-mfcc .evidence-gallery img {
+.project-mfcc .evidence-gallery img,
+.project-emt .evidence-gallery img {
   height: auto;
   max-height: 560px;
   aspect-ratio: auto;
@@ -870,7 +875,9 @@ main {
   grid-column: 1 / -1;
 }
 
-.project-mfcc .evidence-gallery figcaption strong {
+.project-mfcc .evidence-gallery figcaption strong,
+.project-emt .project-hero-media figcaption strong,
+.project-emt .evidence-gallery figcaption strong {
   display: block;
   margin-bottom: 3px;
   color: #283846;
@@ -893,7 +900,8 @@ main {
   margin: 0 auto;
 }
 
-.project-mfcc .hardware-facts {
+.project-mfcc .hardware-facts,
+.project-emt .hardware-facts {
   margin-top: 14px;
 }
 
@@ -1373,6 +1381,7 @@ a:hover {
 #architecture { --section-accent: var(--signal); }
 #verification { --section-accent: var(--scope-blue); }
 #recognition { --section-accent: var(--signal-green); }
+#results { --section-accent: var(--signal-green); }
 #hardware { --section-accent: var(--pcb-copper); }
 #report { --section-accent: var(--report-violet); }
 #limitations { --section-accent: var(--warning-clay); }

@@ -81,29 +81,31 @@
             <article class="project-entry project-emt">
               <header>
                 <p class="project-number">PROJECT 02</p>
-                <h3>Parametric directional speaker - Beamsteering attempt</h3>
+                <h3>FPGA ultrasonic audio-array prototype</h3>
               </header>
               <div class="project-summary">
                 <figure class="project-preview">
-                  <div
-                    class="project-preview-placeholder"
-                    role="img"
-                    aria-label="Placeholder for an EMT project preview photo"
-                  >
-                    <span>Project preview</span>
-                    <strong>Photo placeholder</strong>
-                  </div>
-                  <figcaption>EMT photo</figcaption>
+                  <img
+                    class="project-preview-image"
+                    src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_900/v1786986803/prototype-overview_d8awte.jpg"
+                    width="2083"
+                    height="1666"
+                    alt="Basys 3 connected to three hand-built driver boards and a 24-transducer ultrasonic array"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption>24-transducer qualitative demonstrator; calibrated beam map not yet retained</figcaption>
                 </figure>
                 <dl class="project-facts">
-                  <div><dt>Area</dt><dd>Ultrasonic beamforming on acoustic media</dd></div>
-                  <div><dt>Platform</dt><dd>Basys3 / UART / MATLAB</dd></div>
-                  <div><dt>Status</dt><dd>Bitstream; verified; documented</dd></div>
+                  <div><dt>Area</dt><dd>FPGA control and ultrasonic audio</dd></div>
+                  <div><dt>Platform</dt><dd>Basys 3 / MATLAB / LTspice / KiCad</dd></div>
+                  <div><dt>Status</dt><dd>Qualitative demonstrator; PCB fabrication hold</dd></div>
                 </dl>
               </div>
               <p>
-                MATLAB audio streaming with framed UART samples and a beamsteering phase delta, decoded by
-                FPGA logic that drives PWM/H-bridge PCB channels for an array of ultrasonic transducers.
+                A framed UART audio and steering path driving three hand-built bridge stages and a
+                4 × 6 transducer array, with the current electrical redesign held behind explicit
+                nonlinear, bench, schematic, and PCB release gates.
               </p>
               <div class="entry-actions" aria-label="EMT project links">
                 <a class="button primary" href="projects/emtproject.html">Evidence documentation</a>

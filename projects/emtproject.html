@@ -3,9 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Evidence documentation for a Basys3 ultrasonic directional-speaker prototype with MATLAB UART audio streaming." />
+    <meta
+      name="description"
+      content="Report-backed evidence for a Basys 3 ultrasonic audio-array prototype, its UART control path, nonlinear driver screening, qualitative listening result, and PCB release hold."
+    />
     <meta name="theme-color" content="#163f73" />
-    <title>EMT Project Evidence | Borek's Engineering Notebook</title>
+    <title>FPGA Ultrasonic Audio-Array Prototype | Borek's Engineering Notebook</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body class="project-emt">
@@ -22,84 +25,408 @@
         </div>
         <nav class="main-nav" aria-label="Project navigation">
           <a href="../index.html#projects">All projects</a>
-          <a href="#implementation">Implementation</a>
-          <a href="#evidence">Evidence</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#verification">Verification</a>
+          <a href="#results">Prototype</a>
+          <a href="#hardware">PCB readiness</a>
+          <a href="#report">Report</a>
           <a href="#limitations">Limitations</a>
         </nav>
       </header>
 
       <main id="main-content">
-        <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / EMT</p>
+        <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / FPGA ultrasonic audio array</p>
 
         <section class="project-intro" aria-labelledby="project-title">
-          <p class="page-label">ULTRASONIC AUDIO / EVIDENCE DOCUMENT</p>
-          <h1 id="project-title">EMT: ultrasonic directional-speaker prototype</h1>
+          <p class="page-label">ULTRASONIC AUDIO / REPORT-BACKED EVIDENCE</p>
+          <h1 id="project-title">FPGA ultrasonic audio-array prototype</h1>
           <p class="lead">
-            A hardware/audio experiment in which MATLAB prepares and streams audio frames over
-            UART to a Basys3 design. The FPGA decodes sample and steering data, then controls
-            PWM/H-bridge output paths for an ultrasonic transducer array.
+            A Basys 3 and MATLAB system that sends 8-bit audio samples and a steering command to
+            three hand-built H-bridge drivers feeding a 24-transducer, 40 kHz array. The retained
+            demonstrator produced recognizable localized audio in an individual listening trial;
+            controlled beam steering, calibrated acoustic performance, and PCB release remain open.
           </p>
           <div class="entry-actions" aria-label="EMT project actions">
-            <a class="button primary" href="#evidence">Read evidence record</a>
-            <a class="button repository-button" href="https://github.com/Borek-32/EEE351-Parametric-Speaker-Beam-steering-Attempt-BASYS3" data-repository="emtproject"><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
+            <a class="button primary" href="#results">See prototype evidence</a>
+            <a
+              class="button"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986801/fpga-ultrasonic-audio-array-progress-report_peioed.pdf"
+            >Open progress report</a>
+            <a
+              class="button repository-button"
+              href="https://github.com/Borek-32/EEE351-Parametric-Speaker-Beam-steering-Attempt-BASYS3"
+              data-repository="emtproject"
+            ><span class="github-logo" aria-hidden="true">GH</span>View GitHub repository</a>
           </div>
 
           <dl class="project-facts wide">
-            <div><dt>Platform</dt><dd>Basys3 / 100 MHz FPGA clock</dd></div>
-            <div><dt>Tools</dt><dd>Vivado, VHDL, MATLAB</dd></div>
-            <div><dt>Input path</dt><dd>WAV file → framed UART</dd></div>
-            <div><dt>Recorded status</dt><dd>Prototype bitstream; timing issue remains</dd></div>
+            <div><dt>Platform</dt><dd>Basys 3 / 100 MHz control</dd></div>
+            <div><dt>Prototype</dt><dd>24 transducers / 3 drivers</dd></div>
+            <div><dt>Transport</dt><dd>68-byte frames / 115200 baud</dd></div>
+            <div><dt>Evidence state</dt><dd>Qualitative demo / fabrication hold</dd></div>
           </dl>
+
+          <figure class="project-hero-media">
+            <a
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986803/prototype-overview_d8awte.jpg"
+              aria-label="Open the full-resolution ultrasonic audio-array prototype photograph"
+            >
+              <img
+                src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1786986803/prototype-overview_d8awte.jpg"
+                width="2083"
+                height="1666"
+                alt="Basys 3 board connected to three hand-built driver boards and a 24-transducer ultrasonic array on a bench"
+                decoding="async"
+                fetchpriority="high"
+              />
+            </a>
+            <figcaption>
+              <strong>Integrated demonstrator.</strong> Basys 3, three perfboard driver channels,
+              and the 4 × 6 ultrasonic array. The photograph establishes physical integration,
+              not a calibrated acoustic or electrical result. PDF Figure 1, page 7.
+            </figcaption>
+          </figure>
         </section>
 
         <section class="content-section" aria-labelledby="summary-title">
           <div class="section-titlebar"><h2 id="summary-title">Executive summary</h2><span>what was built</span></div>
           <div class="summary-grid">
-            <article><h3>Problem</h3><p>Explore narrow-region audio delivery through an ultrasonic transducer array while keeping the sample transport and steering control observable.</p></article>
-            <article><h3>Implementation</h3><p>MATLAB normalizes and quantizes audio, sends 64-sample frames plus a signed steering delta, and FPGA logic converts the decoded data into driver control.</p></article>
-            <article><h3>Result</h3><p>The documented build produced a prototype bitstream and a precise serial protocol; physical demo coverage and timing closure still need publication.</p></article>
+            <article>
+              <h3>Problem</h3>
+              <p>Explore localized ultrasonic audio with an FPGA-controlled array while keeping sample transport, steering commands, driver behavior, and release gates inspectable.</p>
+            </article>
+            <article>
+              <h3>Implementation</h3>
+              <p>MATLAB frames 64 unsigned 8-bit samples with a signed steering delta. FPGA logic drives three groups of eight 40 kHz transducers through hand-built full-bridge stages.</p>
+            </article>
+            <article>
+              <h3>Result boundary</h3>
+              <p>An individual listening trial reported recognizable audio concentrated in a preferred region. No controlled beam map was retained, and the redesigned driver remains blocked before fabrication.</p>
+            </article>
           </div>
         </section>
 
-        <section id="implementation" class="content-section" aria-labelledby="implementation-title">
-          <div class="section-titlebar"><h2 id="implementation-title">Implementation flow</h2><span>audio path</span></div>
+        <section id="architecture" class="content-section" aria-labelledby="architecture-title">
+          <div class="section-titlebar"><h2 id="architecture-title">System architecture</h2><span>audio file to ultrasonic array</span></div>
+          <div class="two-column">
+            <article class="plain-panel">
+              <h3>Serial control contract</h3>
+              <p>
+                At 115200 baud, each 68-byte frame carries <code>A5</code>, a signed 16-bit
+                little-endian steering delta, 64 unsigned 8-bit samples, and <code>5A</code>.
+                This contract is documented independently of the missing rebuildable FPGA source.
+              </p>
+            </article>
+            <article class="plain-panel">
+              <h3>Array geometry</h3>
+              <p>
+                The nominal 17.78-18 mm group pitch is more than four times the 4.29 mm half-
+                wavelength at 40 kHz. Grating-lobe and angular ambiguity are therefore expected
+                analytically even if the commanded electronic delay is correct.
+              </p>
+            </article>
+          </div>
+
+          <div class="evidence-gallery architecture-gallery">
+            <figure class="wide-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986799/system-pipeline_upunv6.png"
+                aria-label="Open the full-resolution ultrasonic audio system pipeline"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_2000/v1786986799/system-pipeline_upunv6.png"
+                  width="2400"
+                  height="620"
+                  alt="Block diagram from WAV input through MATLAB framing and UART into Basys 3 decoding, audio PWM, phase control, three bridge drivers, and the ultrasonic transducer array"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>End-to-end signal path.</strong> Software preparation, framed transport, FPGA control, bridge drivers, and array output. PDF Figure 3, page 9.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986800/uart-steering-frame_ancs6i.png"
+                aria-label="Open the full-resolution UART steering frame diagram"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786986800/uart-steering-frame_ancs6i.png"
+                  width="1800"
+                  height="520"
+                  alt="Byte-level frame diagram with A5 start marker, two little-endian steering bytes, 64 audio sample bytes, and 5A end marker"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>UART frame.</strong> The preserved 68-byte sample and steering contract. PDF Figure 4, page 9.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986797/array-spacing-comparison_i2cggu.png"
+                aria-label="Open the full-resolution array spacing comparison"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786986797/array-spacing-comparison_i2cggu.png"
+                  width="1500"
+                  height="680"
+                  alt="Bar chart comparing the 17.78 millimetre nominal array pitch with the 8.57 millimetre 40 kilohertz wavelength and 4.29 millimetre half-wavelength"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Spatial-sampling limit.</strong> The built pitch exceeds the preferred half-wavelength reference by a factor of 4.15. PDF Figure 6, page 12.</figcaption>
+            </figure>
+          </div>
+
           <ol class="flow-list">
-            <li><strong>Prepare the audio.</strong><span>MATLAB reads a WAV file, converts it to mono, resamples, normalizes, and maps samples to unsigned 8-bit values.</span></li>
-            <li><strong>Calculate steering.</strong><span>The streamer derives signed <code>deltaTicks</code> from angle, element spacing, sound speed, and the FPGA clock.</span></li>
-            <li><strong>Transmit framed data.</strong><span>Each v2 frame carries a start marker, two steering bytes, 64 audio samples, and an end marker.</span></li>
-            <li><strong>Decode on FPGA.</strong><span>UART receive logic identifies frame fields and hands sample/steering values to the modulation and phase-control path.</span></li>
-            <li><strong>Drive transducers.</strong><span>Three H-bridge channel groups provide external control signals for the ultrasonic hardware.</span></li>
+            <li><strong>Prepare audio.</strong><span>MATLAB converts the source to mono, resamples, normalizes, and maps it to unsigned 8-bit samples.</span></li>
+            <li><strong>Calculate a command.</strong><span>The software converts the requested angle into a signed FPGA tick delta.</span></li>
+            <li><strong>Frame and transmit.</strong><span>Start and end markers bound each steering value and 64-sample payload.</span></li>
+            <li><strong>Decode on FPGA.</strong><span>The receiver separates steering and sample fields for the phase-control and modulation paths.</span></li>
+            <li><strong>Switch three phases.</strong><span>Three external full bridges drive eight transducer branches each.</span></li>
+            <li><strong>Treat steering as unverified.</strong><span>The command path exists, but the array spacing and missing controlled beam map prevent a steering-performance claim.</span></li>
           </ol>
         </section>
 
-        <section id="evidence" class="content-section" aria-labelledby="evidence-title">
-          <div class="section-titlebar"><h2 id="evidence-title">Evidence record</h2><span>documented artifacts</span></div>
-          <div class="table-wrap" tabindex="0" role="region" aria-label="EMT evidence table">
+        <section id="verification" class="content-section" aria-labelledby="verification-title">
+          <div class="section-titlebar"><h2 id="verification-title">Electrical and artifact verification</h2><span>what each record establishes</span></div>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="EMT verification results">
             <table class="evidence-table">
-              <thead><tr><th scope="col">Evidence</th><th scope="col">What it establishes</th><th scope="col">Publication state</th></tr></thead>
+              <thead><tr><th scope="col">Evidence</th><th scope="col">Retained result</th><th scope="col">What it establishes</th></tr></thead>
               <tbody>
-                <tr><th scope="row"><code>stream_wav_uart_v2.m</code></th><td>Audio preprocessing, 8-bit sample mapping, steering calculation, and serial framing.</td><td>Described on this page</td></tr>
-                <tr><th scope="row">v2 frame format</th><td>Start byte, signed 16-bit delta, 64-sample payload, and end byte.</td><td>Documented on this page</td></tr>
-                <tr><th scope="row"><code>top_module_v2.bit</code></th><td>A bitstream artifact exists for the wired prototype path.</td><td>Recorded; file not published</td></tr>
-                <tr><th scope="row">Basys3 constraints</th><td>UART and three H-bridge output groups are mapped to board pins.</td><td>Mapped in source notes</td></tr>
-                <tr><th scope="row">Routed run notes</th><td>Implementation completed but the notes record failing setup timing.</td><td>Known issue disclosed</td></tr>
-                <tr><th scope="row">Wireless README</th><td>Separates UART-to-nRF TX and nRF-to-speaker RX experiments from the wired path.</td><td>Summarized on this page</td></tr>
+                <tr><th scope="row">Physical prototype</th><td>24-element 4 × 6 array and three hand-built drivers</td><td>Construction and integration only</td></tr>
+                <tr><th scope="row">Phase-A capacitance</th><td>Eight values from 1.772 to 2.117 nF; total 15.571 nF</td><td>Static model inputs for one phase; method metadata and Phase B/C remain absent</td></tr>
+                <tr><th scope="row">Combined screen</th><td>81 gate, 864 network, and 32 audio rows; 106 independent network-electrical passes</td><td>Candidate narrowing in a reduced model, with zero fabrication hard passes</td></tr>
+                <tr><th scope="row">Nonlinear 250 ns anchor</th><td>103.183/102.769 ns modeled gate overlap and 21.024 A modeled source-current spike</td><td><code>retune-required</code>; the present driver population is blocked</td></tr>
+                <tr><th scope="row">KiCad draft</th><td>One phase wired; two dangling wires; U1/U2 and LS1-LS8 footprints missing</td><td>Circuit skeleton only, not ERC closure or manufacturing evidence</td></tr>
+                <tr><th scope="row">FPGA archive</th><td>Historical implementation notes exist, but active HDL/XDC, reports, and bitstream are absent</td><td>The control path is not currently rebuildable or timing-closed</td></tr>
               </tbody>
             </table>
           </div>
-          <p class="source-note"><strong>Documentation basis:</strong> <code>emtproject/PROJECT_NAVIGATION.md</code> and <code>emtproject/wireless_audio/README.md</code>. The wired and wireless paths are not presented as one verified system.</p>
+
+          <div class="evidence-gallery">
+            <figure class="wide-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986800/network-ringing-loss-tradeoff_n8jfob.png"
+                aria-label="Open the full-resolution network ringing and loss tradeoff plot"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1786986800/network-ringing-loss-tradeoff_n8jfob.png"
+                  width="2221"
+                  height="1429"
+                  alt="Scatter plot of reduced-model ringing or noise proxy against electrical loss proxy for branch-only, snubber, and matching-inductor network cases"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Ringing-loss screen.</strong> Candidate networks expose the damping-versus-loss tradeoff; starred finalists are screening coordinates, not PCB values. PDF Figure 13, page 22.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986798/audio-pwm-commutation-failure_jdwbga.png"
+                aria-label="Open the full-resolution nonlinear commutation failure plots"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1600/v1786986798/audio-pwm-commutation-failure_jdwbga.png"
+                  width="3546"
+                  height="2322"
+                  alt="Four simulation plots show gate-voltage overlap, bootstrap voltage, a 21 amp source-current spike, and the differential load-voltage spectrum"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Current nonlinear blocker.</strong> Modeled gate overlap remains near 103 ns and the source-current spike reaches 21.02 A. PDF Figure 16, page 25.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986798/gate-damping-mechanism_eqrodu.png"
+                aria-label="Open the full-resolution gate and damping mechanism comparison"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1600/v1786986798/gate-damping-mechanism_eqrodu.png"
+                  width="4328"
+                  height="2980"
+                  alt="LTspice comparison showing underdamped load ringing, a branch-damped response, and a much slower edge caused by a one-kilohm turn-on gate resistor"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Separated mechanisms.</strong> Load damping suppresses repeated ringing, while excessive gate resistance widens the switching transition. PDF Figure 17, page 27.</figcaption>
+            </figure>
+          </div>
+
+          <p class="source-note">
+            <strong>Simulation boundary:</strong> the plots use vendor device models, measured
+            Phase-A static capacitance, and provisional loop parameters. They are not bench-current,
+            junction-temperature, acoustic-SNR, or beam-pattern measurements.
+          </p>
+        </section>
+
+        <section id="results" class="content-section" aria-labelledby="results-title">
+          <div class="section-titlebar"><h2 id="results-title">Prototype listening result</h2><span>qualitative individual trial</span></div>
+          <p>
+            The original demonstrator produced recognizable audio that the builder perceived as
+            concentrated in a preferred region. This is useful prototype evidence, but it was not
+            recorded with a calibrated microphone, controlled room geometry, blinded listeners,
+            or synchronized electrical and acoustic captures.
+          </p>
+
+          <div class="evidence-gallery">
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986798/array-component-side_p7vctn.jpg"
+                aria-label="Open the full-resolution ultrasonic array component-side photograph"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786986798/array-component-side_p7vctn.jpg"
+                  width="2595"
+                  height="1451"
+                  alt="Component side of a hand-built perforated board carrying 24 ultrasonic transducers arranged in four rows of six"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>4 × 6 array face.</strong> The component-side photograph establishes the 24-element physical arrangement. PDF Figure 20, page 37.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986798/array-wiring-side_nusb3o.jpg"
+                aria-label="Open the full-resolution ultrasonic array wiring-side photograph"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786986798/array-wiring-side_nusb3o.jpg"
+                  width="2587"
+                  height="1575"
+                  alt="Wiring side of the ultrasonic perfboard array with hand-soldered blue point-to-point branch and shared-return wiring"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Hand-routed underside.</strong> Point-to-point branch and shared-return geometry motivates controlled return paths in a future PCB. PDF Figure 21, page 38.</figcaption>
+            </figure>
+          </div>
+
+          <aside class="result-boundary" aria-label="Prototype listening evidence boundary">
+            <strong>How to read the listening result:</strong> it is a subjective observation from
+            one demonstrator, not a calibrated directivity, SPL, intelligibility, beamwidth, or
+            electronic steering measurement. No quantitative acoustic claim is made.
+          </aside>
+        </section>
+
+        <section id="hardware" class="content-section" aria-labelledby="hardware-title">
+          <div class="section-titlebar"><h2 id="hardware-title">Driver schematic and PCB readiness</h2><span>release remains on hold</span></div>
+          <p>
+            The current one-phase KiCad drawing captures the bridge driver, four MOSFETs,
+            bootstrap paths, decoupling, and eight load branches. It does not yet match the full
+            tunable simulation topology, close ERC, or define a manufacturable three-phase board.
+          </p>
+
+          <div class="evidence-gallery hardware-gallery">
+            <figure class="wide-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986799/one-phase-driver-schematic_rkahup.png"
+                aria-label="Open the full-resolution one-phase KiCad driver schematic"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1786986799/one-phase-driver-schematic_rkahup.png"
+                  width="3508"
+                  height="2481"
+                  alt="Black-and-white KiCad schematic for one ultrasonic driver phase with two IR2106S drivers, four IRLZ44N MOSFETs, bootstrap networks, and eight transducer branches"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Current one-phase draft.</strong> A readable circuit skeleton with known missing footprints, optional tuning networks, and two dangling-wire warnings. PDF Figure 19, page 30.</figcaption>
+            </figure>
+          </div>
+
+          <dl class="project-facts wide hardware-facts">
+            <div><dt>Per phase</dt><dd>2 × IR2106S / 4 × IRLZ44N</dd></div>
+            <div><dt>Load</dt><dd>8 capacitive branches</dd></div>
+            <div><dt>Current schematic</dt><dd>Draft / 2 dangling wires</dd></div>
+            <div><dt>PCB release</dt><dd>HOLD / zero hard passes</dd></div>
+          </dl>
+          <p class="source-note">
+            <strong>Manufacturing boundary:</strong> a rejected generated board contains unconnected
+            copper, no usable named-net connectivity or Edge.Cuts outline, and 480 DRC violations.
+            It is negative evidence, not a layout to repair or fabricate.
+          </p>
+        </section>
+
+        <section id="report" class="content-section" aria-labelledby="report-title">
+          <div class="section-titlebar"><h2 id="report-title">Full progress report</h2><span>45 pages / 6.7 MB</span></div>
+          <p>
+            The current report supersedes the preserved earlier ODT narrative. It consolidates the
+            prototype record, UART and array architecture, measured Phase-A inputs, reduced and
+            nonlinear electrical screens, KiCad readiness audit, explicit fabrication gates, and
+            next controlled work. The public copy removes the student ID and workstation paths.
+          </p>
+
+          <figure class="report-cover">
+            <a
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986801/fpga-ultrasonic-audio-array-progress-report_peioed.pdf"
+              aria-label="Open the full 45-page FPGA ultrasonic audio-array progress report PDF"
+            >
+              <img
+                src="https://res.cloudinary.com/vb29plgf/image/upload/pg_1,f_auto,q_auto:good,c_limit,w_1400/v1786986801/fpga-ultrasonic-audio-array-progress-report_peioed.jpg"
+                width="1400"
+                height="1980"
+                alt="Cover page of the ultrasonic parametric speaker and three-phase array driver progress report"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+            <figcaption>Preview of the privacy-scrubbed report cover; select it to open the full PDF.</figcaption>
+          </figure>
+
+          <iframe
+            class="pdf-frame"
+            src="https://res.cloudinary.com/vb29plgf/image/upload/v1786986801/fpga-ultrasonic-audio-array-progress-report_peioed.pdf#page=1&view=FitH"
+            title="Preview of the 45-page FPGA ultrasonic audio-array progress report"
+            loading="lazy"
+          ></iframe>
+          <div class="entry-actions report-actions" aria-label="EMT progress report links">
+            <a
+              class="button primary"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986801/fpga-ultrasonic-audio-array-progress-report_peioed.pdf"
+            >Open full progress report (PDF, 6.7 MB, 45 pages)</a>
+            <a
+              class="button"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/fl_attachment:FPGA-Ultrasonic-Audio-Array-Progress-Report/v1786986801/fpga-ultrasonic-audio-array-progress-report_peioed.pdf"
+            >Download report</a>
+          </div>
         </section>
 
         <section id="limitations" class="content-section" aria-labelledby="limitations-title">
           <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>honest status</span></div>
           <div class="two-column">
-            <article class="plain-panel"><h3>Known limitation</h3><p>The routed prototype has a documented setup-timing failure, likely around phase-offset paths. The available notes also do not yet establish a complete measured beam-steering result.</p></article>
-            <article class="plain-panel"><h3>Best next evidence</h3><p>Publish the design report, protocol capture, transducer/H-bridge wiring photo, timing summary, and a controlled before/after steering measurement or recording.</p></article>
+            <article class="plain-panel">
+              <h3>Known limitations</h3>
+              <ul>
+                <li>The listening result is qualitative and has no calibrated acoustic capture or controlled beam map.</li>
+                <li>The approximately 18 mm pitch is spatially undersampled for unique 40 kHz electronic steering.</li>
+                <li>Only eight Phase-A static capacitances are retained; the method, ESR/BVD, and Phase B/C values are missing.</li>
+                <li>The current nonlinear driver anchor fails its overlap/current gate, so zero fabrication hard passes exist.</li>
+                <li>The schematic is incomplete and no valid routed PCB, DRC closure, BOM, or manufacturing package exists.</li>
+                <li>The historical FPGA record is not currently rebuildable or timing-closed from retained source.</li>
+              </ul>
+            </article>
+            <article class="plain-panel">
+              <h3>Best next evidence</h3>
+              <ul>
+                <li>Run the full 400/600 ns nonlinear deadtime, split-gate, feedback, and zero-state matrix.</li>
+                <li>Measure all 24 transducers with a recorded method, including ESR and complex impedance near 40 kHz.</li>
+                <li>Capture current-limited gate, switch-node, differential-output, source-current, and temperature waveforms.</li>
+                <li>Choose the driver topology, then close the one-phase schematic and ERC before routing a clean board.</li>
+                <li>Retain a calibrated microphone sweep or angular map with fixed geometry and synchronized electrical evidence.</li>
+                <li>Recover or reconstruct the FPGA project and publish a timing-closed build plus connector-level capture.</li>
+              </ul>
+            </article>
           </div>
         </section>
 
         <nav class="project-pager" aria-label="Project pages">
-          <a href="ecd-proje.html">← Previous: ECD_PROJE</a>
+          <a href="ecd-proje.html">← Previous: FPGA 3-bit ADC</a>
           <a href="nrf-project.html">Next: nRF24L01 →</a>
         </nav>
       </main>
