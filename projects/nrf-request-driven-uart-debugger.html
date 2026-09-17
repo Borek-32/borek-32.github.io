@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Evidence documentation for the request-driven UART nRF24L01 debugger with forward-only host payloads, passive RX validation, and FPGA-cycle throughput measurements." />
+    <meta name="theme-color" content="#163f73" />
+    <title>nRF24L01 Request-Driven UART Debugger | Kerem Gürbüz</title>
+    <link rel="stylesheet" href="../styles.css" />
+  </head>
+  <body class="project-nrf">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <div class="site-shell">
+      <header class="site-header">
+        <div class="masthead">
+          <a class="brand" href="../index.html" aria-label="Kerem Gürbüz project archive home">
+            <span class="brand-mark" aria-hidden="true">B</span>
+            <span><strong>Kerem Gürbüz | Project Archive</strong><small>Undergraduate engineering project</small></span>
+          </a>
+          <p class="masthead-note">PROJECT 05 / nRF UART</p>
+        </div>
+        <nav class="main-nav" aria-label="Project navigation">
+          <a href="../index.html#projects">All projects</a>
+          <a href="#architecture">Architecture</a>
+          <a href="#evidence">Evidence</a>
+          <a href="#limitations">Limitations</a>
+        </nav>
+      </header>
+
+      <main id="main-content">
+        <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / nRF24L01 request-driven UART debugger</p>
+
+        <section class="project-intro" aria-labelledby="project-title">
+          <div class="project-heading-meta">
+            <p class="page-label">FPGA / HOST RADIO TELEMETRY / EVIDENCE DOCUMENT</p>
+            <span class="project-status project-status-library-dev" aria-label="Portfolio status: Library dev">Library dev</span>
+          </div>
+          <h1 id="project-title">nRF24L01 request-driven UART debugger</h1>
+          <p class="lead">
+            A forward-only 32-byte test stream in which the TX FPGA requests work, the host spends
+            bounded credit on fresh incrementing payload IDs, and the RX FPGA reports passive
+            delivery and radio-state evidence. A compact two-role monitor keeps rate and integrity
+            claims tied to FPGA counters rather than GUI refresh timing.
+          </p>
+          <div class="entry-actions" aria-label="Request-driven UART debugger actions">
+            <a class="button primary" href="#evidence">Read acceptance record</a>
+          </div>
+
+          <dl class="project-facts wide">
+            <div><dt>Platform</dt><dd>2× Basys 3 / XC7A35T</dd></div>
+            <div><dt>Radio path</dt><dd>nRF24L01 / 32-byte payloads</dd></div>
+            <div><dt>Host link</dt><dd>4 Mbaud UART / Python monitor</dd></div>
+            <div><dt>Recorded status</dt><dd>60.026 s retained ESB-on zero-gap observation</dd></div>
+          </dl>
+
+          <figure class="project-hero-media">
+            <a
+              href="../assets/nrf/request-driven/2026-08-21/hardware-states.png"
+              aria-label="Open the full-resolution request-driven two-board hardware-state plate"
+            >
+              <img
+                src="../assets/nrf/request-driven/2026-08-21/hardware-states.png"
+                width="1600"
+                height="1236"
+                alt="Four labeled photographs of two Basys 3 radio boards: disabled, enabled with ESB on, disabled with ESB on selected, and enabled with ESB off"
+                decoding="async"
+              />
+            </a>
+            <figcaption>Current request-driven board states. LD0 was observed on both enabled boards in the ESB-on example; throughput and register values come from synchronized machine evidence, not the photographs.</figcaption>
+          </figure>
+        </section>
+
+        <section class="content-section" aria-labelledby="summary-title">
+          <div class="section-titlebar"><h2 id="summary-title">Project summary</h2><span>what was measured</span></div>
+          <div class="summary-grid">
+            <article><h3>Problem</h3><p>Drive the radio from a host-fed stream without hiding skipped, corrupt, duplicated, or out-of-order payload identities behind an attractive throughput number.</p></article>
+            <article><h3>Implementation</h3><p>The TX board grants bounded request credit, the host supplies only fresh deterministic IDs, and the passive RX path exports payload, counter, cycle, drop, STATUS, and FIFO_STATUS evidence.</p></article>
+            <article><h3>Recorded result</h3><p>The retained 60.026173-second ESB-on run measured 511.998944 kbit/s TX service and 511.997140 kbit/s RX delivered goodput across 120,051 unique payloads, with zero missing IDs, ingress skips, or recorded evidence, UART, and integrity errors.</p></article>
+          </div>
+        </section>
+
+        <section id="architecture" class="content-section" aria-labelledby="architecture-title">
+          <div class="section-titlebar"><h2 id="architecture-title">Request-driven architecture</h2><span>forward-only evidence path</span></div>
+          <ol class="flow-list">
+            <li><strong>Authorize work.</strong><span>The TX FPGA emits request progress; the host converts that progress into a bounded credit high-water mark rather than an unbounded queue.</span></li>
+            <li><strong>Generate a fresh identity.</strong><span>Each 32-byte body is a deterministic function of epoch and ID, including a visible incrementing byte, full identity fields, a ramp, and CRC32.</span></li>
+            <li><strong>Return one UART response.</strong><span>The host sends the exact epoch, fresh frame ID, and deterministic payload in a fixed UART slot; stale same-epoch IDs cannot rewind the FPGA frontier.</span></li>
+            <li><strong>Transmit through the radio.</strong><span>One pending FPGA latch feeds the existing SPI controller and the nRF24L01 physical TX FIFO; the host does not create a Basys-side payload ring.</span></li>
+            <li><strong>Observe RX passively.</strong><span>The receiver records unique IDs, gaps, ordering, corruption, event counts, FPGA cycles, and evidence drops without ever pausing or directing the TX stream.</span></li>
+            <li><strong>Present direct state.</strong><span>The monitor shows raw phase-specific STATUS and FIFO_STATUS bytes, one FPGA-derived session rate, and one integrity verdict for each role.</span></li>
+          </ol>
+
+          <div class="evidence-gallery architecture-gallery">
+            <figure class="wide-media">
+              <a
+                href="../assets/nrf/request-driven/2026-08-21/disable-reenable-boundary.png"
+                aria-label="Open the full-resolution disable and re-enable epoch-boundary diagram"
+              >
+                <img
+                  src="../assets/nrf/request-driven/2026-08-21/disable-reenable-boundary.png"
+                  width="1600"
+                  height="760"
+                  alt="Four time markers and four lanes show TX state reset, request completion, RX result draining, one millisecond profile qualification, and a new epoch at ID zero"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Disable and re-enable boundary.</strong> SW15 low clears TX inbound lifecycle state while already accepted UART work finishes; re-enable waits for one millisecond of stable SW0 before configuration and a new epoch at ID 0.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section id="evidence" class="content-section" aria-labelledby="evidence-title">
+          <div class="section-titlebar"><h2 id="evidence-title">Accepted evidence record</h2><span>21 August 2026 ESB-on capture</span></div>
+
+          <div class="evidence-gallery architecture-gallery">
+            <figure class="wide-media">
+              <a
+                href="../assets/nrf/request-driven/2026-08-21/accepted-result.png"
+                aria-label="Open the full-resolution ESB-on pacing and accepted-result figure"
+              >
+                <img
+                  src="../assets/nrf/request-driven/2026-08-21/accepted-result.png"
+                  width="1600"
+                  height="760"
+                  alt="Three panels show about 2,190 acknowledged payloads per second, a 200-byte 500-microsecond host slot offering 512 kilobits per second, and the accepted TX and RX rates with 120,051 unique payloads, zero ingress skips, and zero missing IDs"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Accepted ESB-on observation.</strong> The retained 60.026173-second interval measured TX at 511.998944 kbit/s and RX at 511.997140 kbit/s across 120,051 unique payloads, with zero ingress skips and zero missing IDs for the recorded setup and interval.</figcaption>
+            </figure>
+          </div>
+
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Request-driven UART debugger acceptance evidence">
+            <table class="evidence-table">
+              <thead><tr><th scope="col">Gate</th><th scope="col">Retained result</th><th scope="col">Verdict</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Host regression</th><td>176/176 Python tests passed for the accepted request-driven source.</td><td>PASS</td></tr>
+                <tr><th scope="row">Focused XSim</th><td>TX 6/6 and RX 7/7 focused benches passed.</td><td>PASS</td></tr>
+                <tr><th scope="row">Routed timing</th><td>TX WNS/WHS +0.515/+0.122 ns; RX WNS/WHS +1.830/+0.037 ns.</td><td>PASS</td></tr>
+                <tr><th scope="row">Programming and profile</th><td>10/10 fresh program-high trials and their profile assertions reported ESB enabled on both trusted role streams.</td><td>PASS</td></tr>
+                <tr><th scope="row">Synchronized run</th><td>60.026173 s; all 600 sampled TX and RX rows were measurement-ready.</td><td>PASS</td></tr>
+                <tr><th scope="row">TX FPGA service</th><td>511.998944 kbit/s from cumulative TX_DS count and FPGA-cycle anchors.</td><td>PASS</td></tr>
+                <tr><th scope="row">RX delivered goodput</th><td>511.997140 kbit/s from unique validated payload and RX-FPGA cycle deltas.</td><td>PASS</td></tr>
+                <tr><th scope="row">Delivery integrity</th><td>120,051 unique validated payloads; zero missing IDs, ingress skips, evidence-path errors, UART errors, and integrity errors.</td><td>ZERO-GAP OBSERVATION</td></tr>
+                <tr><th scope="row">Direct radio snapshots</th><td>Final TX STATUS/FIFO_STATUS 0x2E/0x11; RX 0x40/0x10. These remain phase-specific SPI samples.</td><td>PASS with boundary</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="source-note"><strong>Documentation basis:</strong> <code>request-driven-uart-debugger/docs/evidence/2026-08-21_ESB_ON_500K_ACCEPTANCE/</code>. This is a finite zero-gap observation for the retained source, bitstreams, devices, configuration, and interval—not a universal claim that all future RF traffic is lossless.</p>
+
+          <div class="evidence-gallery">
+            <figure class="wide-media">
+              <a
+                href="../assets/nrf/request-driven/2026-08-21/current-esb-on-monitor.png"
+                aria-label="Open the full-resolution compact request-driven monitor capture"
+              >
+                <img
+                  src="../assets/nrf/request-driven/2026-08-21/current-esb-on-monitor.png"
+                  width="680"
+                  height="190"
+                  alt="Compact request-driven monitor showing ESB enabled, separate TX and RX STATUS and FIFO_STATUS bytes, FPGA session rates, and OK integrity rows"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Post-acceptance monitor context.</strong> This screenshot was not synchronized to the final machine-readable record; retained FPGA count-and-cycle evidence remains authoritative.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="content-section" aria-labelledby="integrity-title">
+          <div class="section-titlebar"><h2 id="integrity-title">Measurement boundary</h2><span>what the monitor can prove</span></div>
+          <div class="two-column">
+            <article class="plain-panel"><h3>FPGA-derived rates</h3><p>TX service uses cumulative TX_DS events and TX-FPGA cycles. RX delivered goodput uses unique validated payloads and RX-FPGA cycles. Host UART arrival time and GUI refresh time are excluded.</p></article>
+            <article class="plain-panel"><h3>Direct but phase-specific registers</h3><p>STATUS and FIFO_STATUS are sampled during defined SPI phases, not continuously scanned. FIFO_STATUS exposes empty/full boundaries but cannot distinguish FIFO depth one from depth two.</p></article>
+          </div>
+
+          <div class="evidence-gallery architecture-gallery">
+            <figure class="wide-media">
+              <a
+                href="../assets/nrf/request-driven/2026-08-21/measurement-authority.png"
+                aria-label="Open the full-resolution measurement-authority and GUI-boundary diagram"
+              >
+                <img
+                  src="../assets/nrf/request-driven/2026-08-21/measurement-authority.png"
+                  width="1600"
+                  height="760"
+                  alt="TX and RX FPGA evidence enters one central transport process, which emits immutable snapshots to a read-only GUI; a barred reverse path shows the GUI has no commands"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Measurement authority.</strong> The transport process owns both UARTs and computes rates from FPGA count-and-cycle deltas. The GUI consumes immutable snapshots and has no actuator path back to TX.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section id="limitations" class="content-section" aria-labelledby="limitations-title">
+          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>current status</span></div>
+          <div class="two-column">
+            <article class="plain-panel"><h3>Known limitation</h3><p>The accepted interval is a finite zero-gap observation, not proof that every future run or RF environment will remain lossless. STATUS and FIFO_STATUS are phase-specific controller samples, and the retained result does not replace an external RF or SPI timing capture.</p></article>
+            <article class="plain-panel"><h3>What I would test next</h3><p>Repeat the same acceptance across longer durations, power cycles, channels, and RF environments. If hop-level fault localization is required, retain synchronized external SPI or radio-side evidence beside the FPGA and host records.</p></article>
+          </div>
+          <p class="source-note"><strong>Repository state:</strong> this request-driven project remains a local independent repository. No inactive or misleading public-repository button is shown.</p>
+        </section>
+
+        <nav class="project-pager" aria-label="Project pages">
+          <a href="nrf-project.html">← Previous: Seven-segment debugger</a>
+          <a href="rc-car.html">Next: FPGA RC car →</a>
+        </nav>
+      </main>
+
+      <footer class="site-footer"><p>Kerem Gürbüz | Project Archive</p><p><a href="#main-content">Return to top</a></p></footer>
+    </div>
+  </body>
+</html>

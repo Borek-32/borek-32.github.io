@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Report-backed evidence for a routed FPGA MFCC spoken-digit recognizer, its fixed-point verification, retained-dataset evaluation, and analog front-end PCB."
+      content="My EEE491 MFCC-based spoken-digit recognizer: a fixed-point VHDL pipeline checked with XSim and MATLAB, a programmed Basys 3 build, and an integrated microphone/ADC PCB."
     />
     <meta name="theme-color" content="#163f73" />
-    <title>MFCC Spoken-Digit Recognizer | Borek's Engineering Notebook</title>
+    <title>MFCC Spoken-Digit Recognizer | Kerem Gürbüz</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body class="project-mfcc">
@@ -17,11 +17,11 @@
     <div class="site-shell">
       <header class="site-header">
         <div class="masthead">
-          <a class="brand" href="../index.html" aria-label="Borek's Engineering Notebook home">
+          <a class="brand" href="../index.html" aria-label="Kerem Gürbüz project archive home">
             <span class="brand-mark" aria-hidden="true">B</span>
-            <span><strong>Borek's Engineering Notebook</strong><small>Project evidence file</small></span>
+            <span><strong>Kerem Gürbüz | Project Archive</strong><small>Undergraduate engineering project</small></span>
           </a>
-          <p class="masthead-note">PROJECT 04 / MFCC</p>
+          <p class="masthead-note">PROJECT 01 / MFCC</p>
         </div>
         <nav class="main-nav" aria-label="Project navigation">
           <a href="../index.html#projects">All projects</a>
@@ -38,19 +38,25 @@
         <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / MFCC</p>
 
         <section class="project-intro" aria-labelledby="project-title">
-          <p class="page-label">FPGA DSP / REPORT-BACKED EVIDENCE</p>
-          <h1 id="project-title">FPGA MFCC spoken-digit recognizer</h1>
+          <div class="project-heading-meta">
+            <p class="page-label">FPGA DSP / EEE491 PROJECT</p>
+            <span class="project-status project-status-done" aria-label="Portfolio status: Done">Done</span>
+          </div>
+          <h1 id="project-title">FPGA MFCC-based spoken-digit recognizer</h1>
           <p class="lead">
-            A complete fixed-point speech pipeline for Basys 3: microphone capture, overlapped
-            windowing, a Xilinx FFT, MEL and LOGMEL features, DCT coefficients, and a hardware
-            SAD/L1 template comparator. The evidence below comes from the 107-page project report
-            and is presented with the limits of the retained dataset kept explicit.
+            For my EEE491 project, I built a fixed-point, MFCC-based spoken-digit recognizer on a
+            Basys 3. The VHDL path covers microphone capture, overlapping Hann windows, an
+            AMD/Xilinx FFT, MEL and LOGMEL processing, DCT coefficients, and a hardware SAD/L1
+            template comparator. I checked the modules with XSim and MATLAB and documented the
+            final programmed build and microphone/ADC PCB in the 119-page report. The final JC
+            build met its constrained internal timing target at WNS +0.671 ns, but external ADC I/O
+            timing remains open; the 30/30 result below is an offline development-set analysis.
           </p>
           <div class="entry-actions" aria-label="MFCC project actions">
             <a class="button primary" href="#recognition">See recognition evidence</a>
             <a
               class="button"
-              href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186253/engineering-portfolio/mfcc/spoken-digit-project-report.pdf"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1787242750/engineering-portfolio/mfcc/2026-08-20/spoken-digit-project-report.pdf"
             >Open project report</a>
             <a
               class="button repository-button"
@@ -60,53 +66,53 @@
           </div>
 
           <dl class="project-facts wide">
-            <div><dt>Implementation</dt><dd>Vivado / VHDL / MATLAB</dd></div>
+            <div><dt>Implementation</dt><dd>Vivado / VHDL / XSim / MATLAB</dd></div>
             <div><dt>Feature path</dt><dd>63 frames × 8 coefficients</dd></div>
-            <div><dt>Routed timing</dt><dd>100 MHz; WNS +0.609 ns</dd></div>
-            <div><dt>Recorded status</dt><dd>Post-correction labeled live trial pending</dd></div>
+            <div><dt>Final JC build</dt><dd>WNS +0.671 ns / WHS +0.020 ns</dd></div>
+            <div><dt>Hardware status</dt><dd>FPGA programmed; PCB integrated</dd></div>
           </dl>
 
           <figure class="project-hero-media">
             <a
-              href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186251/engineering-portfolio/mfcc/digit-9-active-window.png"
-              aria-label="Open the full-resolution retained digit-nine evidence figure"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1787188836/engineering-portfolio/mfcc/2026-08-20/homefab-operating-on-basys3.PNG"
+              aria-label="Open the full-resolution final PCB integration photograph"
             >
               <img
-                src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1785186251/engineering-portfolio/mfcc/digit-9-active-window.png"
-                width="2722"
-                height="1927"
-                alt="Composite chart of one FPGA-UART digit-nine record with speech waveform, MEL-energy curve, and DCT heat map highlighting the selected 16-frame feature window"
+                src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1787188836/engineering-portfolio/mfcc/2026-08-20/homefab-operating-on-basys3.PNG"
+                width="2800"
+                height="1350"
+                alt="Final two-layer home-fabricated microphone and ADC PCB wired to the Basys 3 Pmod JC during full-design bench integration"
                 decoding="async"
                 fetchpriority="high"
               />
             </a>
             <figcaption>
-              One retained digit-9 FPGA-UART record connects the sampled speech envelope to the
-              energy onset and selected DCT feature window. PDF Figure 40, page 48.
+              Final home-fabricated microphone and ADC PCB connected to the Basys 3 Pmod JC
+              during full-design bench use. PDF Figure 80, page 95.
             </figcaption>
           </figure>
         </section>
 
         <section class="content-section" aria-labelledby="summary-title">
-          <div class="section-titlebar"><h2 id="summary-title">Executive summary</h2><span>what was built</span></div>
+          <div class="section-titlebar"><h2 id="summary-title">Project summary</h2><span>what I built</span></div>
           <div class="summary-grid">
             <article>
               <h3>Problem</h3>
-              <p>Run an explainable spoken-digit feature and comparison chain in FPGA logic while keeping fixed-point arithmetic, memory addressing, and controller sequencing observable.</p>
+              <p>I wanted the fixed-point arithmetic, memory addresses, and controller sequence to remain visible while the recognizer ran in FPGA logic.</p>
             </article>
             <article>
               <h3>Implementation</h3>
-              <p>A 16,384-sample acquisition becomes 63 overlapped frames, 32 MEL bands, eight non-DC DCT coefficients, and a 16-frame template compared against 30 stored references.</p>
+              <p>In VHDL, I turn a 16,384-sample acquisition into 63 overlapping frames, 32 MEL bands, eight non-DC DCT coefficients, and a 16-frame template compared with 30 stored references.</p>
             </article>
             <article>
-              <h3>Result boundary</h3>
-              <p>The integrated design is routed and the retained 30-record collection separates 30/30 in leave-one-out analysis. That is development-set evidence, not population-wide speaker accuracy.</p>
+              <h3>What the result means</h3>
+              <p>I routed the final JC design at WNS +0.671 ns and programmed the FPGA. Separately, the 30 archived development recordings produce 30/30 only in an offline, COMP-compatible leave-one-out analysis; they are not 30 live FPGA decisions or a live-speaker accuracy result.</p>
             </article>
           </div>
         </section>
 
         <section id="architecture" class="content-section" aria-labelledby="architecture-title">
-          <div class="section-titlebar"><h2 id="architecture-title">Implemented architecture</h2><span>data reduction path</span></div>
+          <div class="section-titlebar"><h2 id="architecture-title">Pipeline architecture</h2><span>how I reduce the data</span></div>
           <div class="two-column">
             <article class="plain-panel">
               <h3>Feature dimensions</h3>
@@ -141,7 +147,7 @@
                   decoding="async"
                 />
               </a>
-              <figcaption><strong>Pipeline overview.</strong> Implemented stages and stored data dimensions from ADC capture to fixed-point SAD comparison. PDF Figure 1, page 7.</figcaption>
+              <figcaption><strong>Pipeline overview.</strong> Implemented stages and stored data dimensions from ADC capture to fixed-point SAD comparison. PDF Figure 3, page 8.</figcaption>
             </figure>
           </div>
 
@@ -157,7 +163,7 @@
         </section>
 
         <section id="verification" class="content-section" aria-labelledby="verification-title">
-          <div class="section-titlebar"><h2 id="verification-title">Fixed-point and routed verification</h2><span>module-level evidence</span></div>
+          <div class="section-titlebar"><h2 id="verification-title">How I checked the pipeline</h2><span>XSim, MATLAB, and routed evidence</span></div>
           <div class="table-wrap" tabindex="0" role="region" aria-label="MFCC verification results">
             <table class="evidence-table">
               <thead><tr><th scope="col">Stage</th><th scope="col">Retained result</th><th scope="col">What it establishes</th></tr></thead>
@@ -169,7 +175,8 @@
                 <tr><th scope="row">LOGMEL</th><td>32/32 boundary-focused words agree</td><td>Exponent, ROM, interpolation, and zero clamp</td></tr>
                 <tr><th scope="row">DCT</th><td>8/8 signed coefficients agree</td><td>C1–C8 addressing, accumulation, and rounding</td></tr>
                 <tr><th scope="row">DEBUG</th><td>1,362/1,362 UART words agree</td><td>Packet markers, section order, extension, and full length</td></tr>
-                <tr><th scope="row">Routed design</th><td>WNS +0.609 ns; WHS +0.020 ns; 12,665/12,665 routable nets routed</td><td>The integrated internal 100 MHz timing target and routing completion</td></tr>
+                <tr><th scope="row">Historical main build</th><td>WNS +0.630 ns; WHS +0.014 ns; 12,825/12,825 routable nets routed</td><td>The report's retained main-build internal timing and routing result</td></tr>
+                <tr><th scope="row">Final JC build</th><td>WNS +0.671 ns; WHS +0.020 ns; 12,824/12,824 routable nets routed</td><td>The isolated JC-mapped full design that produced the programmed bitstream</td></tr>
               </tbody>
             </table>
           </div>
@@ -189,27 +196,45 @@
                   decoding="async"
                 />
               </a>
-              <figcaption><strong>Corrected FFT unit test.</strong> The post-fix 1 kHz regression aligns the reference peak with DUT RAM address 32. It verifies this unit test, not classifier accuracy. PDF Figure 11, page 19.</figcaption>
+              <figcaption><strong>Corrected FFT unit test.</strong> The post-fix 1 kHz regression aligns the reference peak with DUT RAM address 32. It verifies this unit test, not classifier accuracy. PDF Figure 13, page 22.</figcaption>
             </figure>
           </div>
 
           <p class="source-note">
-            <strong>Implementation scale:</strong> the placed design uses 5,559 LUTs, 8,412 registers,
-            23.5 block-RAM tiles, and 15 DSPs. The timing result covers the internal 100 MHz
-            constraint; external board-interface timing is not characterized here.
+            <strong>Implementation scale:</strong> the final JC build uses 5,603 LUTs, 8,437
+            registers, 23.5 block-RAM tiles, and 15 DSPs; the historical main build used 5,604
+            LUTs with the same register, BRAM, and DSP counts. These results cover internal
+            constraints. No external ADC I/O delays were applied, so SPI timing is not closed.
           </p>
         </section>
 
         <section id="recognition" class="content-section" aria-labelledby="recognition-title">
-          <div class="section-titlebar"><h2 id="recognition-title">Retained-dataset evaluation</h2><span>30 archived utterances</span></div>
+          <div class="section-titlebar"><h2 id="recognition-title">Offline development-set check</h2><span>30 archived utterances</span></div>
           <p>
-            The retained collection contains digits 0–9 with three FPGA-UART recordings per digit.
-            Each record includes the complete ADC array and all downstream stage memories. In
-            leave-one-out comparison, every query selected the correct digit under the implemented
-            16-frame × 8-coefficient SAD/L1 convention.
+            I retained three FPGA-UART recordings for each digit from 0 to 9, including the complete
+            ADC array and downstream stage memories. I then ran an offline, COMP-compatible
+            leave-one-out analysis on the exact exported FPGA DCT words. All 30 queries selected
+            the correct digit under the 16-frame × 8-coefficient SAD/L1 convention. These were
+            analysis results, not 30 logged decisions made by the live FPGA.
           </p>
 
           <div class="evidence-gallery">
+            <figure class="wide-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186251/engineering-portfolio/mfcc/digit-9-active-window.png"
+                aria-label="Open the full-resolution retained digit-nine evidence figure"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1785186251/engineering-portfolio/mfcc/digit-9-active-window.png"
+                  width="2722"
+                  height="1927"
+                  alt="Composite chart of one FPGA-UART digit-nine record with speech waveform, MEL-energy curve, and DCT heat map highlighting the selected 16-frame feature window"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Retained digit-9 record.</strong> The sampled speech envelope, MEL-energy onset, and selected DCT feature window are shown together. PDF Figure 53, page 64.</figcaption>
+            </figure>
             <figure>
               <a
                 href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186251/engineering-portfolio/mfcc/spoken-digit-confusion-matrix.png"
@@ -224,7 +249,7 @@
                   decoding="async"
                 />
               </a>
-              <figcaption><strong>Leave-one-out confusion matrix.</strong> All 30 retained decisions fall on the diagonal, three per digit. PDF Figure 42, page 50.</figcaption>
+              <figcaption><strong>Offline leave-one-out confusion matrix.</strong> All 30 retained queries fall on the diagonal, three per digit, under the COMP-compatible analysis. PDF Figure 55, page 67.</figcaption>
             </figure>
             <figure>
               <a
@@ -240,23 +265,25 @@
                   decoding="async"
                 />
               </a>
-              <figcaption><strong>Distance margins.</strong> Per-query SAD/L1 distances expose separation across the same 30-record set. PDF Figure 43, page 51.</figcaption>
+              <figcaption><strong>Distance margins.</strong> Per-query SAD/L1 distances expose offline separation across the same 30-record set. PDF Figure 56, page 68.</figcaption>
             </figure>
           </div>
 
           <aside class="result-boundary" aria-label="Recognition result boundary">
-            <strong>How to read 30/30:</strong> this is leave-one-out separability inside one small
-            retained development collection with three trials per digit and no broad speaker or
-            noise stratification. It is not a claim of 100% live-speaker or population-wide accuracy.
+            <strong>How to read 30/30:</strong> this is offline leave-one-out separability inside
+            one small retained development collection with three trials per digit and no broad
+            speaker or noise stratification. The later live behavior was observed informally, but
+            no pre-labeled trial schedule, raw decision log, or numerical live accuracy was retained.
           </aside>
         </section>
 
         <section id="hardware" class="content-section" aria-labelledby="hardware-title">
           <div class="section-titlebar"><h2 id="hardware-title">Microphone front end and PCB</h2><span>design to physical build</span></div>
           <p>
-            The project includes an LM324 microphone amplifier, buffered reference, adjustable
-            gain, and two unequal Sallen-Key low-pass sections. The circuit was converted into a
-            44 mm × 40 mm single-sided through-hole board for home fabrication.
+            I first built the LM324 microphone amplifier, buffered reference, adjustable gain, and
+            two unequal Sallen-Key low-pass sections as the 44 mm × 40 mm single-sided board shown
+            below. I later integrated a two-layer microphone/ADC revision with an ADC121S101 and a
+            direct Basys 3 Pmod JC connection for the programmed full-design bench session.
           </p>
 
           <div class="evidence-gallery hardware-gallery">
@@ -274,7 +301,7 @@
                   decoding="async"
                 />
               </a>
-              <figcaption><strong>Implemented circuit.</strong> LM324-based microphone amplifier and fourth-order Sallen-Key analog front end. PDF Figure 50, page 60.</figcaption>
+              <figcaption><strong>Implemented circuit.</strong> LM324-based microphone amplifier and fourth-order Sallen-Key analog front end. PDF Figure 63, page 77.</figcaption>
             </figure>
             <figure>
               <a
@@ -290,7 +317,7 @@
                   decoding="async"
                 />
               </a>
-              <figcaption><strong>Fabrication layout.</strong> Final 44 mm × 40 mm single-sided through-hole PCB designed for home etching. PDF Figure 53, page 63.</figcaption>
+              <figcaption><strong>First fabrication layout.</strong> The 44 mm × 40 mm single-sided through-hole PCB designed for home etching. PDF Figure 66, page 81.</figcaption>
             </figure>
             <figure class="wide-media assembled-board-media">
               <a
@@ -306,39 +333,136 @@
                   decoding="async"
                 />
               </a>
-              <figcaption><strong>Assembled board.</strong> Completed component-side analog front-end PCB after home fabrication and assembly. PDF Figure 61, page 70.</figcaption>
+              <figcaption><strong>First assembled board.</strong> Completed component-side analog front-end PCB after home fabrication and assembly. PDF Figure 74, page 88.</figcaption>
             </figure>
           </div>
 
           <dl class="project-facts wide hardware-facts">
-            <div><dt>Board</dt><dd>44 mm × 40 mm / 17.6 cm²</dd></div>
-            <div><dt>Fabrication</dt><dd>21 through-hole footprints / no vias</dd></div>
+            <div><dt>First board</dt><dd>44 mm × 40 mm / 17.6 cm²</dd></div>
+            <div><dt>First layout</dt><dd>21 through-hole footprints / no vias</dd></div>
             <div><dt>Simulated corner</dt><dd>−3.0008 dB at 4.053 kHz</dd></div>
             <div><dt>Simulated slope</dt><dd>80.006 dB from 10 to 100 kHz</dd></div>
           </dl>
+
           <p class="source-note">
-            <strong>Measurement boundary:</strong> the frequency-response figures in the report are
-            simulations. No calibrated measured transfer-function sweep, transient oscilloscope
-            trace, or power measurement is retained.
+            <strong>Measurement note:</strong> the frequency-response figures are LTspice
+            simulations. I did not retain a calibrated transfer-function sweep, transient
+            oscilloscope trace, or power measurement.
+          </p>
+
+          <h3>Later two-layer microphone/ADC revision</h3>
+          <p>
+            The recovered schematic and PCB were reconciled through KiCad's native connectivity
+            model. Twenty-one named schematic nets account for the connected copper, with one
+            intentionally isolated unused Pmod pad left as no-net. This establishes connectivity
+            traceability; it does not make the board fabrication-ready.
+          </p>
+
+          <div class="evidence-gallery hardware-gallery">
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1787188979/engineering-portfolio/mfcc/2026-08-20/homefab-reconciled-schematic.PNG"
+                aria-label="Open the full-resolution reconciled microphone and ADC schematic"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1787188979/engineering-portfolio/mfcc/2026-08-20/homefab-reconciled-schematic.PNG"
+                  width="2200"
+                  height="2018"
+                  alt="Reconciled KiCad schematic for the later microphone preamplifier, fourth-order filter, protection network, ADC121S101, and Pmod JC interface"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Reconciled schematic.</strong> The later analog, protection, ADC, and JC interface design with named nets. PDF Figure 76, page 91.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1787188944/engineering-portfolio/mfcc/2026-08-20/homefab-named-net-layers.PNG"
+                aria-label="Open the full-resolution named-net copper layer views"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1600/v1787188944/engineering-portfolio/mfcc/2026-08-20/homefab-named-net-layers.PNG"
+                  width="1890"
+                  height="755"
+                  alt="Paired KiCad views of the later PCB's component-side and underside copper layers with assigned net names"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Named-net copper layers.</strong> Isolated F.Cu and B.Cu routing views after net assignment. PDF Figure 77, page 92.</figcaption>
+            </figure>
+            <figure class="wide-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1787188892/engineering-portfolio/mfcc/2026-08-20/homefab-final-board-sides.PNG"
+                aria-label="Open the full-resolution final PCB side-by-side photographs"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1787188892/engineering-portfolio/mfcc/2026-08-20/homefab-final-board-sides.PNG"
+                  width="2420"
+                  height="832"
+                  alt="Side-by-side photographs of the final populated microphone and ADC PCB component side and hand-soldered underside"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Final populated board.</strong> Component and solder/interconnect sides of the later two-layer revision. PDF Figure 79, page 94.</figcaption>
+            </figure>
+            <figure class="wide-media">
+              <a
+                href="https://res.cloudinary.com/vb29plgf/image/upload/v1787188836/engineering-portfolio/mfcc/2026-08-20/homefab-operating-on-basys3.PNG"
+                aria-label="Open the full-resolution final PCB and Basys 3 integration photograph"
+              >
+                <img
+                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1787188836/engineering-portfolio/mfcc/2026-08-20/homefab-operating-on-basys3.PNG"
+                  width="2800"
+                  height="1350"
+                  alt="Final home-fabricated microphone and ADC PCB connected to the Basys 3 Pmod JC during full-design bench use"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Physical integration.</strong> The final PCB connected to Basys 3 Pmod JC during full-design bench use. PDF Figure 80, page 95.</figcaption>
+            </figure>
+          </div>
+
+          <dl class="project-facts wide hardware-facts">
+            <div><dt>Later layout</dt><dd>27 footprints / 75 pads</dd></div>
+            <div><dt>Copper</dt><dd>287 segments / 18 vias / two layers</dd></div>
+            <div><dt>ADC quiescent</dt><dd>1.652 V measured</dd></div>
+            <div><dt>Microphone bias</dt><dd>8.21 V measured</dd></div>
+          </dl>
+          <p class="source-note">
+            <strong>PCB and measurement boundary:</strong> named-net reconciliation passes, but the
+            retained later-board checks still report 12 PCB DRC errors, 114 DRC warnings, 8
+            schematic ERC errors, and 20 ERC warnings. The two voltage readings above are bench
+            points, not a calibrated transfer-function sweep.
+          </p>
+          <p class="source-note">
+            <strong>ADC correction boundary:</strong> a corrected ADC121S101 receiver candidate
+            passed separate simulation, implementation, and JTAG programming. It was not imported
+            into the full MFCC design, and no retained endpoint capture confirms the candidate on
+            hardware. The final JC MFCC bitstream still uses the legacy receiver.
           </p>
         </section>
 
         <section id="report" class="content-section" aria-labelledby="report-title">
-          <div class="section-titlebar"><h2 id="report-title">Full project report</h2><span>107 pages / 4.9 MB</span></div>
+          <div class="section-titlebar"><h2 id="report-title">Full project report</h2><span>119 pages / 8.9 MB web copy</span></div>
           <p>
-            The report is hosted outside GitHub, so the Pages repository contains only HTML and CSS
-            delivery URLs. Use the normal link if the inline PDF viewer is unavailable in your browser.
+            Cloudinary serves a tagged, page-for-page web-optimized LibreOffice export of the
+            finalized 20 August report. Its text, outlines, page geometry, and 119-page structure
+            match the archival full-size PDF retained in the public source release. Use the normal
+            link if the inline viewer is unavailable.
           </p>
 
           <figure class="report-cover">
             <a
-              href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186253/engineering-portfolio/mfcc/spoken-digit-project-report.pdf"
-              aria-label="Open the full 107-page MFCC project report PDF"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1787242750/engineering-portfolio/mfcc/2026-08-20/spoken-digit-project-report.pdf"
+              aria-label="Open the full 119-page MFCC project report PDF"
             >
               <img
-                src="https://res.cloudinary.com/vb29plgf/image/upload/pg_1,f_auto,q_auto:good,c_limit,w_1400/v1785186253/engineering-portfolio/mfcc/spoken-digit-project-report.jpg"
+                src="https://res.cloudinary.com/vb29plgf/image/upload/pg_1,f_auto,q_auto:good,w_1400/v1787242750/engineering-portfolio/mfcc/2026-08-20/spoken-digit-project-report.jpg"
                 width="1400"
-                height="1812"
+                height="1980"
                 alt="Cover page of the FPGA MFCC Spoken Digit Recognition project report"
                 loading="lazy"
                 decoding="async"
@@ -349,40 +473,44 @@
 
           <iframe
             class="pdf-frame"
-            src="https://res.cloudinary.com/vb29plgf/image/upload/v1785186253/engineering-portfolio/mfcc/spoken-digit-project-report.pdf#page=1&view=FitH"
-            title="Preview of the 107-page FPGA MFCC spoken-digit project report"
+            src="https://res.cloudinary.com/vb29plgf/image/upload/v1787242750/engineering-portfolio/mfcc/2026-08-20/spoken-digit-project-report.pdf#page=1&view=FitH"
+            title="Preview of the 119-page FPGA MFCC spoken-digit project report"
             loading="lazy"
           ></iframe>
           <div class="entry-actions report-actions" aria-label="Project report links">
             <a
               class="button primary"
-              href="https://res.cloudinary.com/vb29plgf/image/upload/v1785186253/engineering-portfolio/mfcc/spoken-digit-project-report.pdf"
-            >Open full project report (PDF, 4.9 MB, 107 pages)</a>
+              href="https://res.cloudinary.com/vb29plgf/image/upload/v1787242750/engineering-portfolio/mfcc/2026-08-20/spoken-digit-project-report.pdf"
+            >Open full project report (PDF, 8.9 MB, 119 pages)</a>
             <a
               class="button"
-              href="https://res.cloudinary.com/vb29plgf/image/upload/fl_attachment:MFCC-Spoken-Digit-Project-Report/v1785186253/engineering-portfolio/mfcc/spoken-digit-project-report.pdf"
+              href="https://res.cloudinary.com/vb29plgf/image/upload/fl_attachment:MFCC-Spoken-Digit-Project-Report-2026-08-20/v1787242750/engineering-portfolio/mfcc/2026-08-20/spoken-digit-project-report.pdf"
             >Download report</a>
           </div>
         </section>
 
         <section id="limitations" class="content-section" aria-labelledby="limitations-title">
-          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>honest status</span></div>
+          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>current status</span></div>
           <div class="two-column">
             <article class="plain-panel">
               <h3>Known limitations</h3>
               <ul>
-                <li>The 30-record collection is historical development evidence, not a broad accuracy study.</li>
+                <li>The 30/30 result is offline retained-set analysis, not logged live hardware accuracy.</li>
                 <li>Runtime reference recording and flush are implemented but lack retained direct readback proof.</li>
-                <li>External SPI and board-interface timing is not characterized by the internal timing result.</li>
+                <li>The corrected standalone ADC candidate was not imported into the full MFCC receiver.</li>
+                <li>External SPI and board-interface timing is not closed by the internal timing result.</li>
+                <li>The later PCB retains open DRC/ERC findings and is not presented as fabrication-ready.</li>
                 <li>The analog response lacks a calibrated physical transfer-function sweep.</li>
               </ul>
             </article>
             <article class="plain-panel">
-              <h3>Best next evidence</h3>
+              <h3>What I would test next</h3>
               <ul>
                 <li>Record one known digit, read the selected reference slot back, then recall it.</li>
                 <li>Capture reference memory before and after flush.</li>
                 <li>Run a labeled live spoken-digit comparison and retain the full frame sequence plus final display/UART result.</li>
+                <li>Capture known ADC endpoint voltages and raw receiver words, then constrain the external SPI interface.</li>
+                <li>Resolve the retained PCB DRC/ERC findings before another fabrication revision.</li>
                 <li>Measure the physical front-end response with calibrated equipment.</li>
               </ul>
             </article>
@@ -390,12 +518,12 @@
         </section>
 
         <nav class="project-pager" aria-label="Project pages">
-          <a href="nrf-project.html">← Previous: nRF24L01</a>
-          <a href="rc-car.html">Next: FPGA RC car →</a>
+          <a href="../index.html#projects">← Project directory</a>
+          <a href="ecd-proje.html">Next: FPGA 3-bit ADC →</a>
         </nav>
       </main>
 
-      <footer class="site-footer"><p>Borek's Engineering Notebook</p><p><a href="#main-content">Return to top</a></p></footer>
+      <footer class="site-footer"><p>Kerem Gürbüz | Project Archive</p><p><a href="#main-content">Return to top</a></p></footer>
     </div>
   </body>
 </html>

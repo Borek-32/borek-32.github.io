@@ -8,7 +8,7 @@
       content="Report-backed evidence for a Basys 3 ultrasonic audio-array prototype, its UART control path, nonlinear driver screening, qualitative listening result, and PCB release hold."
     />
     <meta name="theme-color" content="#163f73" />
-    <title>FPGA Ultrasonic Audio-Array Prototype | Borek's Engineering Notebook</title>
+    <title>FPGA Ultrasonic Audio-Array Prototype | Kerem Gürbüz</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body class="project-emt">
@@ -17,11 +17,11 @@
     <div class="site-shell">
       <header class="site-header">
         <div class="masthead">
-          <a class="brand" href="../index.html" aria-label="Borek's Engineering Notebook home">
+          <a class="brand" href="../index.html" aria-label="Kerem Gürbüz project archive home">
             <span class="brand-mark" aria-hidden="true">B</span>
-            <span><strong>Borek's Engineering Notebook</strong><small>Project evidence file</small></span>
+            <span><strong>Kerem Gürbüz | Project Archive</strong><small>Undergraduate engineering project</small></span>
           </a>
-          <p class="masthead-note">PROJECT 02 / EMT</p>
+          <p class="masthead-note">PROJECT 03 / EMT</p>
         </div>
         <nav class="main-nav" aria-label="Project navigation">
           <a href="../index.html#projects">All projects</a>
@@ -38,13 +38,17 @@
         <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / FPGA ultrasonic audio array</p>
 
         <section class="project-intro" aria-labelledby="project-title">
-          <p class="page-label">ULTRASONIC AUDIO / REPORT-BACKED EVIDENCE</p>
+          <div class="project-heading-meta">
+            <p class="page-label">ULTRASONIC AUDIO / EEE351 COURSE PROJECT</p>
+            <span class="project-status project-status-revision" aria-label="Portfolio status: Needs revision">Needs revision</span>
+          </div>
           <h1 id="project-title">FPGA ultrasonic audio-array prototype</h1>
           <p class="lead">
-            A Basys 3 and MATLAB system that sends 8-bit audio samples and a steering command to
-            three hand-built H-bridge drivers feeding a 24-transducer, 40 kHz array. The retained
-            demonstrator produced recognizable localized audio in an individual listening trial;
-            controlled beam steering, calibrated acoustic performance, and PCB release remain open.
+            For this EEE351 project, I built the 24-transducer array and three H-bridge driver
+            boards, then integrated the MATLAB audio preparation and Basys 3 control path. The
+            prototype produced recognizable audio in a qualitative listening trial, but the
+            steering attempt was unsuccessful. Noise-dominated output, excessive MOSFET heating,
+            the gate drive, PCB release, and a recoverable FPGA build still need work.
           </p>
           <div class="entry-actions" aria-label="EMT project actions">
             <a class="button primary" href="#results">See prototype evidence</a>
@@ -63,7 +67,7 @@
             <div><dt>Platform</dt><dd>Basys 3 / 100 MHz control</dd></div>
             <div><dt>Prototype</dt><dd>24 transducers / 3 drivers</dd></div>
             <div><dt>Transport</dt><dd>68-byte frames / 115200 baud</dd></div>
-            <div><dt>Evidence state</dt><dd>Qualitative demo / fabrication hold</dd></div>
+            <div><dt>Evidence state</dt><dd>Needs revision / progress report only</dd></div>
           </dl>
 
           <figure class="project-hero-media">
@@ -89,18 +93,18 @@
         </section>
 
         <section class="content-section" aria-labelledby="summary-title">
-          <div class="section-titlebar"><h2 id="summary-title">Executive summary</h2><span>what was built</span></div>
+          <div class="section-titlebar"><h2 id="summary-title">Project summary</h2><span>what was built</span></div>
           <div class="summary-grid">
             <article>
               <h3>Problem</h3>
-              <p>Explore localized ultrasonic audio with an FPGA-controlled array while keeping sample transport, steering commands, driver behavior, and release gates inspectable.</p>
+              <p>Explore whether an FPGA-controlled ultrasonic array could produce localized audible sound while keeping the audio transport, steering command, and driver behavior observable.</p>
             </article>
             <article>
               <h3>Implementation</h3>
-              <p>MATLAB frames 64 unsigned 8-bit samples with a signed steering delta. FPGA logic drives three groups of eight 40 kHz transducers through hand-built full-bridge stages.</p>
+              <p>MATLAB frames 64 unsigned 8-bit samples with a signed steering delta. In the demonstrated wired path, FPGA logic drove three groups of eight 40 kHz transducers through hand-built full-bridge stages.</p>
             </article>
             <article>
-              <h3>Result boundary</h3>
+              <h3>What the result means</h3>
               <p>An individual listening trial reported recognizable audio concentrated in a preferred region. No controlled beam map was retained, and the redesigned driver remains blocked before fabrication.</p>
             </article>
           </div>
@@ -265,10 +269,10 @@
         <section id="results" class="content-section" aria-labelledby="results-title">
           <div class="section-titlebar"><h2 id="results-title">Prototype listening result</h2><span>qualitative individual trial</span></div>
           <p>
-            The original demonstrator produced recognizable audio that the builder perceived as
-            concentrated in a preferred region. This is useful prototype evidence, but it was not
-            recorded with a calibrated microphone, controlled room geometry, blinded listeners,
-            or synchronized electrical and acoustic captures.
+            I hand-built the 4 × 6 array and all three driver boards, then tested the complete setup
+            in an individual listening demonstration. The recognizable audio seemed concentrated in
+            a preferred region, but without calibrated equipment this remains a qualitative
+            observation rather than a directivity or steering measurement.
           </p>
 
           <div class="evidence-gallery">
@@ -354,12 +358,21 @@
         </section>
 
         <section id="report" class="content-section" aria-labelledby="report-title">
-          <div class="section-titlebar"><h2 id="report-title">Full progress report</h2><span>45 pages / 6.7 MB</span></div>
+          <div class="section-titlebar"><h2 id="report-title">Full progress report</h2><span>45 pages / 7.1 MB</span></div>
           <p>
             The current report supersedes the preserved earlier ODT narrative. It consolidates the
             prototype record, UART and array architecture, measured Phase-A inputs, reduced and
             nonlinear electrical screens, KiCad readiness audit, explicit fabrication gates, and
             next controlled work. The public copy removes the student ID and workstation paths.
+          </p>
+          <p class="source-note">
+            <strong>Why this remains a progress report:</strong> low external gate resistance
+            produced predominantly audible noise, while kilohm-range resistance made the audible
+            result cleaner but left the MOSFETs very hot. Those trials were qualitative and retained
+            no oscilloscope or controlled temperature record, so the project is not marked complete.
+            The next revision will tune and validate MOSFET turn-on and turn-off response, deadtime,
+            small optional drain-to-gate feedback, and load-side damping with current-limited
+            waveform and temperature checks.
           </p>
 
           <figure class="report-cover">
@@ -389,7 +402,7 @@
             <a
               class="button primary"
               href="https://res.cloudinary.com/vb29plgf/image/upload/v1786986801/fpga-ultrasonic-audio-array-progress-report_peioed.pdf"
-            >Open full progress report (PDF, 6.7 MB, 45 pages)</a>
+            >Open full progress report (PDF, 7.1 MB, 45 pages)</a>
             <a
               class="button"
               href="https://res.cloudinary.com/vb29plgf/image/upload/fl_attachment:FPGA-Ultrasonic-Audio-Array-Progress-Report/v1786986801/fpga-ultrasonic-audio-array-progress-report_peioed.pdf"
@@ -398,7 +411,7 @@
         </section>
 
         <section id="limitations" class="content-section" aria-labelledby="limitations-title">
-          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>honest status</span></div>
+          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>current status</span></div>
           <div class="two-column">
             <article class="plain-panel">
               <h3>Known limitations</h3>
@@ -412,7 +425,7 @@
               </ul>
             </article>
             <article class="plain-panel">
-              <h3>Best next evidence</h3>
+              <h3>What I would test next</h3>
               <ul>
                 <li>Run the full 400/600 ns nonlinear deadtime, split-gate, feedback, and zero-state matrix.</li>
                 <li>Measure all 24 transducers with a recorded method, including ESR and complex impedance near 40 kHz.</li>
@@ -427,11 +440,11 @@
 
         <nav class="project-pager" aria-label="Project pages">
           <a href="ecd-proje.html">← Previous: FPGA 3-bit ADC</a>
-          <a href="nrf-project.html">Next: nRF24L01 →</a>
+          <a href="nrf-project.html">Next: Seven-segment debugger →</a>
         </nav>
       </main>
 
-      <footer class="site-footer"><p>Borek's Engineering Notebook</p><p><a href="#main-content">Return to top</a></p></footer>
+      <footer class="site-footer"><p>Kerem Gürbüz | Project Archive</p><p><a href="#main-content">Return to top</a></p></footer>
     </div>
   </body>
 </html>

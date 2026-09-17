@@ -3,9 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Evidence documentation for Basys3 nRF24L01 transmitter, receiver, and SPI troubleshooting workspaces." />
+    <meta name="description" content="Evidence documentation for the historical Basys 3 nRF24L01 one-byte TX/RX debugger with seven-segment register readback." />
     <meta name="theme-color" content="#163f73" />
-    <title>nRF24L01 Project Evidence | Borek's Engineering Notebook</title>
+    <title>nRF24L01 Seven-Segment Debugger | Kerem Gürbüz</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body class="project-nrf">
@@ -14,11 +14,11 @@
     <div class="site-shell">
       <header class="site-header">
         <div class="masthead">
-          <a class="brand" href="../index.html" aria-label="Borek's Engineering Notebook home">
+          <a class="brand" href="../index.html" aria-label="Kerem Gürbüz project archive home">
             <span class="brand-mark" aria-hidden="true">B</span>
-            <span><strong>Borek's Engineering Notebook</strong><small>Project evidence file</small></span>
+            <span><strong>Kerem Gürbüz | Project Archive</strong><small>Undergraduate engineering project</small></span>
           </a>
-          <p class="masthead-note">PROJECT 03 / nRF</p>
+          <p class="masthead-note">PROJECT 04 / nRF 7-SEG</p>
         </div>
         <nav class="main-nav" aria-label="Project navigation">
           <a href="../index.html#projects">All projects</a>
@@ -29,82 +29,154 @@
       </header>
 
       <main id="main-content">
-        <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / nRF24L01</p>
+        <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / nRF24L01 seven-segment debugger</p>
 
         <section class="project-intro" aria-labelledby="project-title">
-          <p class="page-label">FPGA RADIO BRING-UP / EVIDENCE DOCUMENT</p>
-          <h1 id="project-title">nRF24L01: transmitter, receiver, and debug builds</h1>
+          <div class="project-heading-meta">
+            <p class="page-label">HISTORICAL FPGA RADIO DEBUGGER / EVIDENCE DOCUMENT</p>
+            <span class="project-status project-status-library-dev" aria-label="Portfolio status: Library dev">Library dev</span>
+          </div>
+          <h1 id="project-title">nRF24L01 seven-segment radio debugger</h1>
           <p class="lead">
-            A Basys3 workspace for nRF24L01 communication over SPI. Separate transmitter,
-            receiver, and troubleshooting builds expose radio configuration and register state
-            instead of treating the module as an opaque peripheral.
+            A compact historical one-byte transmitter/receiver pair for two Basys 3 boards.
+            Switches select the transmitted byte, receiver LEDs show the captured byte, and both
+            roles expose selected nRF24L01 register address and value on the seven-segment display.
           </p>
-          <div class="entry-actions" aria-label="nRF project actions">
+          <div class="entry-actions" aria-label="nRF seven-segment debugger actions">
             <a class="button primary" href="#evidence">Read evidence record</a>
-            <a class="button repository-button" href="https://github.com/Borek-32/EEE102-NRF24L01-Radio-Debugger-for-RC-car-Project-BASYS3" data-repository="nrf-project"><span class="github-logo" aria-hidden="true"></span>View GitHub repository</a>
           </div>
 
           <dl class="project-facts wide">
-            <div><dt>Platform</dt><dd>Basys3 / Xilinx Artix-7</dd></div>
-            <div><dt>Peripheral</dt><dd>nRF24L01 2.4 GHz radio</dd></div>
-            <div><dt>Interface</dt><dd>SPI plus CE / CSN / IRQ</dd></div>
-            <div><dt>Recorded status</dt><dd>TX/RX and diagnostic workspaces mapped</dd></div>
+            <div><dt>Platform</dt><dd>2× Basys 3 / XC7A35T</dd></div>
+            <div><dt>Peripheral</dt><dd>nRF24L01+ on Pmod JC</dd></div>
+            <div><dt>Payload</dt><dd>One byte selected by switches</dd></div>
+            <div><dt>Recorded status</dt><dd>Fresh routed builds; controlled RF-transfer record absent</dd></div>
           </dl>
+
+          <figure class="project-hero-media">
+            <a
+              href="../assets/nrf/seven-segment/2026-08-21/bench-config-060f.jpg"
+              aria-label="Open the full-resolution retained seven-segment debugger bench photograph"
+            >
+              <img
+                src="../assets/nrf/seven-segment/2026-08-21/bench-config-060f.jpg"
+                width="3104"
+                height="1848"
+                alt="Two powered Basys 3 boards connected to nRF24L01 modules, both displaying 060F with matching illuminated payload LEDs"
+                decoding="async"
+                fetchpriority="high"
+              />
+            </a>
+            <figcaption><strong>Retained bench configuration.</strong> One of four static photographs preserved in the setup guide. It documents the board arrangement, not a controlled bitstream-bound programming, re-arm, or RF-transfer run.</figcaption>
+          </figure>
         </section>
 
         <section class="content-section" aria-labelledby="summary-title">
-          <div class="section-titlebar"><h2 id="summary-title">Executive summary</h2><span>what was built</span></div>
+          <div class="section-titlebar"><h2 id="summary-title">Project summary</h2><span>what was built</span></div>
           <div class="summary-grid">
-            <article><h3>Problem</h3><p>Bring up an nRF24L01 from FPGA logic while making SPI transactions, configuration registers, payload state, and failure signals inspectable on the board.</p></article>
-            <article><h3>Implementation</h3><p>Reusable helpers separate register writes, payload reads/writes, one-byte commands, clock division, debounce, and seven-segment display logic.</p></article>
-            <article><h3>Result</h3><p>The workspace records four focused builds and their common mapping. A complete published over-the-air TX/RX proof path is still the next verification target.</p></article>
+            <article><h3>Problem</h3><p>Make a first radio link understandable on the boards themselves, without depending on a large host application or treating the nRF24L01 as an opaque peripheral.</p></article>
+            <article><h3>Implementation</h3><p>Separate TX and RX state machines share SPI helpers, register readback, button-controlled register selection, seven-segment formatting, and a short UART event-timing helper.</p></article>
+            <article><h3>Recorded result</h3><p>Both roles were freshly rebuilt and fully routed for Pmod JC with zero route errors. The boards were not programmed in that rebuild, so this is implementation evidence rather than a fresh over-the-air demonstration.</p></article>
           </div>
         </section>
 
         <section id="implementation" class="content-section" aria-labelledby="implementation-title">
-          <div class="section-titlebar"><h2 id="implementation-title">Implementation flow</h2><span>four build roles</span></div>
+          <div class="section-titlebar"><h2 id="implementation-title">Implementation flow</h2><span>one-byte diagnostic path</span></div>
           <ol class="flow-list">
-            <li><strong>Original transmitter.</strong><span><code>nrfTX</code> initializes registers, writes a 32-byte payload, issues commands, pulses CE, and exposes switch input on LEDs.</span></li>
-            <li><strong>Original receiver.</strong><span><code>nrfRX</code> configures receive mode, waits for IRQ, reads payload data, clears status, and returns to listening.</span></li>
-            <li><strong>TX troubleshooting.</strong><span>The debug build adds register readback, display stepping, and maximum-retry visibility.</span></li>
-            <li><strong>RX troubleshooting.</strong><span>The receive debug path centers on IRQ, payload read, FIFO/IRQ clearing, and visible register state.</span></li>
-            <li><strong>Shared board mapping.</strong><span>SPI and radio-control signals are mapped to Basys3 PMOD JC across the documented builds.</span></li>
+            <li><strong>Select and latch one byte.</strong><span>TX samples <code>data_input[7:0]</code> from the board switches and retains the selected diagnostic byte.</span></li>
+            <li><strong>Write and transmit.</strong><span>The transmitter issues <code>W_TX_PAYLOAD</code>, pulses CE, then reads STATUS after the radio event.</span></li>
+            <li><strong>Wait and receive.</strong><span>RX holds CE high while listening, services the active-low IRQ, reads one byte, and places that byte on <code>led_out[7:0]</code>.</span></li>
+            <li><strong>Inspect registers.</strong><span>Two board buttons move the selected register index up or down; the four-digit display shows the register address and value in hexadecimal.</span></li>
+            <li><strong>Expose event timing.</strong><span><code>RsTx</code> emits a short UART timing record on TX_DS or RX_DR events; this helper is diagnostic, not a sustained data transport.</span></li>
+            <li><strong>Use the shared JC mapping.</strong><span>MOSI, SCK, CSN, IRQ, MISO, and CE occupy the same documented Pmod JC positions on both roles.</span></li>
           </ol>
+
+          <div class="evidence-gallery">
+            <figure class="wide-media">
+              <a
+                href="../assets/nrf/seven-segment/2026-08-21/system-overview.png"
+                aria-label="Open the full-resolution seven-segment debugger system overview"
+              >
+                <img
+                  src="../assets/nrf/seven-segment/2026-08-21/system-overview.png"
+                  width="2100"
+                  height="1080"
+                  alt="System overview linking switch-selected transmitter data, the nRF24L01 radio pair, receiver LEDs, and seven-segment register readback"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>System overview.</strong> The one-byte diagnostic path and the state made visible at each board.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="../assets/nrf/seven-segment/2026-08-21/pmod-jc-wiring-contract.png"
+                aria-label="Open the full-resolution Pmod JC wiring contract"
+              >
+                <img
+                  src="../assets/nrf/seven-segment/2026-08-21/pmod-jc-wiring-contract.png"
+                  width="2100"
+                  height="1120"
+                  alt="Pmod JC signal contract for nRF24L01 MOSI, SCK, CSN, IRQ, MISO, CE, power, and ground connections"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Pmod JC wiring contract.</strong> The shared logical radio connection used by the retained TX and RX constraints.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="../assets/nrf/seven-segment/2026-08-21/display-and-payload-evidence-contract.png"
+                aria-label="Open the full-resolution display and payload evidence contract"
+              >
+                <img
+                  src="../assets/nrf/seven-segment/2026-08-21/display-and-payload-evidence-contract.png"
+                  width="2100"
+                  height="1120"
+                  alt="Evidence contract distinguishing switch-selected payload, receiver LED output, register address, and register value on the seven-segment displays"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </a>
+              <figcaption><strong>Display and payload contract.</strong> What the switches, LEDs, and hexadecimal displays mean when collecting a future controlled transfer record.</figcaption>
+            </figure>
+          </div>
         </section>
 
         <section id="evidence" class="content-section" aria-labelledby="evidence-title">
-          <div class="section-titlebar"><h2 id="evidence-title">Evidence record</h2><span>documented artifacts</span></div>
-          <div class="table-wrap" tabindex="0" role="region" aria-label="nRF evidence table">
+          <div class="section-titlebar"><h2 id="evidence-title">Evidence record</h2><span>source and routed builds</span></div>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Seven-segment debugger evidence table">
             <table class="evidence-table">
               <thead><tr><th scope="col">Evidence</th><th scope="col">What it establishes</th><th scope="col">Publication state</th></tr></thead>
               <tbody>
-                <tr><th scope="row">Original TX project</th><td>Register initialization, payload write path, CE pulse, and user-input mapping.</td><td>Summarized on this page</td></tr>
-                <tr><th scope="row">Original RX project</th><td>Receive initialization, IRQ wait, payload read, and status/FIFO clearing.</td><td>Summarized on this page</td></tr>
-                <tr><th scope="row">TX debug project</th><td>Register readback and maximum-retry state can be inspected through board outputs.</td><td>Summarized on this page</td></tr>
-                <tr><th scope="row">RX debug project</th><td>Receive state and configured registers can be stepped through on the display.</td><td>Summarized on this page</td></tr>
-                <tr><th scope="row">Register map notes</th><td>CONFIG, RF_CH, RF_SETUP, DYNPD, FEATURE, and related setup values are tracked per role.</td><td>Recorded in source notes</td></tr>
-                <tr><th scope="row">PMOD JC mapping</th><td>SCK, MOSI, MISO, CE, CSN, and IRQ assumptions are documented for Basys3.</td><td>Recorded in source notes</td></tr>
+                <tr><th scope="row">TX source</th><td>Switch-selected byte capture, payload write, CE pulse, STATUS handling, register readback, and display logic are retained.</td><td>Source retained</td></tr>
+                <tr><th scope="row">RX source</th><td>IRQ-driven one-byte payload read, LED output, register refresh, and return-to-listening flow are retained.</td><td>Source retained</td></tr>
+                <tr><th scope="row">TX JC rebuild</th><td>Vivado 2025.2 routed 1,044/1,044 nets with zero route errors; WNS/WHS were +0.440/+0.117 ns.</td><td>PASS — implementation</td></tr>
+                <tr><th scope="row">RX JC rebuild</th><td>Vivado 2025.2 routed 735/735 nets with zero route errors; WNS/WHS were +0.348/+0.079 ns.</td><td>PASS — implementation</td></tr>
+                <tr><th scope="row">Routed DRC</th><td>Both roles had zero DRC errors; the retained reports contain only the inherited CFGBVS-1 warning.</td><td>PASS with disclosed warning</td></tr>
+                <tr><th scope="row">Retained static photographs</th><td>Four photographs preserve board, wiring, and display arrangements, but they are not tied to a recorded bitstream identity, programming/re-arm sequence, and controlled payload-to-received-byte transfer.</td><td>Context only</td></tr>
+                <tr><th scope="row">Controlled hardware record</th><td>The boards were not programmed in the fresh rebuild, and no bitstream-bound programming, re-arm, SPI, or RF-transfer record was retained.</td><td>NOT RUN</td></tr>
               </tbody>
             </table>
           </div>
-          <p class="source-note"><strong>Documentation basis:</strong> <code>nrf project/PROJECT_CONTENTS.md</code>. The page distinguishes workspace coverage from a fully published radio-link demonstration.</p>
+          <p class="source-note"><strong>Documentation basis:</strong> <code>seven-segment-debugger/README.md</code> and <code>docs/evidence/2026-08-20-jc-rebuild/README.md</code>. The routed rebuild is not presented as fresh hardware proof.</p>
         </section>
 
         <section id="limitations" class="content-section" aria-labelledby="limitations-title">
-          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>honest status</span></div>
+          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>current status</span></div>
           <div class="two-column">
-            <article class="plain-panel"><h3>Known limitation</h3><p>The documentation maps TX, RX, and register-debug paths, but does not yet publish one continuous, independently inspectable over-the-air transfer from transmitter input to receiver output.</p></article>
-            <article class="plain-panel"><h3>Best next evidence</h3><p>Publish a wiring photo, register readback capture, configuration table, and short test showing the selected transmitter payload arriving at the receiver output.</p></article>
+            <article class="plain-panel"><h3>Known limitation</h3><p>The radio setup enables dynamic payload support, but this historical design intentionally transfers only one byte. Its fresh evidence proves routed implementation, not current programming, SPI electrical behavior, or over-the-air delivery.</p></article>
+            <article class="plain-panel"><h3>What I would test next</h3><p>Program the retained TX and RX images, capture both register displays and the JC SPI signals, then retain one labeled switch-to-payload-to-LED demonstration.</p></article>
           </div>
         </section>
 
         <nav class="project-pager" aria-label="Project pages">
           <a href="emtproject.html">← Previous: EMT</a>
-          <a href="mfcc-project.html">Next: MFCC →</a>
+          <a href="nrf-request-driven-uart-debugger.html">Next: Request-driven UART →</a>
         </nav>
       </main>
 
-      <footer class="site-footer"><p>Borek's Engineering Notebook</p><p><a href="#main-content">Return to top</a></p></footer>
+      <footer class="site-footer"><p>Kerem Gürbüz | Project Archive</p><p><a href="#main-content">Return to top</a></p></footer>
     </div>
   </body>
 </html>

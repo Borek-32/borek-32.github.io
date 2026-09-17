@@ -21,3 +21,18 @@
 *.[Ww][Aa][Vv]
 *.[Ww][Ee][Bb][Mm]
 *.[Zz][Ii][Pp]
+
+# Privacy-reviewed, versioned nRF website media and public-report exports.
+!/assets/
+!/assets/nrf/
+!/assets/nrf/seven-segment/
+!/assets/nrf/seven-segment/2026-08-21/
+!/assets/nrf/seven-segment/2026-08-21/**
+!/assets/nrf/request-driven/
+!/assets/nrf/request-driven/2026-08-21/
+!/assets/nrf/request-driven/2026-08-21/**
+
+# VGA scope report and figures supplied for the project page.
+!/assets/ecd/
+!/assets/ecd/2026-09-17/
+!/assets/ecd/2026-09-17/**

@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Borek's compact engineering portfolio: FPGA, DSP, radio, mixed-signal, and mechatronic projects with evidence-first documentation."
+      content="Kerem Gürbüz's undergraduate engineering portfolio: FPGA, VHDL, DSP, radio, mixed-signal, PCB, and mechatronic projects with documented results and limitations."
     />
     <meta name="theme-color" content="#163f73" />
-    <title>Kerem Gürbüz - Project Archive</title>
-    <link rel="stylesheet" href="styles.css" />
+    <title>Kerem Gürbüz | FPGA and Hardware Projects</title>
+    <link rel="stylesheet" href="styles.css?v=20260821-0116" />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -17,11 +17,11 @@
     <div class="site-shell">
       <header class="site-header">
         <div class="masthead">
-          <a class="brand" href="index.html" aria-label="Borek's Engineering Notebook home">
+          <a class="brand" href="index.html" aria-label="Kerem Gürbüz project archive home">
             <span class="brand-mark" aria-hidden="true">B</span>
             <span>
-              <strong>Kerem Gürbüz - Project Archive</strong>
-              <small>FPGA · RTL · DSP · Hardware Integration · verification</small>
+              <strong>Kerem Gürbüz | Project Archive</strong>
+              <small>FPGA · RTL · DSP · hardware integration · verification</small>
             </span>
           </a>
         </div>
@@ -29,59 +29,106 @@
 
       <main id="main-content">
         <section class="welcome-panel" aria-labelledby="welcome-title">
-          <p class="page-label">PROJECT INDEX</p>
-          <h1 id="welcome-title"></h1>
+          <p class="page-label">k.gurbuz@ug.bilkent.edu.tr</p>
+          <h1 id="welcome-title">FPGA and hardware projects</h1>
           <p class="lead">
-            This is a compact project library of FPGA, signal-processing, radio, mixed-signal, and mechatronic work.
-            Each project page has evidences of architecture design, implementation flow,
-            verification notes, and known limitations listed.
+            These are undergraduate FPGA, signal-processing, radio, mixed-signal, and mechatronic
+            projects that I designed, built, integrated, or tested. Each page separates what
+            worked, what I verified later, and what still needs work. Here, Done means the project
+            is complete for the assignments, not that every technical limitation has been resolved.
           </p>
         </section>
 
         <section id="projects" class="content-section" aria-labelledby="projects-title">
           <div class="section-titlebar">
             <h2 id="projects-title">Project directory</h2>
-            <span>5 entries</span>
+            <span>6 entries</span>
           </div>
 
           <div class="project-list">
+            <article class="project-entry project-mfcc">
+              <header>
+                <div class="project-heading-meta">
+                  <p class="project-number">PROJECT 01</p>
+                  <span class="project-status project-status-done" aria-label="Portfolio status: Done">Done</span>
+                </div>
+                <h3>MFCC-based FPGA spoken-digit recognizer</h3>
+              </header>
+              <div class="project-summary">
+                <figure class="project-preview">
+                  <img
+                    class="project-preview-image"
+                    src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1200/v1787188836/engineering-portfolio/mfcc/2026-08-20/homefab-operating-on-basys3.PNG"
+                    width="2800"
+                    height="1350"
+                    alt="Final home-fabricated microphone and ADC PCB connected to the Basys 3 Pmod JC during full-design bench integration"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption>Home-fabricated microphone/ADC PCB connected to Basys 3 Pmod JC</figcaption>
+                </figure>
+                <dl class="project-facts">
+                  <div><dt>Area</dt><dd>FPGA / DSP / PCB design</dd></div>
+                  <div><dt>Platform</dt><dd>Vivado / VHDL / MATLAB / LTSpice / KiCad</dd></div>
+                  <div><dt>Status</dt><dd>Final JC build programmed; integrated PCB; live accuracy not logged</dd></div>
+                </dl>
+              </div>
+              <p>
+                For EEE491, I built the fixed-point ADC, Hann window, FFT, MEL, LOGMEL, DCT,
+                and SAD/L1 pipeline, its XSim/MATLAB checks, and the microphone/ADC PCB. The
+                30/30 result comes from offline analysis, not 30 live FPGA decisions.
+              </p>
+              <div class="entry-actions" aria-label="MFCC project links">
+                <a class="button primary" href="projects/mfcc-project.html">Read project page</a>
+                <a class="button repository-button" href="https://github.com/Borek-32/EEE491-Spoken-Digit-Recognizer-BASYS3" data-repository="mfcc-project"><span class="github-logo" aria-hidden="true"></span>View GitHub repository</a>
+              </div>
+            </article>
+
             <article class="project-entry project-ecd">
               <header>
-                <p class="project-number">PROJECT 01</p>
+                <div class="project-heading-meta">
+                  <p class="project-number">PROJECT 02</p>
+                  <span class="project-status project-status-done" aria-label="Portfolio status: Done">Done</span>
+                </div>
                 <h3>FPGA 3-bit ADC and VGA oscilloscope</h3>
               </header>
               <div class="project-summary">
                 <figure class="project-preview">
                   <img
                     class="project-preview-image"
-                    src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_900/v1786982372/one-khz-sine-vga-output_a9tt9t.jpg"
+                    src="assets/ecd/2026-09-17/sine-1khz.jpg"
                     width="1408"
                     height="734"
-                    alt="Historical bench demonstration with a sine wave on the oscilloscope and its staircase rendering on the VGA display"
+                    alt="Oscilloscope showing a 1 kHz sine wave beside its staircase rendering on the VGA display"
                     loading="lazy"
                     decoding="async"
                   />
-                  <figcaption>Historical 1 kHz sine-wave bench and VGA demonstration; current bitstream linkage remains to be captured</figcaption>
+                  <figcaption>1 kHz sine-wave demonstration: the oscilloscope input beside the ADC’s eight-level VGA trace.</figcaption>
                 </figure>
                 <dl class="project-facts">
                   <div><dt>Area</dt><dd>Mixed-signal acquisition on FPGA</dd></div>
-                  <div><dt>Platform</dt><dd>Basys3 / Artix-7 / LTSpice / KiCad</dd></div>
-                  <div><dt>Status</dt><dd>Current routed bitstream; historical bench demo; timing open</dd></div>
+                  <div><dt>Platform</dt><dd>Basys 3 / VHDL / LTspice / breadboard</dd></div>
+                  <div><dt>Status</dt><dd>Working breadboard ADC; four waveform shapes demonstrated</dd></div>
                 </dl>
               </div>
               <p>
-                FPGA control for an external sample-and-hold and comparator path, followed by
-                period-based trigger detection, double-buffered capture, and a 640 × 480 VGA renderer.
+                For EEE313, I built a three-bit ADC from discrete analog stages and used Basys 3
+                for conversion control, triggered capture, and a 640 × 480 VGA display. Laboratory
+                tests show sine, square, triangle, and sawtooth conversion, with additional sine
+                demonstrations at 500 Hz and 200 Hz.
               </p>
               <div class="entry-actions" aria-label="ECD_PROJE links">
-                <a class="button primary" href="projects/ecd-proje.html">Evidence documentation</a>
+                <a class="button primary" href="projects/ecd-proje.html">Read project page</a>
                 <a class="button repository-button" href="https://github.com/Borek-32/EEE313-VGA-Scope-3-Bit-ADC-BASYS3" data-repository="ecd-proje"><span class="github-logo" aria-hidden="true"></span>View GitHub repository</a>
               </div>
             </article>
 
             <article class="project-entry project-emt">
               <header>
-                <p class="project-number">PROJECT 02</p>
+                <div class="project-heading-meta">
+                  <p class="project-number">PROJECT 03</p>
+                  <span class="project-status project-status-revision" aria-label="Portfolio status: Needs revision">Needs revision</span>
+                </div>
                 <h3>FPGA ultrasonic audio-array prototype</h3>
               </header>
               <div class="project-summary">
@@ -95,123 +142,142 @@
                     loading="lazy"
                     decoding="async"
                   />
-                  <figcaption>24-transducer qualitative demonstrator; calibrated beam map not yet retained</figcaption>
+                  <figcaption>My 24-transducer prototype; the listening observations are qualitative, not a calibrated beam map.</figcaption>
                 </figure>
                 <dl class="project-facts">
                   <div><dt>Area</dt><dd>FPGA control and ultrasonic audio</dd></div>
                   <div><dt>Platform</dt><dd>Basys 3 / MATLAB / LTspice / KiCad</dd></div>
-                  <div><dt>Status</dt><dd>Qualitative demonstrator; PCB fabrication hold</dd></div>
+                  <div><dt>Status</dt><dd>Needs revision; progress report only</dd></div>
                 </dl>
               </div>
               <p>
-                A framed UART audio and steering path driving three hand-built bridge stages and a
-                4 × 6 transducer array, with the current electrical redesign held behind explicit
-                nonlinear, bench, schematic, and PCB release gates.
+                For EEE351, I hand-built the array and three driver boards and integrated the
+                MATLAB-to-FPGA audio path. Recognizable audio seemed concentrated in one region,
+                but the steering attempt was unsuccessful. Noise at low gate resistance, heating
+                at high resistance, and the gate-drive and PCB redesigns remain open.
               </p>
               <div class="entry-actions" aria-label="EMT project links">
-                <a class="button primary" href="projects/emtproject.html">Evidence documentation</a>
+                <a class="button primary" href="projects/emtproject.html">Read project page</a>
                 <a class="button repository-button" href="https://github.com/Borek-32/EEE351-Parametric-Speaker-Beam-steering-Attempt-BASYS3" data-repository="emtproject"><span class="github-logo" aria-hidden="true"></span>View GitHub repository</a>
               </div>
             </article>
 
             <article class="project-entry project-nrf">
               <header>
-                <p class="project-number">PROJECT 03</p>
-                <h3>nRF24L01 — FPGA radio register level debugger</h3>
-              </header>
-              <div class="project-summary">
-                <figure class="project-preview">
-                  <div
-                    class="project-preview-placeholder"
-                    role="img"
-                    aria-label="Placeholder for an nRF24L01 project preview photo"
-                  >
-                    <span>Project preview</span>
-                    <strong>Photo placeholder</strong>
-                  </div>
-                  <figcaption>nRF24L01 photo</figcaption>
-                </figure>
-                <dl class="project-facts">
-                  <div><dt>Area</dt><dd>SPI / 2.4 GHz radio</dd></div>
-                  <div><dt>Platform</dt><dd>Basys3 / nRF24L01 / Python</dd></div>
-                  <div><dt>Status</dt><dd>Bitstream; verified; TX/RX and troubleshooting GUI workspaces documented</dd></div>
-                </dl>
-              </div>
-              <p>
-                A four-build workspace for transmitter, receiver, and diagnostic variants with
-                SPI helpers, register maps, payload logic, and on-board state visibility.
-              </p>
-              <div class="entry-actions" aria-label="nRF24L01 project links">
-                <a class="button primary" href="projects/nrf-project.html">Evidence documentation</a>
-                <a class="button repository-button" href="https://github.com/Borek-32/EEE102-NRF24L01-Radio-Debugger-for-RC-car-Project-BASYS3" data-repository="nrf-project"><span class="github-logo" aria-hidden="true"></span>View GitHub repository</a>
-              </div>
-            </article>
-
-            <article class="project-entry project-mfcc">
-              <header>
-                <p class="project-number">PROJECT 04</p>
-                <h3>MFCC based FPGA speech-recognition DSP pipeline</h3>
+                <div class="project-heading-meta">
+                  <p class="project-number">PROJECT 04</p>
+                  <span class="project-status project-status-library-dev" aria-label="Portfolio status: Library dev">Library dev</span>
+                </div>
+                <h3>nRF24L01 — Seven-segment radio debugger</h3>
               </header>
               <div class="project-summary">
                 <figure class="project-preview">
                   <img
                     class="project-preview-image"
-                    src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_900/v1785186251/engineering-portfolio/mfcc/spoken-digit-confusion-matrix.png"
-                    width="1457"
-                    height="1403"
-                    alt="Ten-by-ten leave-one-out confusion matrix with three retained development recordings correctly placed on each digit's diagonal"
+                    src="assets/nrf/seven-segment/2026-08-21/bench-config-060f.jpg"
+                    width="3104"
+                    height="1848"
+                    alt="Two powered Basys 3 boards connected to nRF24L01 modules, both displaying 060F with matching illuminated payload LEDs"
                     loading="lazy"
                     decoding="async"
                   />
-                  <figcaption>30/30 leave-one-out on 30 retained development utterances; not a live-speaker accuracy result</figcaption>
+                  <figcaption>Retained address-06 register view: both displays read 060F and both static payload banks show 0x7A.</figcaption>
                 </figure>
                 <dl class="project-facts">
-                  <div><dt>Area</dt><dd>FPGA / DSP / PCB design</dd></div>
-                  <div><dt>Platform</dt><dd>Vivado / VHDL / MATLAB / LTSpice / KiCad</dd></div>
-                  <div><dt>Status</dt><dd>Routed RTL and assembled PCB; post-correction labeled live trial pending</dd></div>
+                  <div><dt>Area</dt><dd>SPI / radio bring-up</dd></div>
+                  <div><dt>Platform</dt><dd>2× Basys 3 / nRF24L01+ / Vivado</dd></div>
+                  <div><dt>Status</dt><dd>Four retained bench states; controlled re-arm/RF acceptance not retained</dd></div>
                 </dl>
               </div>
               <p>
-                A staged ADC, Hann-window, FFT, MEL, LOGMEL, DCT, and SAD/L1 pipeline with
-                fixed-point checks, UART observability, a 30-record retained dataset, and a
-                fabricated microphone-amplifier and anti-aliasing PCB.
+                I kept this early debugger to one switch-selected byte so the RX LEDs and both
+                seven-segment displays made payload and register behavior visible. The 2026
+                rebuild is now accompanied by four retained bench photographs.
               </p>
-              <div class="entry-actions" aria-label="MFCC project links">
-                <a class="button primary" href="projects/mfcc-project.html">Evidence documentation</a>
-                <a class="button repository-button" href="https://github.com/Borek-32/EEE491-Spoken-Digit-Recognizer-BASYS3" data-repository="mfcc-project"><span class="github-logo" aria-hidden="true"></span>View GitHub repository</a>
+              <div class="entry-actions" aria-label="nRF24L01 seven-segment debugger links">
+                <a class="button primary" href="projects/nrf-project.html">Read project page</a>
+              </div>
+            </article>
+
+            <article class="project-entry project-nrf">
+              <header>
+                <div class="project-heading-meta">
+                  <p class="project-number">PROJECT 05</p>
+                  <span class="project-status project-status-library-dev" aria-label="Portfolio status: Library dev">Library dev</span>
+                </div>
+                <h3>nRF24L01 — Request-driven UART debugger</h3>
+              </header>
+              <div class="project-summary">
+                <figure class="project-preview">
+                  <img
+                    class="project-preview-image"
+                    src="assets/nrf/request-driven/2026-08-21/esb-on-bench.png"
+                    width="780"
+                    height="530"
+                    alt="Two enabled Basys 3 nRF24L01 boards in the retained ESB-on bench state, with LD0 observed on both boards"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <figcaption>Retained enabled ESB-on board state; rate and integrity values come from synchronized machine evidence.</figcaption>
+                </figure>
+                <dl class="project-facts">
+                  <div><dt>Area</dt><dd>FPGA / host telemetry</dd></div>
+                  <div><dt>Platform</dt><dd>2× Basys 3 / nRF24L01 / Python</dd></div>
+                  <div><dt>Status</dt><dd>60.026 s ESB-on acceptance; zero gaps in the retained run</dd></div>
+                </dl>
+              </div>
+              <p>
+                I built a host-fed 32-byte forward-only stream with passive RX validation,
+                direct STATUS/FIFO_STATUS snapshots, and FPGA-cycle throughput reporting. The
+                accepted ESB-on run retained zero missing IDs without turning one run into a
+                universal lossless-radio claim.
+              </p>
+              <div class="entry-actions" aria-label="nRF24L01 request-driven UART debugger links">
+                <a class="button primary" href="projects/nrf-request-driven-uart-debugger.html">Read project page</a>
               </div>
             </article>
 
             <article class="project-entry project-rc">
               <header>
-                <p class="project-number">PROJECT 05</p>
+                <div class="project-heading-meta">
+                  <p class="project-number">PROJECT 06</p>
+                  <span class="project-status project-status-done" aria-label="Portfolio status: Done">Done</span>
+                </div>
                 <h3>FPGA RC car — SPI, XADC &amp; PWM</h3>
               </header>
               <div class="project-summary">
                 <figure class="project-preview">
-                  <div
-                    class="project-preview-placeholder"
-                    role="img"
-                    aria-label="Media placeholder for the completed RC car chassis"
-                  >
-                    <span>Project preview</span>
-                    <strong>External media pending</strong>
-                  </div>
-                  <figcaption>Completed RC car chassis media will be hosted separately</figcaption>
+                  <picture class="project-preview-picture">
+                    <source
+                      media="(min-width: 801px)"
+                      srcset="https://raw.githubusercontent.com/Borek-32/EEE102-FPGA-RC-Car-BASYS3/49c13aeda1454ee9aa814c28bb7345dfd5d9ee79/website/assets/completed-car-top-view-1200.jpg"
+                      type="image/jpeg"
+                    />
+                    <img
+                      class="project-preview-image"
+                      src="https://raw.githubusercontent.com/Borek-32/EEE102-FPGA-RC-Car-BASYS3/a6419675bd72fcc6aebdbf5b3dbeae639adcdaad/website/assets/p006-img03-completed-rc-car-chassis.png"
+                      width="683"
+                      height="360"
+                      alt="Completed handmade four-wheel-drive RC car chassis with a Basys 3 FPGA board, radio, ESCs, and motors"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </picture>
+                  <figcaption>Completed report-era RC car with its FPGA electronics installed</figcaption>
                 </figure>
                 <dl class="project-facts">
                   <div><dt>Area</dt><dd>FPGA radio control and motor drive</dd></div>
                   <div><dt>Platform</dt><dd>2× Basys3 / NRF24L01 / XADC / PWM</dd></div>
-                  <div><dt>Status</dt><dd>Not fully functional; syntax analysis only</dd></div>
+                  <div><dt>Status</dt><dd>2024 hardware demo; 2026 routed revival; hardware re-test pending</dd></div>
                 </dl>
               </div>
               <p>
-                An all-VHDL control system in which dual analog joysticks feed an XADC and
-                NRF24L01 radio link, while the vehicle produces one steering and four motor/ESC
-                PWM outputs.
+                For EE102, I built a two-board VHDL control system, handmade remote, and vehicle
+                integration. The 2024 radio control included a practical line-of-sight check at
+                approximately 500 m, but the direct-drive motors lacked torque under ground load.
               </p>
               <div class="entry-actions" aria-label="FPGA RC car project links">
-                <a class="button primary" href="projects/rc-car.html">Evidence documentation</a>
+                <a class="button primary" href="projects/rc-car.html">Read project page</a>
                 <a class="button" href="https://youtu.be/JlileyPvNLM?si=4B1xvQ-6fF4RnPQ1">Watch project demo</a>
                 <a class="button repository-button" href="https://github.com/Borek-32/EEE102-FPGA-RC-Car-BASYS3" data-repository="rc-car"><span class="github-logo" aria-hidden="true"></span>View GitHub repository</a>
               </div>
@@ -222,7 +288,7 @@
       </main>
 
       <footer class="site-footer">
-        <p>Kerem Gürbüz - Project Archive</p>
+        <p>Kerem Gürbüz | Project Archive</p>
         <p><a href="#main-content">Return to top</a></p>
       </footer>
     </div>

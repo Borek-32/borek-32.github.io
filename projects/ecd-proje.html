@@ -3,431 +3,201 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Report-backed evidence for a Basys3-controlled 3-bit ADC, discrete analog front end, trigger-aligned capture path, and VGA oscilloscope."
-    />
+    <meta name="description" content="A working breadboard 3-bit ADC with discrete MOSFET sampling and comparison, Basys 3 conversion control, and a trigger-aligned 640 × 480 VGA waveform display." />
     <meta name="theme-color" content="#163f73" />
-    <title>FPGA 3-bit ADC and VGA Oscilloscope | Borek's Engineering Notebook</title>
+    <title>FPGA 3-bit ADC and VGA Oscilloscope | Kerem Gürbüz</title>
     <link rel="stylesheet" href="../styles.css" />
   </head>
   <body class="project-ecd">
     <a class="skip-link" href="#main-content">Skip to main content</a>
-
     <div class="site-shell">
       <header class="site-header">
         <div class="masthead">
-          <a class="brand" href="../index.html" aria-label="Borek's Engineering Notebook home">
+          <a class="brand" href="../index.html" aria-label="Kerem Gürbüz project archive home">
             <span class="brand-mark" aria-hidden="true">B</span>
-            <span><strong>Borek's Engineering Notebook</strong><small>Project evidence file</small></span>
+            <span><strong>Kerem Gürbüz | Project Archive</strong><small>Undergraduate engineering project</small></span>
           </a>
-          <p class="masthead-note">PROJECT 01 / ECD</p>
+          <p class="masthead-note">PROJECT 02 / ECD</p>
         </div>
         <nav class="main-nav" aria-label="Project navigation">
           <a href="../index.html#projects">All projects</a>
           <a href="#architecture">Architecture</a>
-          <a href="#verification">Verification</a>
+          <a href="#verification">Testing</a>
           <a href="#results">Results</a>
           <a href="#hardware">Hardware</a>
           <a href="#report">Report</a>
-          <a href="#limitations">Limitations</a>
+          <a href="#limitations">Operating limits</a>
         </nav>
       </header>
-
       <main id="main-content">
         <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../index.html#projects">Projects</a> / FPGA 3-bit ADC</p>
-
         <section class="project-intro" aria-labelledby="project-title">
-          <p class="page-label">MIXED-SIGNAL FPGA / REPORT-BACKED EVIDENCE</p>
-          <h1 id="project-title">FPGA 3-bit ADC and VGA oscilloscope</h1>
-          <p class="lead">
-            A Basys3 design that closes the loop around a discrete analog front end: FPGA logic
-            freezes a sample, selects three comparison references, reconstructs a 3-bit code,
-            finds a repeatable waveform boundary, and draws the captured result on VGA. The record
-            below separates the current routed build from historical bench photographs.
-          </p>
-          <div class="entry-actions" aria-label="ECD project actions">
-            <a class="button primary" href="#results">See display evidence</a>
-            <a
-              class="button"
-              href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982375/vga-adc-project-report_gdfmu8.pdf"
-            >Open project report</a>
-            <a
-              class="button repository-button"
-              href="https://github.com/Borek-32/EEE313-VGA-Scope-3-Bit-ADC-BASYS3"
-              data-repository="ecd-proje"
-            ><span class="github-logo" aria-hidden="true"></span>View GitHub repository</a>
+          <div class="project-heading-meta">
+            <p class="page-label">MIXED-SIGNAL FPGA / EEE313 COURSE PROJECT</p>
+            <span class="project-status project-status-done" aria-label="Portfolio status: Done">Done</span>
           </div>
-
+          <h1 id="project-title">FPGA 3-bit ADC and VGA oscilloscope</h1>
+          <p class="lead">For EEE313, I built a three-bit ADC on a breadboard and displayed its output directly on a VGA monitor. The assignment proposed Arduino for digital control; I used Basys 3 to run the conversion sequence, trigger waveform capture, and draw the sampled signal. The laboratory demonstration showed recognizable sine, square, triangle, and sawtooth traces.</p>
+          <div class="entry-actions" aria-label="ECD project actions">
+            <a class="button primary" href="#results">See laboratory results</a>
+            <a class="button" href="../assets/ecd/2026-09-17/EEE313_VGA_ADC_Final_Report_2026-01-04_Diagram.pdf">Open project report</a>
+            <a class="button repository-button" href="https://github.com/Borek-32/EEE313-VGA-Scope-3-Bit-ADC-BASYS3" data-repository="ecd-proje"><span class="github-logo" aria-hidden="true"></span>View GitHub repository</a>
+          </div>
           <dl class="project-facts wide">
-            <div><dt>Platform</dt><dd>Basys 3 / XC7A35T</dd></div>
-            <div><dt>Conversion</dt><dd>3 comparisons / 48 µs</dd></div>
+            <div><dt>Platform</dt><dd>Basys 3 / breadboard analog circuit</dd></div>
+            <div><dt>Conversion</dt><dd>3 bits / 20.833 kSa/s nominal</dd></div>
             <div><dt>Display</dt><dd>640 × 480 VGA / ≈59.52 Hz</dd></div>
-            <div><dt>Evidence state</dt><dd>Current routed build; historical bench demo</dd></div>
+            <div><dt>Result</dt><dd>Working ADC and laboratory demonstration</dd></div>
           </dl>
-
           <figure class="project-hero-media">
-            <a
-              href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/one-khz-sine-vga-output_a9tt9t.jpg"
-              aria-label="Open the full-resolution historical one-kilohertz sine-wave VGA demonstration"
-            >
-              <img
-                src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1786982372/one-khz-sine-vga-output_a9tt9t.jpg"
-                width="1408"
-                height="734"
-                alt="Bench photograph showing an oscilloscope sine wave beside a monitor rendering a black staircase waveform on a white VGA plot"
-                decoding="async"
-                fetchpriority="high"
-              />
-            </a>
-            <figcaption>
-              <strong>Historical end-to-end demonstration.</strong> A 1 kHz sine input appears on
-              the bench oscilloscope and VGA display. It demonstrates the earlier prototype, not
-              programming of the current bitstream hash. PDF Figure 17, page 26.
-            </figcaption>
+            <a href="../assets/ecd/2026-09-17/sine-1khz.jpg" aria-label="Open the full-resolution 1 kHz sine-wave demonstration"><img src="../assets/ecd/2026-09-17/sine-1khz.jpg" width="1408" height="734" alt="Bench oscilloscope showing a sine wave beside the corresponding eight-level VGA trace" decoding="async" fetchpriority="high" /></a>
+            <figcaption><strong>1 kHz sine-wave demonstration.</strong> The oscilloscope and VGA monitor show the input and converted waveform together. The staircase makes the ADC’s eight amplitude levels visible. Report Figure 17.</figcaption>
           </figure>
         </section>
-
         <section class="content-section" aria-labelledby="summary-title">
-          <div class="section-titlebar"><h2 id="summary-title">Executive summary</h2><span>what was built</span></div>
+          <div class="section-titlebar"><h2 id="summary-title">Project summary</h2><span>objective, design, result</span></div>
           <div class="summary-grid">
-            <article>
-              <h3>Problem</h3>
-              <p>Demonstrate an end-to-end ADC in which discrete analog acquisition, FPGA decision sequencing, trigger alignment, and a live display operate as one explainable signal path.</p>
-            </article>
-            <article>
-              <h3>Implementation</h3>
-              <p>A sample-and-hold and comparator feed a three-step controller. Completed codes drive a low-to-high trigger detector, alternating 256-sample buffers, and a staircase VGA renderer.</p>
-            </article>
-            <article>
-              <h3>Result boundary</h3>
-              <p>Historical photographs show four waveform families on VGA, while the current package-inverting source set produces a routed bitstream. The current build is not timing-closed or tied to those photographs.</p>
-            </article>
+            <article><h3>Objective</h3><p>Construct a complete three-bit ADC from discrete analog stages, then demonstrate waveform conversion on the laboratory bench.</p></article>
+            <article><h3>My implementation</h3><p>I combined a MOSFET sample-and-hold, comparison and regeneration stages, and a selectable reference ladder with VHDL conversion, triggering, capture, and VGA logic.</p></article>
+            <article><h3>Result</h3><p>The breadboard and FPGA operate as one instrument. Four waveform shapes display at 1 kHz, and the 500 Hz and 200 Hz sine tests show capture adapting to longer input periods.</p></article>
           </div>
         </section>
-
         <section id="architecture" class="content-section" aria-labelledby="architecture-title">
-          <div class="section-titlebar"><h2 id="architecture-title">Implemented architecture</h2><span>analog input to VGA</span></div>
+          <div class="section-titlebar"><h2 id="architecture-title">From analog input to VGA</h2><span>one sample, three comparisons</span></div>
           <div class="two-column">
-            <article class="plain-panel">
-              <h3>Mixed-signal boundary</h3>
-              <p>
-                The FPGA supplies HOLD and three natural-binary reference selections, then samples
-                one comparator decision on <code>din</code>. In the current top level, HOLD and all
-                selectors are inverted at the package boundary for one-stage external 5 V translators.
-              </p>
-            </article>
-            <article class="plain-panel">
-              <h3>Capture convention</h3>
-              <p>
-                One code is completed every 48 µs. A trigger FSM advances only on completed codes;
-                the display engine captures two detected periods or 256 samples into the inactive
-                buffer before swapping it onto the VGA plot.
-              </p>
-            </article>
+            <article class="plain-panel"><h3>Hold, compare, refine</h3><p>The sample-and-hold keeps one input value available while the FPGA makes three successive comparisons. Each comparator decision selects the next reference and contributes one bit to the result. A complete conversion takes 48 µs.</p></article>
+            <article class="plain-panel"><h3>Keep the trace stationary</h3><p>A threshold trigger finds a repeatable rising crossing. Capture follows two detected periods or stops at 256 samples. One buffer collects the next record while the VGA renderer reads the completed one.</p></article>
           </div>
-
           <div class="evidence-gallery architecture-gallery">
             <figure class="wide-media">
-              <a
-                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982373/system-architecture_gitnvt.png"
-                aria-label="Open the full-resolution ECD mixed-signal system architecture diagram"
-              >
-                <img
-                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_2000/v1786982373/system-architecture_gitnvt.png"
-                  width="3397"
-                  height="733"
-                  alt="Signal-flow diagram from analog input through sample-and-hold, comparator and selectable reference network into the Basys3 SAR controller, trigger detector, capture buffers, and VGA output"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
-              <figcaption><strong>System architecture.</strong> The implemented mixed-signal path and control contracts from input acquisition to VGA output. PDF Figure 2, page 8.</figcaption>
+              <a href="../assets/ecd/2026-09-17/system-architecture.png" aria-label="Open the full-resolution system architecture diagram"><img src="../assets/ecd/2026-09-17/system-architecture.png" width="3403" height="1856" alt="Analog input passes through sample-and-hold and comparator to SAR control, capture buffers, and VGA; HOLD and SEL return through level shifting to the analog circuit and reference multiplexer" loading="lazy" decoding="async" /></a>
+              <figcaption><strong>Mixed-signal control loop.</strong> The FPGA controls sampling and reference selection, receives one comparator decision, and passes completed codes to the display path. Report Figure 2.</figcaption>
             </figure>
           </div>
-
           <ol class="flow-list">
-            <li><strong>Acquire the input.</strong><span>A BS250 sample switch and 33 nF storage capacitor follow the moving analog waveform.</span></li>
-            <li><strong>Freeze one sample.</strong><span>The controller asserts logical HOLD for the duration of the three comparison decisions.</span></li>
-            <li><strong>Select references.</strong><span>The SAR-style states choose midpoint and conditional reference levels through the external MUX and ladder.</span></li>
-            <li><strong>Assemble one code.</strong><span>The controller samples <code>din</code> three times, writes the MSB-to-LSB decisions, and pulses <code>code_valid</code>.</span></li>
-            <li><strong>Find a stable boundary.</strong><span>Completed codes feed a low/high threshold sequence that emits <code>period_valid</code> after a full cycle.</span></li>
-            <li><strong>Capture without tearing.</strong><span>The inactive 256-sample buffer records the next span and becomes visible only after capture completes.</span></li>
-            <li><strong>Render the trace.</strong><span>A 25 MHz pixel clock drives a 640 × 480 frame with axes and a three-pixel-thick staircase waveform.</span></li>
+            <li><strong>Acquire.</strong><span>A BS250 switch lets the 33 nF capacitor track the input before conversion.</span></li>
+            <li><strong>Hold.</strong><span>HOLD keeps the sampled value available while the reference changes.</span></li>
+            <li><strong>Compare.</strong><span>The controller tests the midpoint, then refines the reference from the previous decisions to assemble a three-bit code.</span></li>
+            <li><strong>Trigger.</strong><span>Completed samples cross from code 3 or below to code 4 or above, establishing a repeatable capture phase.</span></li>
+            <li><strong>Capture.</strong><span>The inactive 256 × 3-bit buffer stores the new record and becomes visible when capture finishes.</span></li>
+            <li><strong>Display.</strong><span>A 25 MHz pixel clock drives the 640 × 480 raster. The renderer stretches the captured record across a 540-pixel plot.</span></li>
           </ol>
+          <div class="evidence-gallery">
+            <figure class="wide-media">
+              <a href="../assets/ecd/2026-09-17/conversion-sequence.png" aria-label="Open the three-comparison controller sequence"><img src="../assets/ecd/2026-09-17/conversion-sequence.png" width="2310" height="327" alt="Idle and three successive comparison states with reference selection, HOLD, and code-valid actions" loading="lazy" decoding="async" /></a>
+              <figcaption><strong>Conversion sequence.</strong> Each state has three 250 kHz clock edges for its control and settling schedule; twelve edges complete the 48 µs cycle. Report Figure 11.</figcaption>
+            </figure>
+            <figure class="wide-media">
+              <a href="../assets/ecd/2026-09-17/trigger-capture.png" aria-label="Open the trigger and capture diagram"><img src="../assets/ecd/2026-09-17/trigger-capture.png" width="1412" height="558" alt="Period detection aligns inactive-buffer capture, followed by sample collection and completed-buffer swap" loading="lazy" decoding="async" /></a>
+              <figcaption><strong>Trigger and capture.</strong> Period detection aligns the waveform; alternating buffers keep the visible record available during acquisition. Report Figure 12.</figcaption>
+            </figure>
+          </div>
         </section>
-
         <section id="verification" class="content-section" aria-labelledby="verification-title">
-          <div class="section-titlebar"><h2 id="verification-title">Verification record</h2><span>what each artifact establishes</span></div>
-          <div class="table-wrap" tabindex="0" role="region" aria-label="ECD verification results">
+          <div class="section-titlebar"><h2 id="verification-title">Simulation and bench testing</h2><span>circuit behavior to complete system</span></div>
+          <p>I used LTspice to study sampling, comparator polarity, and reference spacing. On the bench, I checked the held waveform and control activity before testing the complete converter with the signal generator, oscilloscope, and VGA monitor.</p>
+          <div class="table-wrap" tabindex="0" role="region" aria-label="Simulation and laboratory results">
             <table class="evidence-table">
-              <thead><tr><th scope="col">Evidence</th><th scope="col">Retained result</th><th scope="col">What it establishes</th></tr></thead>
+              <thead><tr><th scope="col">Check</th><th scope="col">Result described in the report</th><th scope="col">Design connection</th></tr></thead>
               <tbody>
-                <tr><th scope="row">Stored LTspice RAW</th><td>Median acquisition error 5.29 mV; maximum 12.75 mV; median hold drift 0.295 mV; maximum 0.461 mV</td><td>Nominal behavior of the archived analog model only</td></tr>
-                <tr><th scope="row">Comparator polarity</th><td>100% correct outside a ±50 mV ambiguity band in the retained nominal transient</td><td>Decision polarity for that model and stimulus, not ADC accuracy across PVT</td></tr>
-                <tr><th scope="row">Active VHDL and XDC</th><td><code>top_adc</code>, <code>vga_adc_scope_3bits</code>, and <code>top_main</code> form the current synthesis source set</td><td>Current controller, capture, renderer, package polarity, and pin contracts</td></tr>
-                <tr><th scope="row">Routed Vivado build</th><td>Bitstream written; 100 MHz intra-clock WNS +1.179 ns; overall WNS −3.992 ns and TNS −47.310 ns</td><td>Routing and artifact generation, but not timing closure</td></tr>
-                <tr><th scope="row">Historical bench record</th><td>Breadboard, oscilloscope, and VGA photographs retained for sine, square, triangle, and sawtooth inputs</td><td>Qualitative end-to-end behavior of the earlier prototype</td></tr>
+                <tr><th scope="row">LTspice sample-and-hold</th><td>The held node follows the input during acquisition and maintains a staircase during hold.</td><td>One stored voltage supports all three comparisons.</td></tr>
+                <tr><th scope="row">Comparator and references</th><td>The regenerated decision follows the held input relative to the reference; nominal ladder taps span 2.556–4.500 V.</td><td>Comparator polarity and reference ordering support the successive-approximation sequence.</td></tr>
+                <tr><th scope="row">Physical sample-and-hold</th><td>Oscilloscope views show the held staircase and its relationship to control activity.</td><td>The breadboard sampling stage works as part of the conversion path.</td></tr>
+                <tr><th scope="row">1 kHz waveform tests</th><td>Sine, square, triangle, and sawtooth inputs produce recognizable VGA traces.</td><td>The analog circuit, conversion controller, trigger, and display operate together.</td></tr>
+                <tr><th scope="row">500 Hz and 200 Hz sine</th><td>Stable traces contain more samples per period.</td><td>Capture length follows the input period within the 256-sample buffer.</td></tr>
+                <tr><th scope="row">Reference-network spot check</th><td>The meter reads 3.542 V at a midrange point.</td><td>A measured operating point lies inside the reference window.</td></tr>
+                <tr><th scope="row">12.950 kHz experiment</th><td>A smaller hold capacitor and an adjusted clock divider produce a sparse, distorted trace.</td><td>This separate experiment explores settling time, sampling cadence, and input frequency.</td></tr>
               </tbody>
             </table>
           </div>
-
           <div class="evidence-gallery">
             <figure class="wide-media">
-              <a
-                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/ltspice-transient-reanalysis_xjmi1s.png"
-                aria-label="Open the full-resolution LTspice transient reanalysis"
-              >
-                <img
-                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1800/v1786982372/ltspice-transient-reanalysis_xjmi1s.png"
-                  width="2500"
-                  height="1700"
-                  alt="Four-panel LTspice analysis showing input and held voltage, acquisition error, hold drift, and comparator decision margin over a nominal transient"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
-              <figcaption><strong>Nominal analog reanalysis.</strong> Metrics were recomputed from the archived binary RAW file. The model uses an ideal reference surrogate and historical two-stage control translation. PDF Figure 4, page 10.</figcaption>
-            </figure>
-            <figure>
-              <a
-                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982373/sar-sequence_yfkkrw.png"
-                aria-label="Open the full-resolution SAR controller sequence"
-              >
-                <img
-                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786982373/sar-sequence_yfkkrw.png"
-                  width="2310"
-                  height="327"
-                  alt="State diagram showing idle, bit-zero, bit-one, and bit-two conversion states with hold, selector, and output-code actions"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
-              <figcaption><strong>Three-comparison sequence.</strong> Generated from the current controller states and decision updates. PDF Figure 11, page 17.</figcaption>
-            </figure>
-            <figure class="portrait-media">
-              <a
-                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982373/trigger-capture_saan3n.png"
-                aria-label="Open the full-resolution trigger and double-buffer capture sequence"
-              >
-                <img
-                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1000/v1786982373/trigger-capture_saan3n.png"
-                  width="860"
-                  height="1583"
-                  alt="Vertical flow diagram showing low and high threshold waits, period measurement, capture arming, sample collection, and display-buffer swap"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
-              <figcaption><strong>Trigger-to-display control.</strong> The period detector gates capture, and the completed inactive buffer is swapped onto the display. PDF Figure 12, page 19.</figcaption>
+              <a href="../assets/ecd/2026-09-17/sample-hold-simulation.png" aria-label="Open the report’s nominal LTspice analysis"><img src="../assets/ecd/2026-09-17/sample-hold-simulation.png" width="2500" height="1700" alt="Nominal LTspice analysis of acquisition, held voltage, threshold sweep, and comparator response" loading="lazy" decoding="async" /></a>
+              <figcaption><strong>Nominal analog simulation.</strong> The report’s model shows acquisition, hold, and regenerated comparator response. Its 12 µs track / 36 µs hold stimulus and the controller’s approximately 8 µs / 40 µs allocation share a 48 µs conversion period. Report Figure 4.</figcaption>
             </figure>
           </div>
-
-          <p class="source-note">
-            <strong>Current artifact:</strong> <code>top_main.bit</code> is 2,192,132 bytes with
-            SHA-256 <code>3b5d721ca68fffdb19968866694d870c60431c66ee463945d182b23c40285643</code>.
-            The routed report also flags 51 sequential pins without a recognized clock and 90
-            unconstrained internal endpoints.
-          </p>
         </section>
-
         <section id="results" class="content-section" aria-labelledby="results-title">
-          <div class="section-titlebar"><h2 id="results-title">Acquisition and display evidence</h2><span>historical bench record</span></div>
-          <p>
-            The retained photographs pair an oscilloscope view of each applied waveform with the
-            VGA staircase display. They demonstrate shape tracking across four waveform families;
-            they do not provide a calibrated code-versus-voltage table or prove the current build hash.
-          </p>
-
+          <div class="section-titlebar"><h2 id="results-title">Laboratory presentation</h2><span>input and converted output together</span></div>
+          <p>The nominal test uses a 1 kHz, 2 V peak-to-peak waveform centered near 3.5 V. The photographs place the oscilloscope input and VGA output side by side, showing how the same converter responds to four waveform shapes.</p>
           <div class="evidence-gallery">
             <figure>
-              <a
-                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/one-khz-sine-vga-output_a9tt9t.jpg"
-                aria-label="Open the full-resolution one-kilohertz sine-wave VGA demonstration"
-              >
-                <img
-                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786982372/one-khz-sine-vga-output_a9tt9t.jpg"
-                  width="1408"
-                  height="734"
-                  alt="Oscilloscope sine trace beside a monitor showing the corresponding stepped VGA waveform"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
-              <figcaption><strong>Sine input.</strong> Historical 1 kHz bench and VGA demonstration. PDF Figure 17, page 26.</figcaption>
+              <a href="../assets/ecd/2026-09-17/sine-1khz.jpg" aria-label="Open the 1 kHz sine result"><img src="../assets/ecd/2026-09-17/sine-1khz.jpg" width="1408" height="734" alt="Sine-wave input and corresponding staircase VGA output" loading="lazy" decoding="async" /></a>
+              <figcaption><strong>Sine.</strong> The changing input appears as eight discrete amplitude levels. Report Figure 17.</figcaption>
             </figure>
             <figure>
-              <a
-                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/one-khz-square-vga-output_iyqjeu.jpg"
-                aria-label="Open the full-resolution one-kilohertz square-wave VGA demonstration"
-              >
-                <img
-                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786982372/one-khz-square-vga-output_iyqjeu.jpg"
-                  width="1310"
-                  height="726"
-                  alt="Oscilloscope square trace beside a monitor showing the corresponding two-level VGA waveform"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
-              <figcaption><strong>Square input.</strong> Historical 1 kHz bench and VGA demonstration. PDF Figure 18, page 26.</figcaption>
+              <a href="../assets/ecd/2026-09-17/square-1khz.jpg" aria-label="Open the 1 kHz square result"><img src="../assets/ecd/2026-09-17/square-1khz.jpg" width="1310" height="726" alt="Square-wave input and two-level VGA output" loading="lazy" decoding="async" /></a>
+              <figcaption><strong>Square.</strong> The two plateaus are clear; the renderer draws horizontal sample levels without vertical edge connectors. Report Figure 18.</figcaption>
             </figure>
             <figure>
-              <a
-                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/one-khz-triangle-vga-output_zggbwk.jpg"
-                aria-label="Open the full-resolution one-kilohertz triangle-wave VGA demonstration"
-              >
-                <img
-                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786982372/one-khz-triangle-vga-output_zggbwk.jpg"
-                  width="1287"
-                  height="735"
-                  alt="Oscilloscope triangle trace beside a monitor showing the corresponding rising and falling staircase VGA waveform"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
-              <figcaption><strong>Triangle input.</strong> Historical 1 kHz bench and VGA demonstration. PDF Figure 19, page 27.</figcaption>
+              <a href="../assets/ecd/2026-09-17/triangle-1khz.jpg" aria-label="Open the 1 kHz triangle result"><img src="../assets/ecd/2026-09-17/triangle-1khz.jpg" width="1287" height="735" alt="Triangle-wave input and rising and falling VGA staircase" loading="lazy" decoding="async" /></a>
+              <figcaption><strong>Triangle.</strong> The code progresses up and down through the available levels as the input ramps. Report Figure 19.</figcaption>
             </figure>
             <figure>
-              <a
-                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/one-khz-sawtooth-vga-output_p6qpsz.jpg"
-                aria-label="Open the full-resolution one-kilohertz sawtooth-wave VGA demonstration"
-              >
-                <img
-                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1400/v1786982372/one-khz-sawtooth-vga-output_p6qpsz.jpg"
-                  width="1284"
-                  height="722"
-                  alt="Oscilloscope sawtooth trace beside a monitor showing the corresponding rising staircase and reset on VGA"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
-              <figcaption><strong>Sawtooth input.</strong> Historical 1 kHz bench and VGA demonstration. PDF Figure 20, page 27.</figcaption>
+              <a href="../assets/ecd/2026-09-17/sawtooth-1khz.jpg" aria-label="Open the 1 kHz sawtooth result"><img src="../assets/ecd/2026-09-17/sawtooth-1khz.jpg" width="1284" height="722" alt="Sawtooth input and VGA staircase with an abrupt reset" loading="lazy" decoding="async" /></a>
+              <figcaption><strong>Sawtooth.</strong> The gradual ramp and abrupt reset exercise ordered threshold crossings and a discontinuity. Report Figure 20.</figcaption>
             </figure>
           </div>
-
-          <aside class="result-boundary" aria-label="Display evidence boundary">
-            <strong>How to read these photographs:</strong> they are qualitative historical
-            end-to-end evidence. No retained capture ties them to the current package-inverting
-            bitstream, and no calibrated ADC transition or amplitude-error table is available.
-          </aside>
+          <h3>Capture at lower frequencies</h3>
+          <p>At the nominal 20.833 kSa/s rate, two periods occupy about 83 samples at 500 Hz and 208 samples at 200 Hz. Both fit inside the 256-sample buffer, allowing the same capture logic to follow a longer waveform period.</p>
+          <div class="evidence-gallery">
+            <figure>
+              <a href="../assets/ecd/2026-09-17/sine-500hz.jpg" aria-label="Open the 500 Hz sine result"><img src="../assets/ecd/2026-09-17/sine-500hz.jpg" width="1285" height="740" alt="Laboratory demonstration of a 500 Hz sine wave on the oscilloscope and VGA monitor" loading="lazy" decoding="async" /></a>
+              <figcaption><strong>500 Hz sine.</strong> Roughly twice as many samples per cycle as the 1 kHz test. Report Figure 28.</figcaption>
+            </figure>
+            <figure>
+              <a href="../assets/ecd/2026-09-17/sine-200hz.jpg" aria-label="Open the 200 Hz sine result"><img src="../assets/ecd/2026-09-17/sine-200hz.jpg" width="1299" height="731" alt="Laboratory demonstration of a 200 Hz sine wave on the oscilloscope and VGA monitor" loading="lazy" decoding="async" /></a>
+              <figcaption><strong>200 Hz sine.</strong> Two cycles use most of the capture memory while remaining within its capacity. Report Figure 29.</figcaption>
+            </figure>
+          </div>
         </section>
-
         <section id="hardware" class="content-section" aria-labelledby="hardware-title">
-          <div class="section-titlebar"><h2 id="hardware-title">Discrete analog front end</h2><span>prototype and interface</span></div>
-          <p>
-            The analog side uses a MOSFET sample switch, storage capacitor, five-transistor
-            OTA-like comparison stage, CMOS regeneration, a resistor-ladder reference concept,
-            and MOSFET control translation. The Basys3 closes the decision loop and supplies VGA.
-          </p>
-
+          <div class="section-titlebar"><h2 id="hardware-title">Breadboard construction</h2><span>discrete analog stages and FPGA control</span></div>
+          <p>I assembled the analog chain and reference network on solderless breadboards. The PMOD connection carries HOLD, the three reference-select lines, and the comparator decision. This arrangement keeps the held node and reference voltages accessible for probing while Basys 3 controls conversion and drives the monitor.</p>
           <div class="evidence-gallery hardware-gallery">
             <figure class="wide-media">
-              <a
-                href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982372/integrated-hardware-setup_gwfgvw.jpg"
-                aria-label="Open the full-resolution integrated ECD breadboard and Basys3 setup"
-              >
-                <img
-                  src="https://res.cloudinary.com/vb29plgf/image/upload/f_auto,q_auto:good,c_limit,w_1600/v1786982372/integrated-hardware-setup_gwfgvw.jpg"
-                  width="1315"
-                  height="756"
-                  alt="Photograph of the Basys3 board connected by PMOD wiring to a large breadboard analog prototype with a VGA cable attached"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </a>
-              <figcaption><strong>Integrated historical prototype.</strong> Basys3, PMOD wiring, breadboard analog circuit, and VGA connection in the earlier bench setup. PDF Figure 15, page 23.</figcaption>
+              <a href="../assets/ecd/2026-09-17/breadboard-setup.jpg" aria-label="Open the integrated breadboard and Basys 3 setup"><img src="../assets/ecd/2026-09-17/breadboard-setup.jpg" width="1315" height="756" alt="Basys 3 connected to the analog breadboard through PMOD wiring with a VGA cable attached" loading="lazy" decoding="async" /></a>
+              <figcaption><strong>Integrated system.</strong> Analog breadboards, Basys 3, PMOD wiring, and VGA connection form the complete acquisition and display setup. Report Figure 15.</figcaption>
             </figure>
           </div>
-
           <dl class="project-facts wide hardware-facts">
-            <div><dt>Sample-and-hold</dt><dd>BS250 switch / 33 nF storage</dd></div>
+            <div><dt>Sample-and-hold</dt><dd>BS250 / 33 nF</dd></div>
             <div><dt>Comparator</dt><dd>5T OTA-like stage / CMOS regeneration</dd></div>
-            <div><dt>Reference path</dt><dd>Eight-level ladder / MUX concept</dd></div>
-            <div><dt>Current PMOD polarity</dt><dd>Active-low HOLD and selectors</dd></div>
+            <div><dt>References</dt><dd>2.556–4.500 V nominal / ≈0.278 V spacing</dd></div>
+            <div><dt>Control interface</dt><dd>3.3 V to 5 V / two CMOS inverter stages</dd></div>
           </dl>
-          <p class="source-note">
-            <strong>Interface boundary:</strong> the current source expects one external inverter
-            for HOLD and one per selector. The archived LTspice transient used an ideal reference
-            surrogate and a historical two-stage HOLD translator, so it is not validation of the
-            current loaded interface.
-          </p>
+          <p>The report’s control interface uses two cascaded inverters to preserve active-high HOLD and the natural-binary selector address while translating the voltage. The comparator return enters the FPGA on K17; its pin voltage must meet the LVCMOS33 input requirements.</p>
         </section>
-
         <section id="report" class="content-section" aria-labelledby="report-title">
-          <div class="section-titlebar"><h2 id="report-title">Full project report</h2><span>45 pages / 3.3 MB</span></div>
-          <p>
-            The latest saved engineering report consolidates the source map, analog reanalysis,
-            current Vivado reports, historical bench record, limitations, and reproduction guide.
-            The public copy removes the student ID and workstation-specific absolute paths.
-          </p>
-
+          <div class="section-titlebar"><h2 id="report-title">Full project report</h2><span>36 pages / 3.3 MB</span></div>
+          <p><cite>VGA-Interfaced 3-Bit ADC on Basys3</cite> explains the design choices, analog circuits, conversion and trigger logic, VGA rendering, and laboratory results. The appendices include the lower-frequency demonstrations, reference and spectral checks, and the additional high-frequency experiment.</p>
           <figure class="report-cover">
-            <a
-              href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982375/vga-adc-project-report_gdfmu8.pdf"
-              aria-label="Open the full 45-page VGA ADC project report PDF"
-            >
-              <img
-                src="https://res.cloudinary.com/vb29plgf/image/upload/pg_1,f_auto,q_auto:good,c_limit,w_1400/v1786982375/vga-adc-project-report_gdfmu8.jpg"
-                width="1400"
-                height="1980"
-                alt="Cover page of the VGA-Interfaced 3-Bit ADC on Basys3 engineering project report"
-                loading="lazy"
-                decoding="async"
-              />
-            </a>
-            <figcaption>Preview of the privacy-scrubbed report cover; select it to open the full PDF.</figcaption>
+            <a href="../assets/ecd/2026-09-17/EEE313_VGA_ADC_Final_Report_2026-01-04_Diagram.pdf" aria-label="Open the full 36-page VGA ADC report"><img src="../assets/ecd/2026-09-17/report-cover.png" width="849" height="1200" alt="Cover of VGA-Interfaced 3-Bit ADC on Basys3 by Kerem Gürbüz" loading="lazy" decoding="async" /></a>
+            <figcaption>The project report, including the system architecture diagram and laboratory photographs. Select the cover to read the PDF.</figcaption>
           </figure>
-
-          <iframe
-            class="pdf-frame"
-            src="https://res.cloudinary.com/vb29plgf/image/upload/v1786982375/vga-adc-project-report_gdfmu8.pdf#page=1&view=FitH"
-            title="Preview of the 45-page VGA ADC engineering project report"
-            loading="lazy"
-          ></iframe>
+          <iframe class="pdf-frame" src="../assets/ecd/2026-09-17/EEE313_VGA_ADC_Final_Report_2026-01-04_Diagram.pdf#page=1&amp;view=FitH" title="Preview of the 36-page VGA ADC project report" loading="lazy"></iframe>
           <div class="entry-actions report-actions" aria-label="Project report links">
-            <a
-              class="button primary"
-              href="https://res.cloudinary.com/vb29plgf/image/upload/v1786982375/vga-adc-project-report_gdfmu8.pdf"
-            >Open full project report (PDF, 3.3 MB, 45 pages)</a>
-            <a
-              class="button"
-              href="https://res.cloudinary.com/vb29plgf/image/upload/fl_attachment:VGA-ADC-Project-Report/v1786982375/vga-adc-project-report_gdfmu8.pdf"
-            >Download report</a>
+            <a class="button primary" href="../assets/ecd/2026-09-17/EEE313_VGA_ADC_Final_Report_2026-01-04_Diagram.pdf">Open full report (PDF, 3.3 MB, 36 pages)</a>
+            <a class="button" href="../assets/ecd/2026-09-17/EEE313_VGA_ADC_Final_Report_2026-01-04_Diagram.pdf" download="EEE313-VGA-ADC-Project-Report.pdf">Download report</a>
           </div>
         </section>
-
         <section id="limitations" class="content-section" aria-labelledby="limitations-title">
-          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>honest status</span></div>
+          <div class="section-titlebar"><h2 id="limitations-title">Operating characteristics and limits</h2><span>reading the displayed waveform</span></div>
           <div class="two-column">
-            <article class="plain-panel">
-              <h3>Known limitations</h3>
-              <ul>
-                <li>The routed design does not meet overall setup timing and contains unrecognized generated-clock and unconstrained paths.</li>
-                <li>The historical VGA photographs are not tied to the current bitstream hash.</li>
-                <li>The loaded comparator-return level at K17 is not retained for the current interface.</li>
-                <li>The historical copper drawing remains a do-not-fabricate artifact because its inferred connectivity and DRC are unresolved.</li>
-              </ul>
-            </article>
-            <article class="plain-panel">
-              <h3>Best next evidence</h3>
-              <ul>
-                <li>Replace the fabric-generated <code>dclk</code> with a 100 MHz clock-enable path and close all relevant timing constraints.</li>
-                <li>Program the current bitstream, record its hash, and retain a synchronized input/comparator/code/VGA capture.</li>
-                <li>Measure all eight loaded reference voltages plus K17 high/low levels, edge rate, and comparator-return current.</li>
-                <li>Route and DRC a verified schematic before generating any fabrication artwork.</li>
-              </ul>
-            </article>
+            <article class="plain-panel"><h3>Resolution and rendering</h3><p>Three bits provide eight amplitude levels. The resulting staircase is expected, and the renderer’s horizontal segments explain the separated edges in the square and sawtooth traces. The laboratory photographs demonstrate waveform conversion; they do not give a calibrated ADC accuracy specification.</p></article>
+            <article class="plain-panel"><h3>Sampling and capture length</h3><p>The nominal 48 µs conversion period gives about 20.8 samples per cycle at 1 kHz. Below approximately 163 Hz, two complete periods would exceed 256 samples, so capture reaches the memory limit before completing that span.</p></article>
           </div>
+          <div class="evidence-gallery">
+            <figure class="wide-media">
+              <a href="../assets/ecd/2026-09-17/high-frequency-experiment.jpg" aria-label="Open the 12.950 kHz experiment"><img src="../assets/ecd/2026-09-17/high-frequency-experiment.jpg" width="1183" height="690" alt="12.950 kHz test input and sparse distorted VGA trace from the modified capacitor and clock-divider experiment" loading="lazy" decoding="async" /></a>
+              <figcaption><strong>High-frequency experiment.</strong> This 12.950 kHz test uses a smaller hold capacitor and an adjusted conversion-clock divider. The sparse, distorted trace shows the interaction between analog settling, conversion cadence, and input frequency. Report Figure 32.</figcaption>
+            </figure>
+          </div>
+          <p>The project brings transistor-level analog design, FPGA sequencing, and a visible waveform display into one working breadboard system. Its main engineering lesson is the need to coordinate switch timing, reference selection, comparator polarity, and capture behavior across the complete signal path.</p>
         </section>
-
-        <nav class="project-pager" aria-label="Project pages">
-          <a href="../index.html#projects">← Project directory</a>
-          <a href="emtproject.html">Next: EMT ultrasonic speaker →</a>
-        </nav>
+        <nav class="project-pager" aria-label="Project pages"><a href="mfcc-project.html">← Previous: MFCC</a><a href="emtproject.html">Next: EMT ultrasonic speaker →</a></nav>
       </main>
-
-      <footer class="site-footer"><p>Borek's Engineering Notebook</p><p><a href="#main-content">Return to top</a></p></footer>
+      <footer class="site-footer"><p>Kerem Gürbüz | Project Archive</p><p><a href="#main-content">Return to top</a></p></footer>
     </div>
   </body>
 </html>
