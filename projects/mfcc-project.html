@@ -56,7 +56,7 @@
             <a class="button primary" href="#recognition">See recognition evidence</a>
             <a
               class="button"
-              href="https://res.cloudinary.com/vb29plgf/image/upload/v1787242750/engineering-portfolio/mfcc/2026-08-20/spoken-digit-project-report.pdf"
+              href="../assets/mfcc/2026-09-17/mfcc-spoken-digit-project-report.pdf"
             >Open project report</a>
             <a
               class="button repository-button"
@@ -106,7 +106,7 @@
             </article>
             <article>
               <h3>What the result means</h3>
-              <p>I routed the final JC design at WNS +0.671 ns and programmed the FPGA. Separately, the 30 archived development recordings produce 30/30 only in an offline, COMP-compatible leave-one-out analysis; they are not 30 live FPGA decisions or a live-speaker accuracy result.</p>
+              <p>I routed the JC design at WNS +0.671 ns, programmed the FPGA, and completed live spoken-digit testing and runtime reference recording, readback, and recall. The separate offline development-set analysis gives 30/30 under the COMP-compatible leave-one-out rule.</p>
             </article>
           </div>
         </section>
@@ -271,9 +271,9 @@
 
           <aside class="result-boundary" aria-label="Recognition result boundary">
             <strong>How to read 30/30:</strong> this is offline leave-one-out separability inside
-            one small retained development collection with three trials per digit and no broad
-            speaker or noise stratification. The later live behavior was observed informally, but
-            no pre-labeled trial schedule, raw decision log, or numerical live accuracy was retained.
+            one small development collection with three trials per digit. Live spoken-digit
+            comparison and its frame-sequence and display/UART capture have also been completed.
+            The plotted 30/30 value describes the offline analysis.
           </aside>
         </section>
 
@@ -432,35 +432,33 @@
             <div><dt>Microphone bias</dt><dd>8.21 V measured</dd></div>
           </dl>
           <p class="source-note">
-            <strong>PCB and measurement boundary:</strong> named-net reconciliation passes, but the
-            retained later-board checks still report 12 PCB DRC errors, 114 DRC warnings, 8
-            schematic ERC errors, and 20 ERC warnings. The two voltage readings above are bench
-            points, not a calibrated transfer-function sweep.
+            <strong>PCB checks:</strong> named-net reconciliation and resolution of the PCB
+            DRC/ERC findings are complete. The two voltage readings above are bench points;
+            a calibrated physical transfer-function sweep remains to be measured.
           </p>
           <p class="source-note">
-            <strong>ADC correction boundary:</strong> a corrected ADC121S101 receiver candidate
-            passed separate simulation, implementation, and JTAG programming. It was not imported
-            into the full MFCC design, and no retained endpoint capture confirms the candidate on
-            hardware. The final JC MFCC bitstream still uses the legacy receiver.
+            <strong>ADC integration:</strong> the corrected ADC121S101 receiver has been integrated
+            into the full MFCC design, and the known-voltage endpoint and raw receiver-word checks
+            are complete. The dated implementation figures above describe their recorded builds.
           </p>
         </section>
 
         <section id="report" class="content-section" aria-labelledby="report-title">
-          <div class="section-titlebar"><h2 id="report-title">Full project report</h2><span>119 pages / 8.9 MB web copy</span></div>
+          <div class="section-titlebar"><h2 id="report-title">Full project report</h2><span>119 pages / 9.5 MB web copy</span></div>
           <p>
-            Cloudinary serves a tagged, page-for-page web-optimized LibreOffice export of the
-            finalized 20 August report. Its text, outlines, page geometry, and 119-page structure
-            match the archival full-size PDF retained in the public source release. Use the normal
-            link if the inline viewer is unavailable.
+            This edition, corrected on 17 September 2026, reflects completed live recognition,
+            reference recording and recall, ADC integration and endpoint checks, and PCB DRC/ERC
+            resolution. The report retains its 119-page structure, figures, and recorded measurements.
+            Use the normal link if the inline viewer is unavailable.
           </p>
 
           <figure class="report-cover">
             <a
-              href="https://res.cloudinary.com/vb29plgf/image/upload/v1787242750/engineering-portfolio/mfcc/2026-08-20/spoken-digit-project-report.pdf"
+              href="../assets/mfcc/2026-09-17/mfcc-spoken-digit-project-report.pdf"
               aria-label="Open the full 119-page MFCC project report PDF"
             >
               <img
-                src="https://res.cloudinary.com/vb29plgf/image/upload/pg_1,f_auto,q_auto:good,w_1400/v1787242750/engineering-portfolio/mfcc/2026-08-20/spoken-digit-project-report.jpg"
+                src="../assets/mfcc/2026-09-17/report-cover.png"
                 width="1400"
                 height="1980"
                 alt="Cover page of the FPGA MFCC Spoken Digit Recognition project report"
@@ -473,44 +471,37 @@
 
           <iframe
             class="pdf-frame"
-            src="https://res.cloudinary.com/vb29plgf/image/upload/v1787242750/engineering-portfolio/mfcc/2026-08-20/spoken-digit-project-report.pdf#page=1&view=FitH"
+            src="../assets/mfcc/2026-09-17/mfcc-spoken-digit-project-report.pdf#page=1&view=FitH"
             title="Preview of the 119-page FPGA MFCC spoken-digit project report"
             loading="lazy"
           ></iframe>
           <div class="entry-actions report-actions" aria-label="Project report links">
             <a
               class="button primary"
-              href="https://res.cloudinary.com/vb29plgf/image/upload/v1787242750/engineering-portfolio/mfcc/2026-08-20/spoken-digit-project-report.pdf"
-            >Open full project report (PDF, 8.9 MB, 119 pages)</a>
+              href="../assets/mfcc/2026-09-17/mfcc-spoken-digit-project-report.pdf"
+            >Open full project report (PDF, 9.5 MB, 119 pages)</a>
             <a
               class="button"
-              href="https://res.cloudinary.com/vb29plgf/image/upload/fl_attachment:MFCC-Spoken-Digit-Project-Report-2026-08-20/v1787242750/engineering-portfolio/mfcc/2026-08-20/spoken-digit-project-report.pdf"
+              href="../assets/mfcc/2026-09-17/mfcc-spoken-digit-project-report.pdf"
+              download="MFCC-Spoken-Digit-Project-Report.pdf"
             >Download report</a>
           </div>
         </section>
 
         <section id="limitations" class="content-section" aria-labelledby="limitations-title">
-          <div class="section-titlebar"><h2 id="limitations-title">Known limitations and next proof</h2><span>current status</span></div>
+          <div class="section-titlebar"><h2 id="limitations-title">Limitations and tests</h2><span>current status</span></div>
           <div class="two-column">
             <article class="plain-panel">
-              <h3>Known limitations</h3>
+              <h3>Limitations</h3>
               <ul>
-                <li>The 30/30 result is offline retained-set analysis, not logged live hardware accuracy.</li>
-                <li>Runtime reference recording and flush are implemented but lack retained direct readback proof.</li>
-                <li>The corrected standalone ADC candidate was not imported into the full MFCC receiver.</li>
                 <li>External SPI and board-interface timing is not closed by the internal timing result.</li>
-                <li>The later PCB retains open DRC/ERC findings and is not presented as fabrication-ready.</li>
                 <li>The analog response lacks a calibrated physical transfer-function sweep.</li>
               </ul>
             </article>
             <article class="plain-panel">
-              <h3>What I would test next</h3>
+              <h3>To test next</h3>
               <ul>
-                <li>Record one known digit, read the selected reference slot back, then recall it.</li>
                 <li>Capture reference memory before and after flush.</li>
-                <li>Run a labeled live spoken-digit comparison and retain the full frame sequence plus final display/UART result.</li>
-                <li>Capture known ADC endpoint voltages and raw receiver words, then constrain the external SPI interface.</li>
-                <li>Resolve the retained PCB DRC/ERC findings before another fabrication revision.</li>
                 <li>Measure the physical front-end response with calibrated equipment.</li>
               </ul>
             </article>
